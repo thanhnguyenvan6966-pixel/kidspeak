@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Magic Sound Safari - Luyện Nói & Kiểm Tra Tiếng Anh Cho Bé</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+      background-color: #FFFDF5;
+      background-image: radial-gradient(#FDE047 1.5px, transparent 1.5px), radial-gradient(#38BDF8 1.5px, #FFFDF5 1.5px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+      touch-action: manipulation;
+    }
+    .font-ui { font-family: 'Nunito', sans-serif; }
+    .bounce-pulse {
+      animation: gentleBounce 2.2s infinite ease-in-out;
+    }
+    @keyframes gentleBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .card-shadow {
+      box-shadow: 0 16px 30px -8px rgba(245, 158, 11, 0.25), 0 8px 12px -4px rgba(245, 158, 11, 0.15);
+    }
+    .wobble {
+      animation: wobbleAnim 0.4s ease-in-out;
+    }
+    @keyframes wobbleAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px) rotate(-3deg); }
+      75% { transform: translateX(8px) rotate(3deg); }
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800 select-none">
+
+  <header class="w-full px-3 sm:px-6 py-1.5 flex items-center justify-between border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-10 shadow-sm">
+    <div class="flex items-center gap-1.5">
+      <span class="text-2xl">🦁</span>
+      <div>
+        <h1 class="text-base font-black text-amber-600 leading-none">KidSpeak Safari</h1>
+      </div>
+    </div>
+
+    <!-- Category Tabs Navigation -->
+    <div id="categoryTabs" class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar py-0.5 max-w-[42vw] sm:max-w-md"></div>
+
+    <!-- Mode Toggle: Luyện Nói vs Làm Bài Kiểm Tra -->
+    <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner">
+      <button id="modePracticeBtn" onclick="switchAppMode('practice')" class="px-2.5 py-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm">
+        🎙️ Nói
+      </button>
+      <button id="modeQuizBtn" onclick="switchAppMode('quiz')" class="px-2.5 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900">
+        🎯 Đố vui
+      </button>
+    </div>
+
+    <!-- Star Counter & Parent Button -->
+    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1 bg-amber-100 px-2.5 py-0.5 rounded-full border-2 border-amber-300 shadow-sm">
+        <span class="text-base">⭐</span>
+        <span id="starCounter" class="font-black text-amber-800 text-sm">0</span>
+      </div>
+      <button onclick="openParentGate()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold p-1.5 sm:px-2.5 sm:py-1 rounded-xl flex items-center gap-1 text-xs shadow transition" title="Góc Phụ Huynh">
+        <span>⚙️</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="practiceView" class="flex-1 w-full max-w-lg mx-auto px-3 py-1 flex flex-col items-center justify-between min-h-0">
+    
+    <!-- Word Card Container -->
+    <div class="w-full bg-white rounded-3xl border-4 border-amber-300 card-shadow p-2.5 sm:p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
+      
+      <!-- Top Card Header: Prev, Badge, 3-Tries, Next -->
+      <div class="w-full flex items-center justify-between px-1 shrink-0">
+        <button onclick="navigateWord(-1)" class="w-8 h-8 flex items-center justify-center bg-amber-100 hover:bg-amber-200 active:scale-90 text-amber-800 font-black rounded-full shadow-sm transition">
+          ‹
+        </button>
+        
+        <div class="flex items-center gap-2">
+          <span id="cardIndexBadge" class="text-[11px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+            CARD 1 / 1
+          </span>
+          <div class="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200" title="Bé nói 3 lần Pip sẽ tự động tặng sao cổ vũ!">
+            <span class="text-[10px] text-amber-800 font-bold">Lần nói:</span>
+            <div id="attemptDots" class="flex gap-1">
+              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
+              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
+              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="navigateWord(1)" class="w-8 h-8 flex items-center justify-center bg-amber-100 hover:bg-amber-200 active:scale-90 text-amber-800 font-black rounded-full shadow-sm transition">
+          ›
+        </button>
+      </div>
+
+      <!-- Mascot Dragon Advice -->
+      <div class="w-full bg-amber-50 rounded-2xl p-1.5 border border-amber-200 flex items-center gap-2 mt-1 shrink-0">
+        <div id="mascotAvatar" class="text-2xl transition-transform duration-200">🐲</div>
+        <p id="mascotText" class="text-xs sm:text-sm font-bold text-amber-900 leading-snug flex-1">
+          Bé hãy bấm Micro màu đỏ và đọc to nhé!
+        </p>
+      </div>
+
+      <!-- GIANT PICTURE AREA (Chiếm 65-70% diện tích thẻ cho mắt bé dễ nhận diện) -->
+      <div class="flex-1 w-full flex items-center justify-center my-1 min-h-0 relative overflow-hidden">
+        <div id="imageDisplayWrapper" class="w-full h-full rounded-3xl border-4 border-amber-300/80 p-2 bg-gradient-to-b from-amber-50/60 via-sky-50/30 to-white flex items-center justify-center shadow-inner overflow-hidden">
+          <div id="visualHolder" class="w-full h-full flex items-center justify-center">
+            <!-- Large Artwork Injected Here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Compact word title and female teacher button (Chữ vừa vặn, không chiếm chỗ) -->
+      <div class="text-center shrink-0 my-0.5">
+        <div class="flex items-center justify-center gap-2">
+          <h2 id="targetWord" class="text-xl sm:text-2xl font-black text-slate-800 tracking-wide">
+            CAT
+          </h2>
+          <span id="targetIpa" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
+            /kæt/
+          </span>
+          <button onclick="speakTargetWord()" class="flex items-center gap-1 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow transition-all">
+            <span>👩‍🏫</span>
+            <span>Nghe cô đọc</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-Time Speech Recognition Live Transcript -->
+      <div class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-0.5 shrink-0 flex items-center justify-between">
+        <div class="flex items-center gap-1 overflow-hidden">
+          <span class="text-[10px] font-bold text-slate-400 shrink-0">Pip nghe được:</span>
+          <span id="liveHeardTranscript" class="text-xs font-black text-indigo-600 truncate italic">"..."</span>
+        </div>
+        <span id="micStatusText" class="text-[10px] text-amber-600 font-bold">Sẵn sàng</span>
+      </div>
+
+      <!-- Real-time Voice Activity Energy Bar -->
+      <div class="w-full px-1 mt-0.5 shrink-0">
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div id="vadEnergyFill" class="h-full bg-gradient-to-r from-emerald-400 to-amber-400 w-0 transition-all duration-75"></div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Large Ergonomic Bouncy Mic Button -->
+    <div class="w-full py-1.5 flex flex-col items-center justify-center shrink-0">
+      <div class="relative flex items-center justify-center">
+        <div id="micPulseRing" class="hidden absolute -inset-2 rounded-full border-4 border-rose-400/80 animate-ping"></div>
+        <button id="recordBtn" onclick="toggleVoiceInput()" class="relative z-10 w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 border-4 border-white shadow-xl flex items-center justify-center text-3xl text-white transition-transform active:scale-90 bounce-pulse">
+          <span id="micIcon">🎙️</span>
+        </button>
+      </div>
+      <p id="subHint" class="text-[11px] font-bold text-slate-500 mt-0.5">Chạm Micro và đọc to tiếng Anh nha!</p>
+    </div>
+
+  </main>
+
+  <main id="quizView" class="hidden flex-1 w-full max-w-lg mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
+    <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
+      
+      <!-- Quiz Header & Question Tracker -->
+      <div class="w-full flex items-center justify-between px-2 shrink-0 border-b border-sky-100 pb-1.5">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎯</span>
+          <span id="quizCategoryBadge" class="text-xs font-black text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-full">
+            Chủ đề: Animals
+          </span>
+        </div>
+        <span id="quizProgressBadge" class="text-xs font-black text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+          Câu 1 / 4
+        </span>
+      </div>
+
+      <!-- Sound Question Prompt: Listen and choose picture -->
+      <div class="w-full flex flex-col items-center justify-center my-2 shrink-0">
+        <p class="text-xs font-bold text-slate-500 mb-1">Cô giáo vừa đọc từ gì thế nhỉ? Bé hãy nghe lại và chọn ảnh đúng nha:</p>
+        <button onclick="playQuizPromptAudio()" class="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-5 py-2 rounded-2xl shadow-lg transition-transform">
+          <span class="text-2xl animate-pulse">🔊</span>
+          <span class="text-sm tracking-wide">Bấm để nghe lại</span>
+        </button>
+      </div>
+
+      <!-- 2-3 Large Picture Answer Cards for the 6-year-old to Tap -->
+      <div id="quizOptionsGrid" class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 items-center justify-center p-1 min-h-0">
+        <!-- Injected dynamically by JS with huge visual targets -->
+      </div>
+
+      <!-- Gentle feedback mascot in Quiz -->
+      <div id="quizFeedbackBox" class="w-full bg-sky-50 border border-sky-200 rounded-2xl p-1.5 text-center shrink-0 mt-1">
+        <p id="quizFeedbackText" class="text-xs font-bold text-sky-900">
+          Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Quiz Footer Action -->
+    <div class="w-full py-1 flex items-center justify-center shrink-0">
+      <button onclick="switchAppMode('practice')" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-white/80 px-4 py-1 rounded-full border border-slate-200 shadow-sm">
+        ↩️ Quay lại luyện nói
+      </button>
+    </div>
+  </main>
+
+  <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
+    <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
+      <div class="text-3xl mb-1">🔐</div>
+      <h3 class="text-lg font-black text-slate-800">Khu vực Phụ huynh</h3>
+      <p class="text-xs text-slate-500 font-semibold mb-3">Tính nhẩm để mở cài đặt thêm/xóa từ vựng:</p>
+      <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3">
+        <p id="mathQuestion" class="text-xl font-black text-amber-900">4 + 5 = ?</p>
+      </div>
+      <input id="mathAnswerInput" type="number" pattern="[0-9]*" class="w-full text-center text-xl font-bold py-2 border-2 border-slate-300 rounded-xl mb-3 focus:outline-none focus:border-indigo-500" placeholder="Đáp án" />
+      <div class="flex gap-2">
+        <button onclick="closeParentGate()" class="flex-1 py-2 rounded-xl bg-slate-100 font-bold text-slate-600 text-sm hover:bg-slate-200">Hủy</button>
+        <button onclick="verifyParentMath()" class="flex-1 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 font-black text-slate-900 text-sm shadow">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
+    <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-1.5">
+            <span>⚙️</span> Quản Lý Từ Vựng & Hình Ảnh
+          </h2>
+          <p class="text-[11px] text-slate-500 font-semibold">Tự động tìm ảnh lớn cho từ mới (như ELEPHANT, TIGER, PIZZA...)</p>
+        </div>
+        <button onclick="closeParentStudio()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black text-slate-500 flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto pr-1 mt-3 space-y-3">
+        
+        <!-- Add Word Form -->
+        <div class="bg-indigo-50/70 p-3 sm:p-4 rounded-2xl border border-indigo-200 space-y-2.5">
+          <p class="text-xs font-black text-indigo-900 flex items-center gap-1">
+            <span>➕ Thêm từ mới vào chủ đề:</span>
+            <span id="studioTargetCatName" class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md font-bold">Animals</span>
+          </p>
+
+          <div class="flex gap-2">
+            <input id="newWordInput" type="text" placeholder="Gõ từ tiếng Anh (vd: ELEPHANT, TIGER, BUS...)" class="flex-1 px-3 py-2 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
+            <button onclick="searchWordImagesTrigger()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-3 py-2 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
+              <span>🔍</span> <span>Tìm ảnh</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <input id="newIpaInput" type="text" placeholder="Phiên âm (tự sinh vd: /ˈel.ə.fənt/)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newAltsInput" type="text" placeholder="Âm ngọng của bé (vd: efan, pant)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-extrabold text-slate-600">Chọn 1 hình ảnh bé thích nhất bên dưới:</span>
+              <span id="imgSearchStatus" class="text-[10px] font-bold text-indigo-600"></span>
+            </div>
+            
+            <div id="imageCandidateGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-36 overflow-y-auto bg-white p-2 rounded-xl border border-indigo-200 min-h-[70px]">
+              <div class="col-span-full py-3 text-center text-xs text-slate-400 italic">
+                Gõ từ tiếng Anh rồi bấm "Tìm ảnh" để chọn ảnh thật sắc nét!
+              </div>
+            </div>
+
+            <div class="mt-1.5">
+              <input id="newImgUrlInput" type="text" placeholder="Hoặc dán trực tiếp link ảnh online bất kỳ..." class="w-full px-2.5 py-1 rounded-lg border border-slate-200 text-[11px]" />
+            </div>
+          </div>
+
+          <button onclick="handleAddCustomWord()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 rounded-xl text-xs shadow-md active:scale-95 transition">
+            ✨ Lưu từ này vào bài học cho bé
+          </button>
+        </div>
+
+        <!-- Active Category Words List & Deletion -->
+        <div class="bg-white p-3 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black text-slate-700">Danh sách từ trong chủ đề hiện tại:</span>
+            <span id="studioWordsCountBadge" class="text-[11px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">4 từ</span>
+          </div>
+          <div id="studioWordList" class="space-y-1.5 max-h-44 overflow-y-auto pr-1"></div>
+        </div>
+
+      </div>
+
+      <div class="mt-3 pt-2 border-t flex justify-between items-center text-xs shrink-0">
+        <button onclick="resetDefaults()" class="text-rose-500 font-bold hover:underline">
+          Khôi phục từ mặc định
+        </button>
+        <button onclick="closeParentStudio()" class="bg-slate-800 hover:bg-slate-900 text-white px-5 py-2 rounded-xl font-black shadow">
+          Xong & Quay lại
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const HIGH_RES_VECTORS = {
+      ELEPHANT: {
+        ipa: '/ˈel.ə.fənt/',
+        emoji: '🐘',
+        alts: ['efan', 'elphan', 'elefan', 'pant', 'fan', 'alfa', 'olifan'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <ellipse cx="115" cy="115" rx="65" ry="52" fill="#94A3B8"/>
+          <ellipse cx="70" cy="100" rx="42" ry="46" fill="#94A3B8"/>
+          <ellipse cx="40" cy="95" rx="30" ry="38" fill="#CBD5E1"/>
+          <ellipse cx="40" cy="95" rx="20" ry="26" fill="#F472B6" opacity="0.3"/>
+          <path d="M 50 120 Q 35 165 72 160 Q 80 155 68 140" fill="#94A3B8" stroke="#64748B" stroke-width="3"/>
+          <circle cx="62" cy="85" r="8" fill="#1E293B"/>
+          <circle cx="64" cy="82" r="3" fill="#FFFFFF"/>
+          <path d="M 64 125 Q 82 136 78 118" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+          <rect x="90" y="145" width="22" height="35" rx="10" fill="#64748B"/>
+          <rect x="135" y="145" width="22" height="35" rx="10" fill="#64748B"/>
+          <path d="M 178 115 Q 192 135 186 148" stroke="#64748B" stroke-width="5" stroke-linecap="round" fill="none"/>
+        </svg>`
+      },
+      TIGER: {
+        ipa: '/ˈtaɪ.ɡər/',
+        emoji: '🐯',
+        alts: ['tige', 'taiga', 'tiga', 'tyge', 'ger'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="105" r="70" fill="#FB923C"/>
+          <polygon points="50,60 60,25 95,50" fill="#EA580C"/>
+          <polygon points="150,60 140,25 105,50" fill="#EA580C"/>
+          <polygon points="55,55 63,33 88,48" fill="#FECDD3"/>
+          <polygon points="145,55 137,33 112,48" fill="#FECDD3"/>
+          <ellipse cx="100" cy="125" rx="34" ry="24" fill="#FFF7ED"/>
+          <circle cx="75" cy="98" r="9" fill="#1E293B"/>
+          <circle cx="77" cy="95" r="3" fill="#FFFFFF"/>
+          <circle cx="125" cy="98" r="9" fill="#1E293B"/>
+          <circle cx="127" cy="95" r="3" fill="#FFFFFF"/>
+          <polygon points="100,120 90,110 110,110" fill="#EA580C"/>
+          <path d="M 100 80 L 100 60 M 60 92 L 40 88 M 140 92 L 160 88 M 58 115 L 38 118 M 142 115 L 162 118" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+        </svg>`
+      },
+      LION: {
+        ipa: '/ˈlaɪ.ən/',
+        emoji: '🦁',
+        alts: ['wion', 'lyon', 'laion', 'line', 'ryan'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="100" r="78" fill="#EA580C"/>
+          <circle cx="100" cy="100" r="56" fill="#FDE047"/>
+          <circle cx="76" cy="92" r="8" fill="#1E293B"/>
+          <circle cx="78" cy="89" r="3" fill="#FFFFFF"/>
+          <circle cx="124" cy="92" r="8" fill="#1E293B"/>
+          <circle cx="126" cy="89" r="3" fill="#FFFFFF"/>
+          <ellipse cx="100" cy="112" rx="12" ry="9" fill="#9A3412"/>
+          <path d="M 100 121 Q 90 135 78 128 M 100 121 Q 110 135 122 128" stroke="#9A3412" stroke-width="4" stroke-linecap="round" fill="none"/>
+        </svg>`
+      },
+      CAT: {
+        ipa: '/kæt/',
+        emoji: '🐱',
+        alts: ['kat', 'cap', 'cac', 'cut', 'ca', 'khat'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="110" r="65" fill="#FBBF24"/>
+          <polygon points="50,70 60,25 98,60" fill="#F59E0B"/>
+          <polygon points="150,70 140,25 102,60" fill="#F59E0B"/>
+          <circle cx="76" cy="100" r="9" fill="#1E293B"/>
+          <circle cx="78" cy="97" r="3" fill="#FFFFFF"/>
+          <circle cx="124" cy="100" r="9" fill="#1E293B"/>
+          <circle cx="126" cy="97" r="3" fill="#FFFFFF"/>
+          <ellipse cx="100" cy="122" rx="8" ry="6" fill="#F43F5E"/>
+          <path d="M 40 108 L 65 108 M 40 124 L 65 120 M 160 108 L 135 108 M 160 124 L 135 120" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+        </svg>`
+      },
+      DOG: {
+        ipa: '/dɒɡ/',
+        emoji: '🐶',
+        alts: ['dok', 'doc', 'dot', 'do', 'dawg'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <ellipse cx="100" cy="110" rx="70" ry="60" fill="#D97706"/>
+          <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/>
+          <ellipse cx="155" cy="90" rx="18" ry="36" fill="#B45309"/>
+          <circle cx="76" cy="104" r="9" fill="#1E293B"/>
+          <circle cx="78" cy="101" r="3" fill="#FFFFFF"/>
+          <circle cx="124" cy="104" r="9" fill="#1E293B"/>
+          <circle cx="126" cy="101" r="3" fill="#FFFFFF"/>
+          <ellipse cx="100" cy="130" rx="14" ry="10" fill="#1E293B"/>
+          <path d="M 100 140 Q 100 156 112 152" stroke="#F43F5E" stroke-width="8" stroke-linecap="round" fill="none"/>
+        </svg>`
+      },
+      DUCK: {
+        ipa: '/dʌk/',
+        emoji: '🦆',
+        alts: ['dak', 'dac', 'dap', 'duh', 'dock'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="90" r="56" fill="#FACC15"/>
+          <circle cx="80" cy="80" r="8" fill="#1E293B"/>
+          <circle cx="82" cy="77" r="3" fill="#FFFFFF"/>
+          <ellipse cx="130" cy="100" rx="32" ry="14" fill="#F97316"/>
+          <path d="M 50 120 Q 100 170 150 120" fill="#EAB308"/>
+        </svg>`
+      },
+      APPLE: {
+        ipa: '/ˈæp.əl/',
+        emoji: '🍎',
+        alts: ['apo', 'appo', 'aple', 'epo'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="84" cy="110" r="52" fill="#EF4444"/>
+          <circle cx="116" cy="110" r="52" fill="#DC2626"/>
+          <path d="M 100 64 Q 104 36 120 30" stroke="#78350F" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <ellipse cx="128" cy="44" rx="14" ry="8" fill="#22C55E" transform="rotate(-20 128 44)"/>
+        </svg>`
+      },
+      BANANA: {
+        ipa: '/bəˈnɑː.nə/',
+        emoji: '🍌',
+        alts: ['nana', 'banana', 'banan', 'bana'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <path d="M 50 150 C 40 80 100 40 150 50 C 110 70 80 110 90 160 Z" fill="#FACC15" stroke="#EAB308" stroke-width="4"/>
+          <circle cx="150" cy="50" r="5" fill="#78350F"/>
+        </svg>`
+      },
+      CAR: {
+        ipa: '/kɑːr/',
+        emoji: '🚗',
+        alts: ['ca', 'ka', 'car', 'cor'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <rect x="40" y="90" width="120" height="44" rx="12" fill="#3B82F6"/>
+          <path d="M 60 90 L 80 56 L 130 56 L 144 90 Z" fill="#93C5FD"/>
+          <circle cx="70" cy="134" r="16" fill="#1E293B"/>
+          <circle cx="70" cy="134" r="7" fill="#CBD5E1"/>
+          <circle cx="130" cy="134" r="16" fill="#1E293B"/>
+          <circle cx="130" cy="134" r="7" fill="#CBD5E1"/>
+        </svg>`
+      },
+      BUS: {
+        ipa: '/bʌs/',
+        emoji: '🚌',
+        alts: ['bas', 'bah'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <rect x="30" y="60" width="140" height="75" rx="16" fill="#FBBF24"/>
+          <rect x="45" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
+          <rect x="85" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
+          <rect x="125" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
+          <circle cx="65" cy="135" r="16" fill="#1E293B"/>
+          <circle cx="135" cy="135" r="16" fill="#1E293B"/>
+        </svg>`
+      }
+    };
+
+    const DEFAULT_DATA = [
+      {
+        id: 'animals',
+        name: 'Animals (Động vật)',
+        icon: '🦁',
+        words: [
+          { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['efan', 'elphan', 'pant', 'fan'] },
+          { word: 'TIGER', ipa: '/ˈtaɪ.ɡər/', img: '', alts: ['tige', 'taiga', 'tiga'] },
+          { word: 'CAT', ipa: '/kæt/', img: '', alts: ['kat', 'cap', 'cac', 'cut', 'ca'] },
+          { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dok', 'doc', 'do', 'dawg'] }
+        ]
+      },
+      {
+        id: 'foods',
+        name: 'Foods (Món ăn)',
+        icon: '🍎',
+        words: [
+          { word: 'APPLE', ipa: '/ˈæp.əl/', img: '', alts: ['apo', 'appo', 'aple'] },
+          { word: 'BANANA', ipa: '/bəˈnɑː.nə/', img: '', alts: ['nana', 'banana', 'banan'] }
+        ]
+      },
+      {
+        id: 'vehicles',
+        name: 'Vehicles (Xe cộ)',
+        icon: '🚗',
+        words: [
+          { word: 'CAR', ipa: '/kɑːr/', img: '', alts: ['ca', 'ka', 'car'] },
+          { word: 'BUS', ipa: '/bʌs/', img: '', alts: ['bas', 'bah'] }
+        ]
+      }
+    ];
+
+    let appData = JSON.parse(localStorage.getItem('safari_curriculum_v6')) || DEFAULT_DATA;
+    let currentCatIndex = 0;
+    let currentWordIndex = 0;
+    let totalStars = parseInt(localStorage.getItem('safari_stars') || '0');
+    let attemptsCount = 0;
+    let isListening = false;
+    let currentMode = 'practice'; // 'practice' | 'quiz'
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+
+    let audioContext = null;
+    let recognition = null;
+    let micStream = null;
+    let parentMathSecret = 0;
+    let selectedImageCandidate = '';
+    let preferredFemaleVoice = null;
+
+    function saveData() {
+      localStorage.setItem('safari_curriculum_v6', JSON.stringify(appData));
+    }
+  </script>
+
+  <script>
+    function initAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      return audioContext;
+    }
+
+    function playCelebrationFanfare() {
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.28, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.32);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.34);
+      });
+    }
+
+    function playGentleErrorSound() {
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(200, now + 0.22);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.23);
+    }
+
+    function loadFemaleTeacherVoice() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      preferredFemaleVoice = voices.find(v => 
+        (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
+        (v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Zira') || 
+         v.name.includes('Google US English') || v.name.includes('Karen') || v.name.includes('Female'))
+      ) || voices.find(v => v.lang.startsWith('en'));
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadFemaleTeacherVoice;
+      loadFemaleTeacherVoice();
+    }
+
+    function speakTargetWord(customWord = null, onEndCallback = null) {
+      initAudioContext();
+      if (!('speechSynthesis' in window)) return;
+      const word = customWord || appData[currentCatIndex].words[currentWordIndex]?.word;
+      if (!word) return;
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word.toLowerCase());
+      utterance.lang = 'en-US';
+      utterance.rate = 0.8;
+      utterance.pitch = 1.2;
+      if (preferredFemaleVoice) utterance.voice = preferredFemaleVoice;
+
+      if (onEndCallback) {
+        utterance.onend = onEndCallback;
+      }
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+
+  <script>
+    function getVisualHTML(wordObj, extraClasses = '') {
+      if (!wordObj) return '<span class="text-7xl">🌟</span>';
+      const cleanWord = wordObj.word.toUpperCase();
+      const dictMatch = HIGH_RES_VECTORS[cleanWord];
+
+      if (wordObj.img && wordObj.img.trim() !== '') {
+        return `<img src="${wordObj.img}" alt="${wordObj.word}" class="w-full h-full object-contain drop-shadow-md rounded-2xl ${extraClasses}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-7xl\\'>${dictMatch?.emoji || '🌟'}</span>'" />`;
+      }
+      if (dictMatch && dictMatch.svg) {
+        return `<div class="w-full h-full flex items-center justify-center p-1 ${extraClasses}">${dictMatch.svg}</div>`;
+      }
+      return `<span class="text-7xl sm:text-8xl animate-bounce">${dictMatch?.emoji || '🌟'}</span>`;
+    }
+
+    function renderVisualCard(wordObj) {
+      const container = document.getElementById('visualHolder');
+      container.innerHTML = getVisualHTML(wordObj);
+    }
+
+    function renderCurrentCard() {
+      const cat = appData[currentCatIndex];
+      const wordObj = cat.words[currentWordIndex];
+
+      document.getElementById('cardIndexBadge').innerText = `CARD ${currentWordIndex + 1} / ${cat.words.length}`;
+      document.getElementById('targetWord').innerText = wordObj.word;
+      document.getElementById('targetIpa').innerText = wordObj.ipa || (HIGH_RES_VECTORS[wordObj.word.toUpperCase()]?.ipa || `/${wordObj.word.toLowerCase()}/`);
+      document.getElementById('liveHeardTranscript').innerText = '"..."';
+
+      renderVisualCard(wordObj);
+      renderAttemptDots();
+      setMascot('Bé hãy bấm nút Micro và đọc to từ vựng nhé!', '🐲');
+    }
+
+    function renderAttemptDots() {
+      const container = document.getElementById('attemptDots');
+      container.innerHTML = [0, 1, 2].map(i => `
+        <span class="w-2.5 h-2.5 rounded-full border border-amber-400 ${i < attemptsCount ? 'bg-amber-400' : 'bg-transparent'}"></span>
+      `).join('');
+    }
+
+    function navigateWord(direction) {
+      const cat = appData[currentCatIndex];
+      currentWordIndex = (currentWordIndex + direction + cat.words.length) % cat.words.length;
+      attemptsCount = 0;
+      renderCurrentCard();
+    }
+
+    function setMascot(text, avatar = '🐲') {
+      document.getElementById('mascotText').innerText = text;
+      document.getElementById('mascotAvatar').innerText = avatar;
+    }
+
+    function renderTabs() {
+      const container = document.getElementById('categoryTabs');
+      container.innerHTML = appData.map((cat, idx) => `
+        <button onclick="selectCategory(${idx})" class="px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${idx === currentCatIndex ? 'bg-amber-400 text-amber-950 shadow-sm' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
+          ${cat.icon} ${cat.name.split(' ')[0]}
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(idx) {
+      currentCatIndex = idx;
+      currentWordIndex = 0;
+      attemptsCount = 0;
+      renderTabs();
+      if (currentMode === 'practice') {
+        renderCurrentCard();
+      } else {
+        startQuizForCurrentCategory();
+      }
+    }
+  </script>
+
+  <script>
+    function switchAppMode(mode) {
+      currentMode = mode;
+      const practiceView = document.getElementById('practiceView');
+      const quizView = document.getElementById('quizView');
+      const practiceBtn = document.getElementById('modePracticeBtn');
+      const quizBtn = document.getElementById('modeQuizBtn');
+
+      if (mode === 'practice') {
+        practiceView.classList.remove('hidden');
+        quizView.classList.add('hidden');
+        practiceBtn.className = 'px-2.5 py-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm';
+        quizBtn.className = 'px-2.5 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900';
+        renderCurrentCard();
+      } else {
+        practiceView.classList.add('hidden');
+        quizView.classList.remove('hidden');
+        quizBtn.className = 'px-2.5 py-1 rounded-xl text-xs font-black transition-all bg-sky-400 text-sky-950 shadow-sm';
+        practiceBtn.className = 'px-2.5 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900';
+        startQuizForCurrentCategory();
+      }
+    }
+
+    function startQuizForCurrentCategory() {
+      const cat = appData[currentCatIndex];
+      document.getElementById('quizCategoryBadge').innerText = `Chủ đề: ${cat.name.split(' ')[0]}`;
+
+      // Xáo trộn toàn bộ từ trong chủ đề để tạo danh sách câu hỏi
+      quizQuestions = [...cat.words].sort(() => 0.5 - Math.random());
+      currentQuizIndex = 0;
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (currentQuizIndex >= quizQuestions.length) {
+        renderQuizCompletionScreen();
+        return;
+      }
+
+      const target = quizQuestions[currentQuizIndex];
+      const cat = appData[currentCatIndex];
+      document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+      document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
+
+      // Tạo các lựa chọn ảnh gây nhiễu (distractors)
+      const otherWords = cat.words.filter(w => w.word !== target.word);
+      let distractors = otherWords.sort(() => 0.5 - Math.random()).slice(0, 2);
+      
+      // Nếu chủ đề có ít từ, lấy thêm từ các chủ đề khác bù vào cho đủ 2-3 ảnh
+      if (distractors.length < 1) {
+        const pool = appData.flatMap(c => c.words).filter(w => w.word !== target.word);
+        distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 2);
+      }
+
+      const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
+      const grid = document.getElementById('quizOptionsGrid');
+      grid.innerHTML = '';
+
+      choices.forEach(item => {
+        const choiceBtn = document.createElement('button');
+        choiceBtn.className = 'w-full h-full max-h-[220px] rounded-3xl border-4 border-slate-200 hover:border-sky-400 bg-slate-50/80 p-2 flex flex-col items-center justify-center transition-all active:scale-95 shadow-md relative overflow-hidden group';
+        
+        choiceBtn.innerHTML = `
+          <div class="w-full h-full flex items-center justify-center overflow-hidden pointer-events-none">
+            ${getVisualHTML(item, 'max-h-[160px]')}
+          </div>
+        `;
+
+        choiceBtn.onclick = () => handleQuizAnswer(item, target, choiceBtn);
+        grid.appendChild(choiceBtn);
+      });
+
+      // Tự động đọc từ vựng ngay khi câu hỏi xuất hiện
+      setTimeout(() => {
+        speakTargetWord(target.word);
+      }, 350);
+    }
+
+    function playQuizPromptAudio() {
+      const target = quizQuestions[currentQuizIndex];
+      if (target) {
+        speakTargetWord(target.word);
+      }
+    }
+
+    function handleQuizAnswer(selectedItem, targetItem, btnElem) {
+      if (selectedItem.word === targetItem.word) {
+        // Đúng: Thưởng sao, đổi màu viền xanh lá, chúc mừng
+        btnElem.classList.remove('border-slate-200');
+        btnElem.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-300');
+        playCelebrationFanfare();
+
+        totalStars += 1;
+        localStorage.setItem('safari_stars', totalStars);
+        document.getElementById('starCounter').innerText = totalStars;
+
+        document.getElementById('quizFeedbackText').innerHTML = `🎉 <b class="text-emerald-600">CHÍNH XÁC!</b> Đó là "${targetItem.word}"!`;
+
+        confetti({
+          particleCount: 40,
+          spread: 50,
+          origin: { y: 0.6 }
+        });
+
+        // Tự động sang câu tiếp theo sau 1.2s
+        setTimeout(() => {
+          currentQuizIndex++;
+          renderQuizQuestion();
+        }, 1200);
+
+      } else {
+        // Sai: Rung lắc nhẹ, âm thanh dịu dàng khuyên bé thử lại
+        btnElem.classList.add('wobble', 'border-rose-300');
+        playGentleErrorSound();
+        document.getElementById('quizFeedbackText').innerHTML = `💡 Chưa đúng rồi, bé bấm nghe lại và thử lại bức ảnh khác nhé!`;
+        setTimeout(() => {
+          btnElem.classList.remove('wobble', 'border-rose-300');
+        }, 500);
+      }
+    }
+
+    function renderQuizCompletionScreen() {
+      const grid = document.getElementById('quizOptionsGrid');
+      grid.innerHTML = `
+        <div class="col-span-full flex flex-col items-center justify-center p-4 text-center">
+          <span class="text-6xl animate-bounce mb-2">🏆</span>
+          <h3 class="text-xl font-black text-amber-600 mb-1">HOÀN THÀNH BÀI KIỂM TRA!</h3>
+          <p class="text-xs font-bold text-slate-600 mb-4">Bé đã trả lời rất giỏi và nhận được thêm nhiều ngôi sao!</p>
+          <div class="flex gap-3">
+            <button onclick="startQuizForCurrentCategory()" class="bg-amber-400 hover:bg-amber-500 active:scale-95 text-amber-950 font-black px-4 py-2 rounded-2xl text-xs shadow-md">
+              🔄 Làm lại bài này
+            </button>
+            <button onclick="switchAppMode('practice')" class="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white font-black px-4 py-2 rounded-2xl text-xs shadow-md">
+              🎙️ Tiếp tục luyện nói
+            </button>
+          </div>
+        </div>
+      `;
+      playCelebrationFanfare();
+      confetti({ particleCount: 80, spread: 80 });
+    }
+  </script>
+
+  <script>
+    function calculateLevenshtein(a, b) {
+      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function evaluateChildSpeech(hypotheses, targetWordObj) {
+      const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
+      const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
+      
+      const dictObj = HIGH_RES_VECTORS[targetWordObj.word];
+      if (dictObj && dictObj.alts) {
+        childAlts.push(...dictObj.alts);
+      }
+
+      let bestTranscript = hypotheses[0] || '';
+      let bestConfidence = 0;
+
+      for (const phrase of hypotheses) {
+        const words = phrase.toLowerCase().trim().split(/\s+/);
+        for (const rawWord of words) {
+          const w = rawWord.replace(/[^a-z]/g, '');
+          if (!w) continue;
+
+          if (w === cleanTarget || childAlts.includes(w)) {
+            return { isMatch: true, heardText: w, confidence: 1.0 };
+          }
+
+          const normW = w.replace(/r/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
+          const normT = cleanTarget.replace(/r/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
+          if (normW === normT) {
+            return { isMatch: true, heardText: w, confidence: 0.95 };
+          }
+
+          if (w.includes(cleanTarget) || (cleanTarget.length >= 5 && (cleanTarget.includes(w) && w.length >= 3))) {
+            return { isMatch: true, heardText: w, confidence: 0.9 };
+          }
+
+          const dist = calculateLevenshtein(normW, normT);
+          const maxLen = Math.max(normW.length, normT.length);
+          const similarity = maxLen > 0 ? (1 - dist / maxLen) : 0;
+          if (similarity > bestConfidence) {
+            bestConfidence = similarity;
+            bestTranscript = w;
+          }
+
+          if (similarity >= 0.45) {
+            return { isMatch: true, heardText: w, confidence: similarity };
+          }
+        }
+      }
+
+      return { isMatch: false, heardText: bestTranscript, confidence: bestConfidence };
+    }
+
+    function initSpeechRecognition() {
+      const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechClass) {
+        setMascot('Trình duyệt chưa hỗ trợ Micro. Bé mở bằng Google Chrome nhé!', '⚠️');
+        return;
+      }
+
+      recognition = new SpeechClass();
+      recognition.lang = 'en-US';
+      recognition.continuous = false;
+      recognition.interimResults = true; 
+      recognition.maxAlternatives = 10; 
+
+      recognition.onstart = () => {
+        isListening = true;
+        document.getElementById('micPulseRing').classList.remove('hidden');
+        document.getElementById('micStatusText').innerText = 'Đang nghe bé nói...';
+        setMascot('Pip đang lắng nghe nè, bé đọc to lên nhé! 👂', '👂');
+      };
+
+      recognition.onresult = (event) => {
+        const hypotheses = [];
+        let interimText = '';
+
+        for (let i = 0; i < event.results.length; ++i) {
+          const res = event.results[i];
+          for (let j = 0; j < res.length; ++j) {
+            const t = res[j].transcript;
+            if (t && !hypotheses.includes(t)) hypotheses.push(t);
+          }
+          if (!res.isFinal) {
+            interimText = res[0].transcript;
+          }
+        }
+
+        const previewWord = interimText || hypotheses[0] || '...';
+        document.getElementById('liveHeardTranscript').innerText = `"${previewWord.trim()}"`;
+
+        if (event.results[0].isFinal) {
+          isListening = false;
+          document.getElementById('micPulseRing').classList.add('hidden');
+          const targetObj = appData[currentCatIndex].words[currentWordIndex];
+          const evaluation = evaluateChildSpeech(hypotheses, targetObj);
+
+          if (evaluation.isMatch) {
+            celebrateSuccess(evaluation.heardText);
+          } else {
+            handleSpeechRetry(evaluation.heardText);
+          }
+        }
+      };
+
+      recognition.onerror = () => {
+        isListening = false;
+        document.getElementById('micPulseRing').classList.add('hidden');
+        document.getElementById('micStatusText').innerText = 'Sẵn sàng';
+        handleSpeechRetry('...');
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        document.getElementById('micPulseRing').classList.add('hidden');
+      };
+    }
+
+    async function toggleVoiceInput() {
+      initAudioContext();
+      await initPersistentMic();
+      if (!recognition) return;
+
+      try {
+        if (isListening) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
+      } catch (err) {
+        try {
+          recognition.stop();
+          setTimeout(() => recognition.start(), 150);
+        } catch(e) {}
+      }
+    }
+
+    function celebrateSuccess(spokenWord) {
+      playCelebrationFanfare();
+      totalStars += 1;
+      localStorage.setItem('safari_stars', totalStars);
+      document.getElementById('starCounter').innerText = totalStars;
+      
+      const targetWord = appData[currentCatIndex].words[currentWordIndex].word;
+      setMascot(`XUẤT SẮC! Bé đọc từ "${targetWord}" chuẩn lắm! 🎉`, '🥳');
+      
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.7 }
+      });
+
+      attemptsCount = 0;
+      renderAttemptDots();
+
+      setTimeout(() => {
+        navigateWord(1);
+      }, 1600);
+    }
+
+    function handleSpeechRetry(heardWord) {
+      attemptsCount++;
+      renderAttemptDots();
+
+      if (attemptsCount >= 3) {
+        setMascot('BÉ ĐÃ RẤT CỐ GẮNG! Pip tặng bé 1 ngôi sao chăm chỉ nha! 🌟', '🎉');
+        playCelebrationFanfare();
+        setTimeout(() => celebrateSuccess(heardWord), 1000);
+        return;
+      }
+
+      playGentleErrorSound();
+      setMascot(`Gần đúng rồi! Bé bấm "Nghe cô đọc" rồi nói lại to hơn nha! 💖`, '🥰');
+      setTimeout(() => speakTargetWord(), 900);
+    }
+  </script>
+
+  <script>
+    async function searchWordImages(queryWord) {
+      const cleanWord = queryWord.trim().toLowerCase();
+      const grid = document.getElementById('imageCandidateGrid');
+      const status = document.getElementById('imgSearchStatus');
+      
+      grid.innerHTML = '<div class="col-span-full py-4 text-center text-xs text-indigo-600 font-bold animate-pulse">Đang tìm ảnh cho bé...</div>';
+      status.innerText = 'Đang tìm...';
+
+      const results = [];
+      const upper = queryWord.toUpperCase();
+      if (HIGH_RES_VECTORS[upper]) {
+        results.push({
+          type: 'dict',
+          label: 'Vector HD Chuẩn',
+          data: HIGH_RES_VECTORS[upper]
+        });
+      }
+
+      try {
+        const endpoint = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(cleanWord)}&gsrlimit=6&prop=pageimages&pithumbsize=400&format=json&origin=*`;
+        const res = await fetch(endpoint);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.query && json.query.pages) {
+            Object.values(json.query.pages).forEach(p => {
+              if (p.thumbnail && p.thumbnail.source) {
+                results.push({
+                  type: 'photo',
+                  label: p.title,
+                  url: p.thumbnail.source
+                });
+              }
+            });
+          }
+        }
+      } catch (err) {}
+
+      if (results.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-3 text-center text-xs text-slate-400">Không tìm thấy ảnh trên mạng. Ứng dụng sẽ dùng Vector chuẩn!</div>';
+        status.innerText = '0 ảnh';
+        return;
+      }
+
+      status.innerText = `Tìm thấy ${results.length} ảnh`;
+      grid.innerHTML = '';
+
+      results.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'relative aspect-square rounded-xl border-2 border-slate-200 cursor-pointer overflow-hidden p-1 flex items-center justify-center hover:border-indigo-500 bg-slate-50 transition shadow-sm';
+        
+        if (item.type === 'dict') {
+          card.innerHTML = `<div class="w-full h-full p-1">${item.data.svg}</div><span class="absolute bottom-0.5 text-[9px] bg-indigo-600 text-white px-1 rounded font-bold">Vector HD</span>`;
+          card.onclick = () => selectCandidateImage('', card);
+        } else {
+          card.innerHTML = `<img src="${item.url}" alt="${item.label}" class="w-full h-full object-cover rounded-lg" onerror="this.parentElement.remove()" />`;
+          card.onclick = () => selectCandidateImage(item.url, card);
+        }
+
+        grid.appendChild(card);
+
+        if (index === (results[0].type === 'photo' ? 0 : (results.length > 1 ? 1 : 0))) {
+          if (item.type === 'photo') selectCandidateImage(item.url, card);
+        }
+      });
+    }
+
+    function selectCandidateImage(url, elem) {
+      selectedImageCandidate = url;
+      document.getElementById('newImgUrlInput').value = url;
+      document.querySelectorAll('#imageCandidateGrid > div').forEach(d => {
+        d.classList.remove('ring-4', 'ring-indigo-500', 'border-indigo-500');
+      });
+      if (elem) {
+        elem.classList.add('ring-4', 'ring-indigo-500', 'border-indigo-500');
+      }
+    }
+
+    function searchWordImagesTrigger() {
+      const word = document.getElementById('newWordInput').value.trim();
+      if (!word) return alert('Vui lòng gõ từ tiếng Anh trước khi tìm ảnh!');
+      
+      const upper = word.toUpperCase();
+      const dict = HIGH_RES_VECTORS[upper];
+      if (dict) {
+        document.getElementById('newIpaInput').value = dict.ipa;
+        document.getElementById('newAltsInput').value = dict.alts.join(', ');
+      } else {
+        document.getElementById('newIpaInput').value = `/${word.toLowerCase()}/`;
+      }
+
+      searchWordImages(word);
+    }
+
+    function openParentGate() {
+      const a = Math.floor(Math.random() * 6) + 3;
+      const b = Math.floor(Math.random() * 5) + 2;
+      parentMathSecret = a + b;
+      document.getElementById('mathQuestion').innerText = `${a} + ${b} = ?`;
+      document.getElementById('mathAnswerInput').value = '';
+      document.getElementById('parentGateModal').classList.remove('hidden');
+    }
+
+    function closeParentGate() {
+      document.getElementById('parentGateModal').classList.add('hidden');
+    }
+
+    function verifyParentMath() {
+      const val = parseInt(document.getElementById('mathAnswerInput').value);
+      if (val === parentMathSecret) {
+        closeParentGate();
+        openParentStudio();
+      } else {
+        alert('Phép tính chưa đúng, mời ba mẹ thử lại!');
+        openParentGate();
+      }
+    }
+
+    function openParentStudio() {
+      document.getElementById('studioTargetCatName').innerText = appData[currentCatIndex].name;
+      renderStudioWordList();
+      document.getElementById('parentStudioModal').classList.remove('hidden');
+    }
+
+    function closeParentStudio() {
+      document.getElementById('parentStudioModal').classList.add('hidden');
+      renderTabs();
+      renderCurrentCard();
+    }
+
+    function renderStudioWordList() {
+      const cat = appData[currentCatIndex];
+      const listContainer = document.getElementById('studioWordList');
+      document.getElementById('studioWordsCountBadge').innerText = `${cat.words.length} từ`;
+
+      listContainer.innerHTML = cat.words.map((w, idx) => `
+        <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-center gap-2">
+            <span class="font-black text-slate-800 text-xs">${w.word}</span>
+            <span class="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-bold">${w.ipa}</span>
+          </div>
+          <button onclick="deleteWord(${idx})" class="text-rose-600 hover:text-rose-800 font-black text-xs px-2.5 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition active:scale-95">
+            🗑️ Xóa từ này
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function handleAddCustomWord() {
+      const word = document.getElementById('newWordInput').value.trim().toUpperCase();
+      const ipa = document.getElementById('newIpaInput').value.trim() || `/${word.toLowerCase()}/`;
+      const altsRaw = document.getElementById('newAltsInput').value.trim();
+      let imgUrl = document.getElementById('newImgUrlInput').value.trim() || selectedImageCandidate;
+
+      if (!word) return alert('Vui lòng nhập từ tiếng Anh!');
+
+      const alts = altsRaw ? altsRaw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean) : [word.toLowerCase()];
+
+      appData[currentCatIndex].words.push({
+        word: word,
+        ipa: ipa,
+        img: imgUrl,
+        alts: alts
+      });
+
+      saveData();
+      renderStudioWordList();
+      renderCurrentCard();
+
+      document.getElementById('newWordInput').value = '';
+      document.getElementById('newIpaInput').value = '';
+      document.getElementById('newAltsInput').value = '';
+      document.getElementById('newImgUrlInput').value = '';
+      selectedImageCandidate = '';
+      document.getElementById('imageCandidateGrid').innerHTML = '<div class="col-span-full py-3 text-center text-xs text-slate-400 italic">Đã thêm từ thành công! Gõ từ tiếp theo để tìm ảnh.</div>';
+
+      alert(`Đã thêm từ "${word}" thành công vào bài học của bé!`);
+    }
+
+    function deleteWord(idx) {
+      if (appData[currentCatIndex].words.length <= 1) {
+        return alert('Mỗi chủ đề cần giữ lại ít nhất 1 từ vựng cho bé học!');
+      }
+      const wName = appData[currentCatIndex].words[idx].word;
+      if (confirm(`Xóa từ "${wName}" khỏi danh sách?`)) {
+        appData[currentCatIndex].words.splice(idx, 1);
+        if (currentWordIndex >= appData[currentCatIndex].words.length) {
+          currentWordIndex = 0;
+        }
+        saveData();
+        renderStudioWordList();
+        renderCurrentCard();
+      }
+    }
+
+    function resetDefaults() {
+      if (confirm('Khôi phục lại toàn bộ danh sách từ vựng chuẩn ban đầu?')) {
+        appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        saveData();
+        renderStudioWordList();
+        renderTabs();
+        renderCurrentCard();
+      }
+    }
+
+    async function initPersistentMic() {
+      if (micStream) return true;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        micStream = stream;
+        const ctx = initAudioContext();
+        const source = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const energyFill = document.getElementById('vadEnergyFill');
+
+        function updateVAD() {
+          if (!isListening) {
+            energyFill.style.width = '0%';
+            requestAnimationFrame(updateVAD);
+            return;
+          }
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          let avg = sum / dataArray.length;
+          let pct = Math.min(100, Math.round((avg / 60) * 100));
+          energyFill.style.width = pct + '%';
+
+          if (pct > 25) {
+            document.getElementById('mascotAvatar').style.transform = 'scale(1.25)';
+          } else {
+            document.getElementById('mascotAvatar').style.transform = 'scale(1)';
+          }
+          requestAnimationFrame(updateVAD);
+        }
+        updateVAD();
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('starCounter').innerText = totalStars;
+      renderTabs();
+      renderCurrentCard();
+      initSpeechRecognition();
+      loadFemaleTeacherVoice();
+    });
+  </script>
+</body>
+</html>
