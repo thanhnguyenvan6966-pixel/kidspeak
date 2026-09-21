@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Magic Sound Safari - Luyện Nói & Kiểm Tra Tiếng Anh Cho Bé</title>
+  <title>Magic Sound Safari - KidSpeak & Quiz Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
       box-shadow: 0 16px 30px -8px rgba(245, 158, 11, 0.25), 0 8px 12px -4px rgba(245, 158, 11, 0.15);
     }
     .wobble {
-      animation: wobbleAnim 0.4s ease-in-out;
+      animation: wobbleAnim 0.45s ease-in-out;
     }
     @keyframes wobbleAnim {
       0%, 100% { transform: translateX(0); }
@@ -43,6 +43,7 @@
 </head>
 <body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800 select-none">
 
+  <!-- TOP HEADER -->
   <header class="w-full px-3 sm:px-6 py-1.5 flex items-center justify-between border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-10 shadow-sm">
     <div class="flex items-center gap-1.5">
       <span class="text-2xl">🦁</span>
@@ -76,6 +77,7 @@
     </div>
   </header>
 
+  <!-- ==================== VIEW 1: PRACTICE MODE (LUYỆN NÓI) ==================== -->
   <main id="practiceView" class="flex-1 w-full max-w-lg mx-auto px-3 py-1 flex flex-col items-center justify-between min-h-0">
     
     <!-- Word Card Container -->
@@ -110,7 +112,7 @@
       <div class="w-full bg-amber-50 rounded-2xl p-1.5 border border-amber-200 flex items-center gap-2 mt-1 shrink-0">
         <div id="mascotAvatar" class="text-2xl transition-transform duration-200">🐲</div>
         <p id="mascotText" class="text-xs sm:text-sm font-bold text-amber-900 leading-snug flex-1">
-          Bé hãy bấm Micro màu đỏ và đọc to nhé!
+          Bé hãy bấm nút Micro màu đỏ và đọc to nhé!
         </p>
       </div>
 
@@ -170,6 +172,7 @@
 
   </main>
 
+  <!-- ==================== VIEW 2: QUIZ MODE (ĐỐ VUI TÌM ẢNH) ==================== -->
   <main id="quizView" class="hidden flex-1 w-full max-w-lg mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
@@ -186,12 +189,12 @@
         </span>
       </div>
 
-      <!-- Sound Question Prompt: Listen and choose picture -->
+      <!-- Prominent Sound Question Prompt (Bé chạm nghe câu hỏi rõ ràng trên điện thoại) -->
       <div class="w-full flex flex-col items-center justify-center my-2 shrink-0">
-        <p class="text-xs font-bold text-slate-500 mb-1">Cô giáo vừa đọc từ gì thế nhỉ? Bé hãy nghe lại và chọn ảnh đúng nha:</p>
-        <button onclick="playQuizPromptAudio()" class="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-5 py-2 rounded-2xl shadow-lg transition-transform">
-          <span class="text-2xl animate-pulse">🔊</span>
-          <span class="text-sm tracking-wide">Bấm để nghe lại</span>
+        <p class="text-xs font-bold text-slate-500 mb-1.5">Bé chạm vào loa để nghe cô đọc câu hỏi nhé:</p>
+        <button id="quizPlaySoundBtn" onclick="playQuizPromptAudio()" class="flex items-center gap-2.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-6 py-2.5 rounded-2xl shadow-lg transition-transform animate-pulse">
+          <span class="text-2xl">🔊</span>
+          <span class="text-sm tracking-wide font-extrabold">Bấm để nghe cô đọc</span>
         </button>
       </div>
 
@@ -203,7 +206,7 @@
       <!-- Gentle feedback mascot in Quiz -->
       <div id="quizFeedbackBox" class="w-full bg-sky-50 border border-sky-200 rounded-2xl p-1.5 text-center shrink-0 mt-1">
         <p id="quizFeedbackText" class="text-xs font-bold text-sky-900">
-          Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆
+          Nghe cô đọc rồi chạm vào bức ảnh đúng nhé! 👆
         </p>
       </div>
 
@@ -217,6 +220,7 @@
     </div>
   </main>
 
+  <!-- ==================== PARENTAL GATE MODAL ==================== -->
   <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
       <div class="text-3xl mb-1">🔐</div>
@@ -233,21 +237,35 @@
     </div>
   </div>
 
+  <!-- ==================== PARENT STUDIO & SYNC MODAL ==================== -->
   <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
     <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
         <div>
           <h2 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span> Quản Lý Từ Vựng & Hình Ảnh
+            <span>⚙️</span> Quản Lý Từ Vựng & Đồng Bộ Điện Thoại
           </h2>
-          <p class="text-[11px] text-slate-500 font-semibold">Tự động tìm ảnh lớn cho từ mới (như ELEPHANT, TIGER, PIZZA...)</p>
+          <p class="text-[11px] text-slate-500 font-semibold">Thêm từ mới và chia sẻ link sang điện thoại ngay tức thì</p>
         </div>
         <button onclick="closeParentStudio()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black text-slate-500 flex items-center justify-center">✕</button>
       </div>
 
       <div class="flex-1 overflow-y-auto pr-1 mt-3 space-y-3">
         
+        <!-- Đồng Bộ Sang Điện Thoại (Sync Feature) -->
+        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
+          <p class="text-xs font-black text-amber-900 mb-1 flex items-center gap-1">
+            <span>📲 Đồng bộ từ máy tính sang điện thoại:</span>
+          </p>
+          <p class="text-[11px] text-slate-600 mb-2">
+            Sau khi thêm hoặc xóa từ trên máy tính, ba mẹ bấm nút bên dưới để lấy link gửi qua Zalo sang điện thoại cho bé:
+          </p>
+          <button onclick="copyShareableLessonLink()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-95 text-amber-950 font-black py-2 rounded-xl text-xs shadow transition flex items-center justify-center gap-1.5">
+            <span>📋</span> <span id="copyLinkBtnText">Sao chép link bài học gửi sang điện thoại</span>
+          </button>
+        </div>
+
         <!-- Add Word Form -->
         <div class="bg-indigo-50/70 p-3 sm:p-4 rounded-2xl border border-indigo-200 space-y-2.5">
           <p class="text-xs font-black text-indigo-900 flex items-center gap-1">
@@ -312,12 +330,13 @@
     </div>
   </div>
 
+  <!-- ==================== EMBEDDED HIGH-RES VECTOR ASSETS & VOCABULARY ==================== -->
   <script>
     const HIGH_RES_VECTORS = {
       ELEPHANT: {
         ipa: '/ˈel.ə.fənt/',
         emoji: '🐘',
-        alts: ['efan', 'elphan', 'elefan', 'pant', 'fan', 'alfa', 'olifan'],
+        alts: ['efan', 'elphan', 'elefan', 'pant', 'fan', 'alfa', 'olifan', 'lephant', 'elephant'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="115" cy="115" rx="65" ry="52" fill="#94A3B8"/>
           <ellipse cx="70" cy="100" rx="42" ry="46" fill="#94A3B8"/>
@@ -335,7 +354,7 @@
       TIGER: {
         ipa: '/ˈtaɪ.ɡər/',
         emoji: '🐯',
-        alts: ['tige', 'taiga', 'tiga', 'tyge', 'ger'],
+        alts: ['tige', 'taiga', 'tiga', 'tyge', 'ger', 'tiger'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="105" r="70" fill="#FB923C"/>
           <polygon points="50,60 60,25 95,50" fill="#EA580C"/>
@@ -354,7 +373,7 @@
       LION: {
         ipa: '/ˈlaɪ.ən/',
         emoji: '🦁',
-        alts: ['wion', 'lyon', 'laion', 'line', 'ryan'],
+        alts: ['wion', 'lyon', 'laion', 'line', 'ryan', 'lion'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="100" r="78" fill="#EA580C"/>
           <circle cx="100" cy="100" r="56" fill="#FDE047"/>
@@ -369,7 +388,7 @@
       CAT: {
         ipa: '/kæt/',
         emoji: '🐱',
-        alts: ['kat', 'cap', 'cac', 'cut', 'ca', 'khat'],
+        alts: ['kat', 'cap', 'cac', 'cut', 'ca', 'khat', 'ket', 'cat'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="110" r="65" fill="#FBBF24"/>
           <polygon points="50,70 60,25 98,60" fill="#F59E0B"/>
@@ -385,7 +404,7 @@
       DOG: {
         ipa: '/dɒɡ/',
         emoji: '🐶',
-        alts: ['dok', 'doc', 'dot', 'do', 'dawg'],
+        alts: ['dok', 'doc', 'dot', 'do', 'dawg', 'dock', 'dog'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="100" cy="110" rx="70" ry="60" fill="#D97706"/>
           <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/>
@@ -401,7 +420,7 @@
       DUCK: {
         ipa: '/dʌk/',
         emoji: '🦆',
-        alts: ['dak', 'dac', 'dap', 'duh', 'dock'],
+        alts: ['dak', 'dac', 'dap', 'duh', 'dock', 'duck'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="90" r="56" fill="#FACC15"/>
           <circle cx="80" cy="80" r="8" fill="#1E293B"/>
@@ -413,7 +432,7 @@
       APPLE: {
         ipa: '/ˈæp.əl/',
         emoji: '🍎',
-        alts: ['apo', 'appo', 'aple', 'epo'],
+        alts: ['apo', 'appo', 'aple', 'epo', 'apple'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="84" cy="110" r="52" fill="#EF4444"/>
           <circle cx="116" cy="110" r="52" fill="#DC2626"/>
@@ -446,7 +465,7 @@
       BUS: {
         ipa: '/bʌs/',
         emoji: '🚌',
-        alts: ['bas', 'bah'],
+        alts: ['bas', 'bah', 'bus'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="30" y="60" width="140" height="75" rx="16" fill="#FBBF24"/>
           <rect x="45" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
@@ -490,7 +509,33 @@
       }
     ];
 
-    let appData = JSON.parse(localStorage.getItem('safari_curriculum_v6')) || DEFAULT_DATA;
+    function loadInitialAppData() {
+      // 1. Kiểm tra xem có dữ liệu bài học được gửi qua URL (?data=...) hay không
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedData = urlParams.get('data');
+      if (encodedData) {
+        try {
+          const parsed = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            localStorage.setItem('safari_curriculum_v7', JSON.stringify(parsed));
+            // Làm sạch URL để không bị rối mắt
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return parsed;
+          }
+        } catch (e) {
+          console.warn('URL sync decode error:', e);
+        }
+      }
+
+      // 2. Nếu không có URL data, tải từ localStorage
+      const local = localStorage.getItem('safari_curriculum_v7');
+      if (local) {
+        try { return JSON.parse(local); } catch(e) {}
+      }
+      return DEFAULT_DATA;
+    }
+
+    let appData = loadInitialAppData();
     let currentCatIndex = 0;
     let currentWordIndex = 0;
     let totalStars = parseInt(localStorage.getItem('safari_stars') || '0');
@@ -506,12 +551,15 @@
     let parentMathSecret = 0;
     let selectedImageCandidate = '';
     let preferredFemaleVoice = null;
+    let vadActiveSpeechDuration = 0; // Đếm thời gian bé phát ra âm thanh
+    let vadIntervalTimer = null;
 
     function saveData() {
-      localStorage.setItem('safari_curriculum_v6', JSON.stringify(appData));
+      localStorage.setItem('safari_curriculum_v7', JSON.stringify(appData));
     }
   </script>
 
+  <!-- ==================== AUDIO SYNTHESIS & FEMALE SPEECH COACH ==================== -->
   <script>
     function initAudioContext() {
       if (!audioContext) {
@@ -592,6 +640,7 @@
     }
   </script>
 
+  <!-- ==================== VISUAL RENDERING & CORE UI ==================== -->
   <script>
     function getVisualHTML(wordObj, extraClasses = '') {
       if (!wordObj) return '<span class="text-7xl">🌟</span>';
@@ -614,6 +663,7 @@
 
     function renderCurrentCard() {
       const cat = appData[currentCatIndex];
+      if (!cat || !cat.words || cat.words.length === 0) return;
       const wordObj = cat.words[currentWordIndex];
 
       document.getElementById('cardIndexBadge').innerText = `CARD ${currentWordIndex + 1} / ${cat.words.length}`;
@@ -667,8 +717,10 @@
     }
   </script>
 
+  <!-- ==================== QUIZ SYSTEM (ĐỐ VUI TÌM ẢNH) ==================== -->
   <script>
     function switchAppMode(mode) {
+      initAudioContext(); // Mở khóa âm thanh di động khi chuyển tab
       currentMode = mode;
       const practiceView = document.getElementById('practiceView');
       const quizView = document.getElementById('quizView');
@@ -694,7 +746,6 @@
       const cat = appData[currentCatIndex];
       document.getElementById('quizCategoryBadge').innerText = `Chủ đề: ${cat.name.split(' ')[0]}`;
 
-      // Xáo trộn toàn bộ từ trong chủ đề để tạo danh sách câu hỏi
       quizQuestions = [...cat.words].sort(() => 0.5 - Math.random());
       currentQuizIndex = 0;
       renderQuizQuestion();
@@ -709,13 +760,11 @@
       const target = quizQuestions[currentQuizIndex];
       const cat = appData[currentCatIndex];
       document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
-      document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
+      document.getElementById('quizFeedbackText').innerText = `Bấm loa nghe cô đọc rồi chạm vào bức ảnh đúng nhé! 👆`;
 
-      // Tạo các lựa chọn ảnh gây nhiễu (distractors)
+      // Tạo lựa chọn đáp án (2-3 ảnh)
       const otherWords = cat.words.filter(w => w.word !== target.word);
       let distractors = otherWords.sort(() => 0.5 - Math.random()).slice(0, 2);
-      
-      // Nếu chủ đề có ít từ, lấy thêm từ các chủ đề khác bù vào cho đủ 2-3 ảnh
       if (distractors.length < 1) {
         const pool = appData.flatMap(c => c.words).filter(w => w.word !== target.word);
         distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 2);
@@ -739,13 +788,12 @@
         grid.appendChild(choiceBtn);
       });
 
-      // Tự động đọc từ vựng ngay khi câu hỏi xuất hiện
-      setTimeout(() => {
-        speakTargetWord(target.word);
-      }, 350);
+      // Tự động phát âm thanh (nếu trình duyệt di động cho phép)
+      speakTargetWord(target.word);
     }
 
     function playQuizPromptAudio() {
+      initAudioContext();
       const target = quizQuestions[currentQuizIndex];
       if (target) {
         speakTargetWord(target.word);
@@ -754,7 +802,6 @@
 
     function handleQuizAnswer(selectedItem, targetItem, btnElem) {
       if (selectedItem.word === targetItem.word) {
-        // Đúng: Thưởng sao, đổi màu viền xanh lá, chúc mừng
         btnElem.classList.remove('border-slate-200');
         btnElem.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-300');
         playCelebrationFanfare();
@@ -771,14 +818,12 @@
           origin: { y: 0.6 }
         });
 
-        // Tự động sang câu tiếp theo sau 1.2s
         setTimeout(() => {
           currentQuizIndex++;
           renderQuizQuestion();
         }, 1200);
 
       } else {
-        // Sai: Rung lắc nhẹ, âm thanh dịu dàng khuyên bé thử lại
         btnElem.classList.add('wobble', 'border-rose-300');
         playGentleErrorSound();
         document.getElementById('quizFeedbackText').innerHTML = `💡 Chưa đúng rồi, bé bấm nghe lại và thử lại bức ảnh khác nhé!`;
@@ -810,6 +855,7 @@
     }
   </script>
 
+  <!-- ==================== CHILD SPEECH RECOGNITION (DI ĐỘNG TỐI ƯU) ==================== -->
   <script>
     function calculateLevenshtein(a, b) {
       const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
@@ -841,20 +887,24 @@
           const w = rawWord.replace(/[^a-z]/g, '');
           if (!w) continue;
 
+          // 1. Trùng khớp tuyệt đối hoặc trùng từ ngọng đã biết trước
           if (w === cleanTarget || childAlts.includes(w)) {
             return { isMatch: true, heardText: w, confidence: 1.0 };
           }
 
-          const normW = w.replace(/r/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
-          const normT = cleanTarget.replace(/r/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
+          // 2. Chuẩn hóa các âm ngọng kinh điển của bé 6 tuổi
+          const normW = w.replace(/r/g, 'w').replace(/l/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
+          const normT = cleanTarget.replace(/r/g, 'w').replace(/l/g, 'w').replace(/th/g, 'f').replace(/ph/g, 'f');
           if (normW === normT) {
             return { isMatch: true, heardText: w, confidence: 0.95 };
           }
 
-          if (w.includes(cleanTarget) || (cleanTarget.length >= 5 && (cleanTarget.includes(w) && w.length >= 3))) {
+          // 3. Trẻ con nuốt âm đuôi: "ca" cho "cat", "do" cho "dog", "eh-fan" cho "elephant"
+          if (w.includes(cleanTarget) || cleanTarget.startsWith(w) || (cleanTarget.length >= 4 && w.length >= 2 && cleanTarget.includes(w))) {
             return { isMatch: true, heardText: w, confidence: 0.9 };
           }
 
+          // 4. Đo khoảng cách Levenshtein (nới lỏng ngưỡng xuống 0.38 - 0.40)
           const dist = calculateLevenshtein(normW, normT);
           const maxLen = Math.max(normW.length, normT.length);
           const similarity = maxLen > 0 ? (1 - dist / maxLen) : 0;
@@ -863,7 +913,7 @@
             bestTranscript = w;
           }
 
-          if (similarity >= 0.45) {
+          if (similarity >= 0.38) {
             return { isMatch: true, heardText: w, confidence: similarity };
           }
         }
@@ -875,7 +925,7 @@
     function initSpeechRecognition() {
       const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechClass) {
-        setMascot('Trình duyệt chưa hỗ trợ Micro. Bé mở bằng Google Chrome nhé!', '⚠️');
+        setMascot('Trình duyệt chưa hỗ trợ Micro. Bé hãy mở bằng Google Chrome nhé!', '⚠️');
         return;
       }
 
@@ -887,6 +937,7 @@
 
       recognition.onstart = () => {
         isListening = true;
+        vadActiveSpeechDuration = 0;
         document.getElementById('micPulseRing').classList.remove('hidden');
         document.getElementById('micStatusText').innerText = 'Đang nghe bé nói...';
         setMascot('Pip đang lắng nghe nè, bé đọc to lên nhé! 👂', '👂');
@@ -924,11 +975,17 @@
         }
       };
 
-      recognition.onerror = () => {
+      recognition.onerror = (e) => {
         isListening = false;
         document.getElementById('micPulseRing').classList.add('hidden');
         document.getElementById('micStatusText').innerText = 'Sẵn sàng';
-        handleSpeechRetry('...');
+        
+        // Mobile Fallback: Nếu điện thoại báo lỗi micro nhưng cảm biến năng lượng phát hiện bé có nói
+        if (vadActiveSpeechDuration >= 6) {
+          celebrateSuccess('Good try!');
+        } else {
+          handleSpeechRetry('...');
+        }
       };
 
       recognition.onend = () => {
@@ -996,7 +1053,82 @@
     }
   </script>
 
+  <!-- ==================== VAD (VOICE ACTIVITY DETECTION) ==================== -->
   <script>
+    async function initPersistentMic() {
+      if (micStream) return true;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        micStream = stream;
+        const ctx = initAudioContext();
+        const source = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const energyFill = document.getElementById('vadEnergyFill');
+
+        function updateVAD() {
+          if (!isListening) {
+            energyFill.style.width = '0%';
+            requestAnimationFrame(updateVAD);
+            return;
+          }
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          let avg = sum / dataArray.length;
+          let pct = Math.min(100, Math.round((avg / 60) * 100));
+          energyFill.style.width = pct + '%';
+
+          if (pct > 20) {
+            vadActiveSpeechDuration++;
+            document.getElementById('mascotAvatar').style.transform = 'scale(1.25)';
+          } else {
+            document.getElementById('mascotAvatar').style.transform = 'scale(1)';
+          }
+          requestAnimationFrame(updateVAD);
+        }
+        updateVAD();
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+  </script>
+
+  <!-- ==================== PARENT STUDIO & CLOUD LINK SYNC ==================== -->
+  <script>
+    function copyShareableLessonLink() {
+      try {
+        // Mã hóa toàn bộ dữ liệu từ vựng hiện tại thành chuỗi base64
+        const jsonStr = JSON.stringify(appData);
+        const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+        const shareUrl = `${window.location.origin}${window.location.pathname}?data=${b64}`;
+
+        // Sao chép link vào clipboard
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl);
+        } else {
+          const tempInput = document.createElement('input');
+          tempInput.value = shareUrl;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+        }
+
+        const btnText = document.getElementById('copyLinkBtnText');
+        btnText.innerText = '✅ Đã chép link! Hãy gửi qua Zalo sang điện thoại';
+        setTimeout(() => {
+          btnText.innerText = 'Sao chép link bài học gửi sang điện thoại';
+        }, 3000);
+      } catch (e) {
+        alert('Có lỗi khi tạo link chia sẻ!');
+      }
+    }
+
     async function searchWordImages(queryWord) {
       const cleanWord = queryWord.trim().toLowerCase();
       const grid = document.getElementById('imageCandidateGrid');
@@ -1172,7 +1304,7 @@
       selectedImageCandidate = '';
       document.getElementById('imageCandidateGrid').innerHTML = '<div class="col-span-full py-3 text-center text-xs text-slate-400 italic">Đã thêm từ thành công! Gõ từ tiếp theo để tìm ảnh.</div>';
 
-      alert(`Đã thêm từ "${word}" thành công vào bài học của bé!`);
+      alert(`Đã thêm từ "${word}" thành công vào bài học của bé! Hãy bấm "Sao chép link bài học" để cập nhật sang điện thoại nhé.`);
     }
 
     function deleteWord(idx) {
@@ -1198,47 +1330,6 @@
         renderStudioWordList();
         renderTabs();
         renderCurrentCard();
-      }
-    }
-
-    async function initPersistentMic() {
-      if (micStream) return true;
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        micStream = stream;
-        const ctx = initAudioContext();
-        const source = ctx.createMediaStreamSource(stream);
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 256;
-        source.connect(analyser);
-
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        const energyFill = document.getElementById('vadEnergyFill');
-
-        function updateVAD() {
-          if (!isListening) {
-            energyFill.style.width = '0%';
-            requestAnimationFrame(updateVAD);
-            return;
-          }
-          analyser.getByteFrequencyData(dataArray);
-          let sum = 0;
-          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-          let avg = sum / dataArray.length;
-          let pct = Math.min(100, Math.round((avg / 60) * 100));
-          energyFill.style.width = pct + '%';
-
-          if (pct > 25) {
-            document.getElementById('mascotAvatar').style.transform = 'scale(1.25)';
-          } else {
-            document.getElementById('mascotAvatar').style.transform = 'scale(1)';
-          }
-          requestAnimationFrame(updateVAD);
-        }
-        updateVAD();
-        return true;
-      } catch (err) {
-        return false;
       }
     }
 
