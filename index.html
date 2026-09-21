@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Magic Sound Safari - KidSpeak Curriculum Studio</title>
+  <title>KidSpeak Safari - Luyện Nói & Đố Vui Tiếng Anh Cho Bé</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,14 +20,22 @@
     }
     .font-ui { font-family: 'Nunito', sans-serif; }
     .bounce-pulse {
-      animation: gentleBounce 2.2s infinite ease-in-out;
+      animation: gentleBounce 2s infinite ease-in-out;
     }
     @keyframes gentleBounce {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.06); }
     }
+    .mic-active-glow {
+      box-shadow: 0 0 0 10px rgba(244, 63, 94, 0.35), 0 0 0 20px rgba(244, 63, 94, 0.15);
+      animation: micPulseGlow 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes micPulseGlow {
+      from { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0.4), 0 0 0 16px rgba(244, 63, 94, 0.15); }
+      to { box-shadow: 0 0 0 16px rgba(244, 63, 94, 0.5), 0 0 0 28px rgba(244, 63, 94, 0.1); }
+    }
     .card-shadow {
-      box-shadow: 0 16px 30px -8px rgba(245, 158, 11, 0.25), 0 8px 12px -4px rgba(245, 158, 11, 0.15);
+      box-shadow: 0 14px 28px -6px rgba(245, 158, 11, 0.25), 0 6px 10px -4px rgba(245, 158, 11, 0.15);
     }
     .wobble {
       animation: wobbleAnim 0.4s ease-in-out;
@@ -43,53 +51,53 @@
 </head>
 <body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800 select-none">
 
-  <header class="w-full px-3 sm:px-6 py-1.5 flex items-center justify-between border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-10 shadow-sm">
-    <div class="flex items-center gap-1.5 shrink-0">
+  <!-- TOP BAR -->
+  <header class="w-full px-2.5 sm:px-5 py-1.5 flex items-center justify-between border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-10 shadow-sm">
+    <div class="flex items-center gap-1.5">
       <span class="text-2xl">🦁</span>
-      <div class="hidden sm:block">
-        <h1 class="text-base font-black text-amber-600 leading-none">KidSpeak Safari</h1>
-      </div>
+      <h1 class="text-sm sm:text-base font-black text-amber-600 leading-none hidden xs:block">KidSpeak</h1>
     </div>
 
-    <!-- Category (Topic) Tabs -->
-    <div id="categoryTabs" class="flex items-center gap-1 overflow-x-auto hide-scrollbar py-0.5 max-w-[34vw] sm:max-w-xs"></div>
+    <!-- Category Tabs -->
+    <div id="categoryTabs" class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar py-0.5 max-w-[34vw] sm:max-w-xs"></div>
 
-    <!-- Lesson / Unit Selector Pill -->
-    <div class="flex items-center bg-amber-50 border-2 border-amber-300 rounded-xl px-2 py-0.5 shrink-0">
-      <span class="text-[10px] sm:text-xs font-black text-amber-900 mr-1">📖</span>
-      <select id="lessonSelect" onchange="onSelectLesson(this.value)" class="bg-transparent text-xs font-black text-amber-950 focus:outline-none cursor-pointer">
-        <!-- Injected by JS -->
+    <!-- Lesson Dropdown Selector within Category -->
+    <div class="flex items-center gap-1 bg-amber-50 border border-amber-300 rounded-xl px-2 py-1 shadow-sm">
+      <span class="text-xs">📖</span>
+      <select id="lessonSelect" onchange="handleSelectLesson(this.value)" class="bg-transparent text-xs font-black text-amber-900 focus:outline-none cursor-pointer">
+        <!-- Injected via JS -->
       </select>
     </div>
 
-    <!-- Mode Toggle: Practice vs Quiz -->
-    <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-2xl border border-slate-200 shadow-inner shrink-0">
-      <button id="modePracticeBtn" onclick="switchAppMode('practice')" class="px-2 py-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm">
+    <!-- Mode Toggle: Luyện Nói vs Đố Vui -->
+    <div class="flex items-center gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-xl border border-slate-200">
+      <button id="modePracticeBtn" onclick="switchAppMode('practice')" class="px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm">
         🎙️ Nói
       </button>
-      <button id="modeQuizBtn" onclick="switchAppMode('quiz')" class="px-2 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900">
+      <button id="modeQuizBtn" onclick="switchAppMode('quiz')" class="px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all text-slate-600 hover:text-slate-900">
         🎯 Đố vui
       </button>
     </div>
 
-    <!-- Stars & Parent Studio Gear -->
-    <div class="flex items-center gap-1.5 shrink-0">
-      <div class="flex items-center gap-0.5 bg-amber-100 px-2 py-0.5 rounded-full border-2 border-amber-300 shadow-sm">
+    <!-- Stars & Parent Settings -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <div class="flex items-center gap-1 bg-amber-100 px-2 py-0.5 rounded-full border-2 border-amber-300 shadow-sm">
         <span class="text-sm">⭐</span>
         <span id="starCounter" class="font-black text-amber-800 text-xs sm:text-sm">0</span>
       </div>
-      <button onclick="openParentGate()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold p-1.5 rounded-xl flex items-center gap-1 text-xs shadow transition" title="Góc Phụ Huynh & Quản lý bài học">
-        <span>⚙️</span>
+      <button onclick="openParentGate()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold p-1.5 rounded-xl text-xs shadow transition" title="Góc Phụ Huynh">
+        ⚙️
       </button>
     </div>
   </header>
 
-  <main id="practiceView" class="flex-1 w-full max-w-lg mx-auto px-3 py-1 flex flex-col items-center justify-between min-h-0">
+  <!-- MAIN PRACTICE VIEW -->
+  <main id="practiceView" class="flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     
-    <!-- Word Card Container -->
+    <!-- Flashcard Box -->
     <div class="w-full bg-white rounded-3xl border-4 border-amber-300 card-shadow p-2.5 sm:p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
-      <!-- Top Card Header: Prev, Lesson Tracker Badge, 3-Tries, Next -->
+      <!-- Card Nav Header -->
       <div class="w-full flex items-center justify-between px-1 shrink-0">
         <button onclick="navigateWord(-1)" class="w-8 h-8 flex items-center justify-center bg-amber-100 hover:bg-amber-200 active:scale-90 text-amber-800 font-black rounded-full shadow-sm transition">
           ‹
@@ -102,9 +110,9 @@
           <div class="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200" title="Bé nói 3 lần Pip sẽ tự động tặng sao cổ vũ!">
             <span class="text-[10px] text-amber-800 font-bold">Lần nói:</span>
             <div id="attemptDots" class="flex gap-1">
-              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
-              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
-              <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
+              <span class="w-2 h-2 rounded-full border border-amber-400 bg-transparent"></span>
+              <span class="w-2 h-2 rounded-full border border-amber-400 bg-transparent"></span>
+              <span class="w-2 h-2 rounded-full border border-amber-400 bg-transparent"></span>
             </div>
           </div>
         </div>
@@ -114,27 +122,25 @@
         </button>
       </div>
 
-      <!-- Mascot Dragon Advice -->
+      <!-- Mascot Guidance Speech Bubble -->
       <div class="w-full bg-amber-50 rounded-2xl p-1.5 border border-amber-200 flex items-center gap-2 mt-1 shrink-0">
         <div id="mascotAvatar" class="text-2xl transition-transform duration-200">🐲</div>
         <p id="mascotText" class="text-xs sm:text-sm font-bold text-amber-900 leading-snug flex-1">
-          Bé hãy bấm Micro màu đỏ và đọc to nhé!
+          Bé hãy bấm nút Micro màu đỏ và đọc to từ vựng nhé!
         </p>
       </div>
 
-      <!-- GIANT PICTURE AREA (Chiếm 65-70% thẻ) -->
+      <!-- GIANT PICTURE AREA (Chiếm phần lớn diện tích thẻ cho mắt bé dễ quan sát) -->
       <div class="flex-1 w-full flex items-center justify-center my-1 min-h-0 relative overflow-hidden">
-        <div id="imageDisplayWrapper" class="w-full h-full rounded-3xl border-4 border-amber-300/80 p-2 bg-gradient-to-b from-amber-50/60 via-sky-50/30 to-white flex items-center justify-center shadow-inner overflow-hidden">
-          <div id="visualHolder" class="w-full h-full flex items-center justify-center">
-            <!-- Large Artwork Injected Here -->
-          </div>
+        <div id="imageDisplayWrapper" class="w-full h-full rounded-2xl border-4 border-amber-300/80 p-1.5 bg-gradient-to-b from-amber-50/50 via-sky-50/20 to-white flex items-center justify-center shadow-inner overflow-hidden">
+          <div id="visualHolder" class="w-full h-full flex items-center justify-center"></div>
         </div>
       </div>
 
-      <!-- Compact word title and female teacher button -->
+      <!-- Target Word Title & Female Teacher Button -->
       <div class="text-center shrink-0 my-0.5">
         <div class="flex items-center justify-center gap-2">
-          <h2 id="targetWord" class="text-xl sm:text-2xl font-black text-slate-800 tracking-wide">
+          <h2 id="targetWord" class="text-2xl sm:text-3xl font-black text-slate-800 tracking-wide">
             CAT
           </h2>
           <span id="targetIpa" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
@@ -148,45 +154,37 @@
       </div>
 
       <!-- Real-Time Speech Recognition Live Transcript -->
-      <div class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-0.5 shrink-0 flex items-center justify-between">
-        <div class="flex items-center gap-1 overflow-hidden">
+      <div class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2.5 py-1 shrink-0 flex items-center justify-between">
+        <div class="flex items-center gap-1 overflow-hidden flex-1 mr-2">
           <span class="text-[10px] font-bold text-slate-400 shrink-0">Pip nghe được:</span>
           <span id="liveHeardTranscript" class="text-xs font-black text-indigo-600 truncate italic">"..."</span>
         </div>
-        <span id="micStatusText" class="text-[10px] text-amber-600 font-bold">Sẵn sàng</span>
-      </div>
-
-      <!-- Real-time Voice Activity Energy Bar -->
-      <div class="w-full px-1 mt-0.5 shrink-0">
-        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-          <div id="vadEnergyFill" class="h-full bg-gradient-to-r from-emerald-400 to-amber-400 w-0 transition-all duration-75"></div>
-        </div>
+        <span id="micStatusText" class="text-[10px] text-amber-600 font-bold shrink-0">Sẵn sàng</span>
       </div>
       
     </div>
 
-    <!-- Ergonomic Bouncy Mic Button (Never overflows) -->
+    <!-- Nút Micro to bản với hiệu ứng nhận diện hoạt động rõ ràng -->
     <div class="w-full py-1.5 flex flex-col items-center justify-center shrink-0">
       <div class="relative flex items-center justify-center">
-        <div id="micPulseRing" class="hidden absolute -inset-2 rounded-full border-4 border-rose-400/80 animate-ping"></div>
-        <button id="recordBtn" onclick="toggleVoiceInput()" class="relative z-10 w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 border-4 border-white shadow-xl flex items-center justify-center text-3xl text-white transition-transform active:scale-90 bounce-pulse">
+        <button id="recordBtn" onclick="toggleVoiceInput()" class="relative z-10 w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 border-4 border-white shadow-xl flex items-center justify-center text-3xl text-white transition-all active:scale-90 bounce-pulse">
           <span id="micIcon">🎙️</span>
         </button>
       </div>
-      <p id="subHint" class="text-[11px] font-bold text-slate-500 mt-0.5">Chạm Micro và đọc to tiếng Anh nha!</p>
+      <p id="subHint" class="text-[11px] font-bold text-slate-500 mt-1">Chạm Micro và đọc to tiếng Anh nha!</p>
     </div>
 
   </main>
-
-  <main id="quizView" class="hidden flex-1 w-full max-w-lg mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
+  <!-- QUIZ VIEW (ĐỐ VUI) -->
+  <main id="quizView" class="hidden flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
-      <!-- Quiz Header & Tracker -->
+      <!-- Quiz Header -->
       <div class="w-full flex items-center justify-between px-2 shrink-0 border-b border-sky-100 pb-1.5">
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1.5">
           <span class="text-xl">🎯</span>
-          <span id="quizLessonBadge" class="text-xs font-black text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-full">
-            Bài 1: Farm Animals
+          <span id="quizLessonBadge" class="text-xs font-black text-sky-800 bg-sky-100 px-2 py-0.5 rounded-full">
+            Bài: Bài 1: Cơ bản
           </span>
         </div>
         <span id="quizProgressBadge" class="text-xs font-black text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
@@ -194,19 +192,19 @@
         </span>
       </div>
 
-      <!-- Sound Question Prompt -->
+      <!-- Quiz Sound Prompt -->
       <div class="w-full flex flex-col items-center justify-center my-2 shrink-0">
-        <p class="text-xs font-bold text-slate-500 mb-1">Bé hãy bấm loa nghe cô đọc rồi chạm vào hình đúng nhé:</p>
-        <button onclick="playQuizPromptAudio()" class="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-5 py-2 rounded-2xl shadow-lg transition-transform">
+        <p class="text-xs font-bold text-slate-500 mb-1">Bé hãy bấm nghe cô đọc rồi chọn hình đúng nhé:</p>
+        <button onclick="playQuizPromptAudio()" class="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-4 py-2 rounded-2xl shadow-md transition-transform">
           <span class="text-2xl animate-pulse">🔊</span>
-          <span class="text-sm tracking-wide">Bấm nghe lại câu hỏi</span>
+          <span class="text-xs sm:text-sm tracking-wide">Bấm để nghe lại</span>
         </button>
       </div>
 
-      <!-- Big Picture Answer Cards -->
-      <div id="quizOptionsGrid" class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 items-center justify-center p-1 min-h-0"></div>
+      <!-- Quiz Options Grid -->
+      <div id="quizOptionsGrid" class="flex-1 w-full grid grid-cols-2 gap-2.5 sm:gap-3 items-center justify-center p-1 min-h-0"></div>
 
-      <!-- Feedback Banner -->
+      <!-- Quiz Feedback Box -->
       <div id="quizFeedbackBox" class="w-full bg-sky-50 border border-sky-200 rounded-2xl p-1.5 text-center shrink-0 mt-1">
         <p id="quizFeedbackText" class="text-xs font-bold text-sky-900">
           Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆
@@ -215,7 +213,6 @@
 
     </div>
 
-    <!-- Quiz Footer Action -->
     <div class="w-full py-1 flex items-center justify-center shrink-0">
       <button onclick="switchAppMode('practice')" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-white/80 px-4 py-1 rounded-full border border-slate-200 shadow-sm">
         ↩️ Quay lại luyện nói
@@ -223,11 +220,12 @@
     </div>
   </main>
 
+  <!-- PARENT GATE MODAL -->
   <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
       <div class="text-3xl mb-1">🔐</div>
       <h3 class="text-lg font-black text-slate-800">Khu vực Phụ huynh</h3>
-      <p class="text-xs text-slate-500 font-semibold mb-3">Tính nhẩm để mở cài đặt bài học & sao lưu:</p>
+      <p class="text-xs text-slate-500 font-semibold mb-3">Tính nhẩm để mở cài đặt giáo trình:</p>
       <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3">
         <p id="mathQuestion" class="text-xl font-black text-amber-900">4 + 5 = ?</p>
       </div>
@@ -239,297 +237,299 @@
     </div>
   </div>
 
-  <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 font-ui">
-    <div class="bg-white rounded-3xl p-3 sm:p-5 max-w-lg w-full max-h-[96vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
+  <!-- PARENT STUDIO MODAL (QUẢN LÝ BÀI HỌC & JSON FILE) -->
+  <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
+    <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div>
-          <h2 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span> Soạn Giáo Trình & Sao Lưu
+          <h2 class="text-base font-black text-slate-800 flex items-center gap-1.5">
+            <span>⚙️</span> Quản Lý Giáo Trình & Đồng Bộ
           </h2>
-          <p class="text-[11px] text-slate-500 font-semibold">Tùy biến bài học, chia nhỏ chủ đề & tải file .json</p>
+          <p class="text-[11px] text-slate-500 font-semibold">Tạo nhiều bài học theo chủ đề và chia sẻ file .json</p>
         </div>
         <button onclick="closeParentStudio()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black text-slate-500 flex items-center justify-center">✕</button>
       </div>
 
-      <div class="flex-1 overflow-y-auto pr-1 mt-2 space-y-3">
+      <div class="flex-1 overflow-y-auto pr-1 mt-3 space-y-3">
         
-        <!-- SECTION 1: JSON BACKUP & RESTORE (LƯU / MỞ FILE .JSON) -->
-        <div class="bg-amber-50/80 p-3 rounded-2xl border-2 border-amber-200">
-          <p class="text-xs font-black text-amber-950 mb-1.5 flex items-center gap-1">
-            <span>💾</span> Sao lưu & Nhập giáo trình (.json):
-          </p>
+        <!-- JSON FILE BACKUP & IMPORT BOX (Không bao giờ lo link dài bị đứt) -->
+        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
+          <p class="text-xs font-black text-amber-900 mb-2">💾 Sao lưu & Đồng bộ sang Điện thoại:</p>
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="exportCurriculumJSON()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 shadow">
+            <button onclick="exportDataToJSON()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow">
               <span>💾</span> <span>Lưu file .json</span>
             </button>
-            <label class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 shadow cursor-pointer text-center">
+            <label class="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow cursor-pointer text-center">
               <span>📂</span> <span>Mở file .json</span>
-              <input type="file" id="jsonFileInput" accept=".json" onchange="importCurriculumJSON(event)" class="hidden" />
+              <input type="file" id="jsonFileInput" accept=".json" onchange="importDataFromJSON(event)" class="hidden" />
             </label>
           </div>
-          <p class="text-[10px] text-slate-500 mt-1 font-semibold">Gửi file này qua Zalo sang điện thoại hoặc máy khác để mở là xong ngay!</p>
+          <p class="text-[10px] text-amber-700 font-semibold mt-1.5">
+            * Mẹo: Ba mẹ tải file .json về, gửi qua Zalo sang điện thoại rồi bấm "Mở file .json" là đồng bộ 100%!
+          </p>
         </div>
 
-        <!-- SECTION 2: TOPIC & LESSON STRUCTURING (CHỦ ĐỀ & BÀI HỌC) -->
-        <div class="bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 space-y-2">
+        <!-- LESSON & THEME MANAGER -->
+        <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-indigo-900">1. Chọn Chủ Đề & Bài Học:</span>
-            <button onclick="promptCreateTopic()" class="text-[10px] font-black bg-indigo-200 hover:bg-indigo-300 text-indigo-900 px-2 py-0.5 rounded-lg">
-              ➕ Thêm chủ đề mới
+            <span class="text-xs font-black text-sky-900">Quản lý Bài học trong Chủ đề:</span>
+            <button onclick="handleCreateNewLesson()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-2 py-1 rounded-lg text-[11px] shadow">
+              ➕ Thêm bài học mới
             </button>
           </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-[10px] font-bold text-slate-500">Chủ đề:</label>
-              <select id="studioTopicSelect" onchange="onStudioTopicChange(this.value)" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
-                <!-- Injected by JS -->
-              </select>
-            </div>
-            <div>
-              <label class="text-[10px] font-bold text-slate-500">Bài học trong chủ đề:</label>
-              <select id="studioLessonSelect" onchange="onStudioLessonChange(this.value)" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
-                <!-- Injected by JS -->
-              </select>
-            </div>
-          </div>
-
-          <div class="flex gap-2 pt-1">
-            <button onclick="promptCreateLesson()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-black py-1 px-2 rounded-lg text-xs">
-              ➕ Tạo bài học mới
-            </button>
-            <button onclick="deleteCurrentLesson()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold py-1 px-2 rounded-lg text-xs">
-              🗑️ Xóa bài này
+          <div class="flex items-center gap-2">
+            <select id="studioLessonSelect" onchange="handleStudioChangeLesson(this.value)" class="flex-1 bg-white border border-sky-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800">
+              <!-- Injected dynamically -->
+            </select>
+            <button onclick="handleDeleteCurrentLesson()" class="text-rose-600 hover:text-rose-800 bg-rose-50 border border-rose-200 px-2 py-1.5 rounded-xl text-xs font-bold">
+              🗑️ Xóa bài
             </button>
           </div>
         </div>
 
-        <!-- SECTION 3: ADD WORD TO CURRENT LESSON -->
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-slate-800">2. Thêm từ vào bài học đang chọn:</span>
-            <span id="studioLessonTargetTag" class="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">Bài 1</span>
-          </div>
+        <!-- ADD WORD TO CURRENT LESSON FORM -->
+        <div class="bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 space-y-2.5">
+          <p class="text-xs font-black text-indigo-900 flex items-center justify-between">
+            <span>➕ Thêm từ mới vào bài đang chọn:</span>
+            <span id="studioCurrentLessonName" class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md font-bold text-[11px]">Bài 1</span>
+          </p>
 
           <div class="flex gap-2">
-            <input id="newWordInput" type="text" placeholder="Từ tiếng Anh (vd: ELEPHANT, TIGER, BUS...)" class="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs uppercase font-black focus:outline-none focus:border-indigo-500" />
-            <button onclick="searchWordImagesTrigger()" class="bg-sky-600 hover:bg-sky-700 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
+            <input id="newWordInput" type="text" placeholder="Gõ từ tiếng Anh (vd: MONKEY, TIGER...)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
+            <button onclick="searchWordImagesTrigger()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
               <span>🔍</span> <span>Tìm ảnh</span>
             </button>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <input id="newIpaInput" type="text" placeholder="Phiên âm (tự sinh)" class="px-2 py-1 rounded-lg border border-slate-200 text-xs" />
-            <input id="newAltsInput" type="text" placeholder="Âm ngọng của bé (vd: efan, pant)" class="px-2 py-1 rounded-lg border border-slate-200 text-xs" />
+            <input id="newIpaInput" type="text" placeholder="Phiên âm (tự sinh vd: /ˈmʌŋ.ki/)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newAltsInput" type="text" placeholder="Âm ngọng của bé (vd: monk, maki)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-1">
-              <span class="text-[11px] font-bold text-slate-600">Chọn ảnh cho bé:</span>
+              <span class="text-[11px] font-extrabold text-slate-600">Chọn 1 hình ảnh bé thích:</span>
               <span id="imgSearchStatus" class="text-[10px] font-bold text-indigo-600"></span>
             </div>
             
-            <div id="imageCandidateGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-1.5 max-h-32 overflow-y-auto bg-white p-1.5 rounded-xl border border-slate-200 min-h-[60px]">
+            <div id="imageCandidateGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-32 overflow-y-auto bg-white p-2 rounded-xl border border-indigo-200 min-h-[60px]">
               <div class="col-span-full py-2 text-center text-xs text-slate-400 italic">
-                Gõ từ tiếng Anh rồi bấm "Tìm ảnh" để chọn ảnh đẹp!
+                Gõ từ tiếng Anh rồi bấm "Tìm ảnh" để chọn ảnh thật đẹp cho bé!
               </div>
             </div>
 
-            <div class="mt-1">
-              <input id="newImgUrlInput" type="text" placeholder="Hoặc dán link ảnh online tùy thích..." class="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px]" />
+            <div class="mt-1.5">
+              <input id="newImgUrlInput" type="text" placeholder="Hoặc dán trực tiếp link ảnh online bất kỳ..." class="w-full px-2.5 py-1 rounded-lg border border-slate-200 text-[11px]" />
             </div>
           </div>
 
           <button onclick="handleAddCustomWord()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2 rounded-xl text-xs shadow-md active:scale-95 transition">
-            ✨ Thêm từ này vào bài học
+            ✨ Lưu từ này vào bài học cho bé
           </button>
         </div>
 
-        <!-- SECTION 4: WORDS LIST IN CURRENT LESSON -->
+        <!-- CURRENT LESSON WORD LIST -->
         <div class="bg-white p-3 rounded-2xl border border-slate-200">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-black text-slate-700">Các từ có trong bài học này:</span>
-            <span id="studioWordsCountBadge" class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0 từ</span>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black text-slate-700">Danh sách từ trong bài học này:</span>
+            <span id="studioWordsCountBadge" class="text-[11px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0 từ</span>
           </div>
-          <div id="studioWordList" class="space-y-1 max-h-36 overflow-y-auto pr-1"></div>
+          <div id="studioWordList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
         </div>
 
       </div>
 
       <div class="mt-2 pt-2 border-t flex justify-between items-center text-xs shrink-0">
         <button onclick="resetDefaults()" class="text-rose-500 font-bold hover:underline">
-          Khôi phục giáo trình mẫu
+          Khôi phục gốc ban đầu
         </button>
         <button onclick="closeParentStudio()" class="bg-slate-800 hover:bg-slate-900 text-white px-5 py-2 rounded-xl font-black shadow">
-          Xong & Quay lại học
+          Xong & Quay lại
         </button>
       </div>
 
     </div>
   </div>
-
   <script>
     const HIGH_RES_VECTORS = {
+      MONKEY: {
+        ipa: '/ˈmʌŋ.ki/',
+        emoji: '🐵',
+        alts: ['monk', 'maki', 'monki', 'manki'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="105" r="56" fill="#8D4925"/>
+          <circle cx="48" cy="95" r="22" fill="#8D4925"/>
+          <circle cx="48" cy="95" r="14" fill="#E0A96D"/>
+          <circle cx="152" cy="95" r="22" fill="#8D4925"/>
+          <circle cx="152" cy="95" r="14" fill="#E0A96D"/>
+          <ellipse cx="100" cy="118" rx="42" ry="32" fill="#E0A96D"/>
+          <ellipse cx="80" cy="95" rx="16" ry="18" fill="#E0A96D"/>
+          <ellipse cx="120" cy="95" rx="16" ry="18" fill="#E0A96D"/>
+          <circle cx="82" cy="95" r="6" fill="#1E293B"/>
+          <circle cx="84" cy="93" r="2" fill="#FFFFFF"/>
+          <circle cx="118" cy="95" r="6" fill="#1E293B"/>
+          <circle cx="120" cy="93" r="2" fill="#FFFFFF"/>
+          <circle cx="94" cy="115" r="3" fill="#8D4925"/>
+          <circle cx="106" cy="115" r="3" fill="#8D4925"/>
+          <path d="M 88 128 Q 100 138 112 128" stroke="#8D4925" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>`
+      },
       ELEPHANT: {
         ipa: '/ˈel.ə.fənt/',
         emoji: '🐘',
-        alts: ['efan', 'elphan', 'elefan', 'pant', 'fan', 'alfa', 'olifan'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['efan', 'elphan', 'elefan', 'pant', 'fan', 'alfa'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="115" cy="115" rx="65" ry="52" fill="#94A3B8"/>
           <ellipse cx="70" cy="100" rx="42" ry="46" fill="#94A3B8"/>
           <ellipse cx="40" cy="95" rx="30" ry="38" fill="#CBD5E1"/>
           <ellipse cx="40" cy="95" rx="20" ry="26" fill="#F472B6" opacity="0.3"/>
           <path d="M 50 120 Q 35 165 72 160 Q 80 155 68 140" fill="#94A3B8" stroke="#64748B" stroke-width="3"/>
-          <circle cx="62" cy="85" r="8" fill="#1E293B"/><circle cx="64" cy="82" r="3" fill="#FFFFFF"/>
-          <path d="M 64 125 Q 82 136 78 118" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
-          <rect x="90" y="145" width="22" height="35" rx="10" fill="#64748B"/><rect x="135" y="145" width="22" height="35" rx="10" fill="#64748B"/>
-          <path d="M 178 115 Q 192 135 186 148" stroke="#64748B" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="62" cy="85" r="8" fill="#1E293B"/>
+          <circle cx="64" cy="82" r="3" fill="#FFFFFF"/>
+          <rect x="90" y="145" width="22" height="35" rx="10" fill="#64748B"/>
+          <rect x="135" y="145" width="22" height="35" rx="10" fill="#64748B"/>
         </svg>`
       },
       TIGER: {
         ipa: '/ˈtaɪ.ɡər/',
         emoji: '🐯',
         alts: ['tige', 'taiga', 'tiga', 'tyge', 'ger'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
-          <circle cx="100" cy="105" r="70" fill="#FB923C"/>
-          <polygon points="50,60 60,25 95,50" fill="#EA580C"/><polygon points="150,60 140,25 105,50" fill="#EA580C"/>
-          <polygon points="55,55 63,33 88,48" fill="#FECDD3"/><polygon points="145,55 137,33 112,48" fill="#FECDD3"/>
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="105" r="68" fill="#FB923C"/>
+          <polygon points="50,60 60,25 95,50" fill="#EA580C"/>
+          <polygon points="150,60 140,25 105,50" fill="#EA580C"/>
           <ellipse cx="100" cy="125" rx="34" ry="24" fill="#FFF7ED"/>
-          <circle cx="75" cy="98" r="9" fill="#1E293B"/><circle cx="77" cy="95" r="3" fill="#FFFFFF"/>
-          <circle cx="125" cy="98" r="9" fill="#1E293B"/><circle cx="127" cy="95" r="3" fill="#FFFFFF"/>
+          <circle cx="75" cy="98" r="8" fill="#1E293B"/>
+          <circle cx="125" cy="98" r="8" fill="#1E293B"/>
           <polygon points="100,120 90,110 110,110" fill="#EA580C"/>
-          <path d="M 100 80 L 100 60 M 60 92 L 40 88 M 140 92 L 160 88 M 58 115 L 38 118 M 142 115 L 162 118" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+          <path d="M 100 80 L 100 60 M 60 92 L 40 88 M 140 92 L 160 88" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
         </svg>`
       },
       LION: {
         ipa: '/ˈlaɪ.ən/',
         emoji: '🦁',
-        alts: ['wion', 'lyon', 'laion', 'line', 'ryan'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
-          <circle cx="100" cy="100" r="78" fill="#EA580C"/><circle cx="100" cy="100" r="56" fill="#FDE047"/>
-          <circle cx="76" cy="92" r="8" fill="#1E293B"/><circle cx="78" cy="89" r="3" fill="#FFFFFF"/>
-          <circle cx="124" cy="92" r="8" fill="#1E293B"/><circle cx="126" cy="89" r="3" fill="#FFFFFF"/>
+        alts: ['wion', 'lyon', 'laion', 'line'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="100" cy="100" r="78" fill="#EA580C"/>
+          <circle cx="100" cy="100" r="56" fill="#FDE047"/>
+          <circle cx="76" cy="92" r="8" fill="#1E293B"/>
+          <circle cx="124" cy="92" r="8" fill="#1E293B"/>
           <ellipse cx="100" cy="112" rx="12" ry="9" fill="#9A3412"/>
-          <path d="M 100 121 Q 90 135 78 128 M 100 121 Q 110 135 122 128" stroke="#9A3412" stroke-width="4" stroke-linecap="round" fill="none"/>
         </svg>`
       },
       CAT: {
         ipa: '/kæt/',
         emoji: '🐱',
-        alts: ['kat', 'cap', 'cac', 'cut', 'ca', 'khat'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['kat', 'cap', 'cac', 'cut', 'ca'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="110" r="65" fill="#FBBF24"/>
-          <polygon points="50,70 60,25 98,60" fill="#F59E0B"/><polygon points="150,70 140,25 102,60" fill="#F59E0B"/>
-          <circle cx="76" cy="100" r="9" fill="#1E293B"/><circle cx="78" cy="97" r="3" fill="#FFFFFF"/>
-          <circle cx="124" cy="100" r="9" fill="#1E293B"/><circle cx="126" cy="97" r="3" fill="#FFFFFF"/>
+          <polygon points="50,70 60,25 98,60" fill="#F59E0B"/>
+          <polygon points="150,70 140,25 102,60" fill="#F59E0B"/>
+          <circle cx="76" cy="100" r="9" fill="#1E293B"/>
+          <circle cx="124" cy="100" r="9" fill="#1E293B"/>
           <ellipse cx="100" cy="122" rx="8" ry="6" fill="#F43F5E"/>
-          <path d="M 40 108 L 65 108 M 40 124 L 65 120 M 160 108 L 135 108 M 160 124 L 135 120" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
         </svg>`
       },
       DOG: {
         ipa: '/dɒɡ/',
         emoji: '🐶',
-        alts: ['dok', 'doc', 'dot', 'do', 'dawg'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['dok', 'doc', 'dot', 'do'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="100" cy="110" rx="70" ry="60" fill="#D97706"/>
-          <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/><ellipse cx="155" cy="90" rx="18" ry="36" fill="#B45309"/>
-          <circle cx="76" cy="104" r="9" fill="#1E293B"/><circle cx="78" cy="101" r="3" fill="#FFFFFF"/>
-          <circle cx="124" cy="104" r="9" fill="#1E293B"/><circle cx="126" cy="101" r="3" fill="#FFFFFF"/>
+          <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/>
+          <ellipse cx="155" cy="90" rx="18" ry="36" fill="#B45309"/>
+          <circle cx="76" cy="104" r="9" fill="#1E293B"/>
+          <circle cx="124" cy="104" r="9" fill="#1E293B"/>
           <ellipse cx="100" cy="130" rx="14" ry="10" fill="#1E293B"/>
-          <path d="M 100 140 Q 100 156 112 152" stroke="#F43F5E" stroke-width="8" stroke-linecap="round" fill="none"/>
         </svg>`
       },
       DUCK: {
         ipa: '/dʌk/',
         emoji: '🦆',
-        alts: ['dak', 'dac', 'dap', 'duh', 'dock'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['dak', 'dac', 'dap', 'duh'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="90" r="56" fill="#FACC15"/>
-          <circle cx="80" cy="80" r="8" fill="#1E293B"/><circle cx="82" cy="77" r="3" fill="#FFFFFF"/>
+          <circle cx="80" cy="80" r="8" fill="#1E293B"/>
           <ellipse cx="130" cy="100" rx="32" ry="14" fill="#F97316"/>
-          <path d="M 50 120 Q 100 170 150 120" fill="#EAB308"/>
         </svg>`
       },
       APPLE: {
         ipa: '/ˈæp.əl/',
         emoji: '🍎',
-        alts: ['apo', 'appo', 'aple', 'epo'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
-          <circle cx="84" cy="110" r="52" fill="#EF4444"/><circle cx="116" cy="110" r="52" fill="#DC2626"/>
+        alts: ['apo', 'appo', 'aple'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="84" cy="110" r="52" fill="#EF4444"/>
+          <circle cx="116" cy="110" r="52" fill="#DC2626"/>
           <path d="M 100 64 Q 104 36 120 30" stroke="#78350F" stroke-width="8" stroke-linecap="round" fill="none"/>
-          <ellipse cx="128" cy="44" rx="14" ry="8" fill="#22C55E" transform="rotate(-20 128 44)"/>
         </svg>`
       },
       BANANA: {
         ipa: '/bəˈnɑː.nə/',
         emoji: '🍌',
-        alts: ['nana', 'banana', 'banan', 'bana'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['nana', 'banana', 'banan'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <path d="M 50 150 C 40 80 100 40 150 50 C 110 70 80 110 90 160 Z" fill="#FACC15" stroke="#EAB308" stroke-width="4"/>
-          <circle cx="150" cy="50" r="5" fill="#78350F"/>
         </svg>`
       },
       CAR: {
         ipa: '/kɑːr/',
         emoji: '🚗',
-        alts: ['ca', 'ka', 'car', 'cor'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        alts: ['ca', 'ka', 'car'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="40" y="90" width="120" height="44" rx="12" fill="#3B82F6"/>
-          <path d="M 60 90 L 80 56 L 130 56 L 144 90 Z" fill="#93C5FD"/>
-          <circle cx="70" cy="134" r="16" fill="#1E293B"/><circle cx="70" cy="134" r="7" fill="#CBD5E1"/>
-          <circle cx="130" cy="134" r="16" fill="#1E293B"/><circle cx="130" cy="134" r="7" fill="#CBD5E1"/>
+          <circle cx="70" cy="134" r="16" fill="#1E293B"/>
+          <circle cx="130" cy="134" r="16" fill="#1E293B"/>
         </svg>`
       },
       BUS: {
         ipa: '/bʌs/',
         emoji: '🚌',
         alts: ['bas', 'bah'],
-        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] drop-shadow-md">
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="30" y="60" width="140" height="75" rx="16" fill="#FBBF24"/>
-          <rect x="45" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
-          <rect x="85" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
-          <rect x="125" y="72" width="30" height="24" rx="4" fill="#E0F2FE"/>
-          <circle cx="65" cy="135" r="16" fill="#1E293B"/><circle cx="135" cy="135" r="16" fill="#1E293B"/>
+          <circle cx="65" cy="135" r="16" fill="#1E293B"/>
+          <circle cx="135" cy="135" r="16" fill="#1E293B"/>
         </svg>`
       }
     };
 
-    // MULTI-LESSON DEFAULT CURRICULUM HIERARCHY
-    const DEFAULT_CURRICULUM = [
+    // GIÁO TRÌNH ĐA BÀI HỌC THEO CHỦ ĐỀ (CURRICULUM ARCHITECTURE)
+    const DEFAULT_DATA = [
       {
         id: 'animals',
-        name: 'Animals',
+        name: 'Animals (Động vật)',
         icon: '🦁',
         lessons: [
           {
             id: 'animals_l1',
-            title: 'Bài 1: Thú nuôi (Pets & Farm)',
+            title: 'Bài 1: Thú nuôi',
             words: [
-              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['kat', 'cap', 'ca'] },
-              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dok', 'doc', 'do'] },
-              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['dak', 'dac', 'duh'] }
+              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['kat', 'cap', 'cac', 'cut', 'ca'] },
+              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dok', 'doc', 'do', 'dawg'] },
+              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['dak', 'dac', 'dap', 'duh'] }
             ]
           },
           {
             id: 'animals_l2',
-            title: 'Bài 2: Rừng xanh (Safari Giants)',
+            title: 'Bài 2: Rừng xanh',
             words: [
+              { word: 'MONKEY', ipa: '/ˈmʌŋ.ki/', img: '', alts: ['monk', 'maki', 'monki', 'manki'] },
+              { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['efan', 'elphan', 'pant', 'fan'] },
               { word: 'TIGER', ipa: '/ˈtaɪ.ɡər/', img: '', alts: ['tige', 'taiga', 'tiga'] },
-              { word: 'LION', ipa: '/ˈlaɪ.ən/', img: '', alts: ['wion', 'lyon', 'laion'] },
-              { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['efan', 'elphan', 'pant', 'fan'] }
+              { word: 'LION', ipa: '/ˈlaɪ.ən/', img: '', alts: ['wion', 'lyon', 'laion'] }
             ]
           }
         ]
       },
       {
         id: 'foods',
-        name: 'Foods',
+        name: 'Foods (Món ăn)',
         icon: '🍎',
         lessons: [
           {
             id: 'foods_l1',
-            title: 'Bài 1: Trái cây ngọt',
+            title: 'Bài 1: Trái cây',
             words: [
               { word: 'APPLE', ipa: '/ˈæp.əl/', img: '', alts: ['apo', 'appo', 'aple'] },
               { word: 'BANANA', ipa: '/bəˈnɑː.nə/', img: '', alts: ['nana', 'banana', 'banan'] }
@@ -539,7 +539,7 @@
       },
       {
         id: 'vehicles',
-        name: 'Vehicles',
+        name: 'Vehicles (Xe cộ)',
         icon: '🚗',
         lessons: [
           {
@@ -554,32 +554,40 @@
       }
     ];
 
-    let appCurriculum = JSON.parse(localStorage.getItem('safari_curriculum_v7')) || DEFAULT_CURRICULUM;
-    let currentTopicIndex = 0;
+    let appData = JSON.parse(localStorage.getItem('safari_curriculum_v7')) || DEFAULT_DATA;
+    let currentCatIndex = 0;
     let currentLessonIndex = 0;
     let currentWordIndex = 0;
-
-    let totalStars = parseInt(localStorage.getItem('safari_stars_v7') || '0');
+    let totalStars = parseInt(localStorage.getItem('safari_stars') || '0');
     let attemptsCount = 0;
     let isListening = false;
     let currentMode = 'practice'; // 'practice' | 'quiz'
 
     let quizQuestions = [];
     let currentQuizIndex = 0;
-
     let audioContext = null;
     let recognition = null;
-    let micStream = null;
     let parentMathSecret = 0;
     let selectedImageCandidate = '';
     let preferredFemaleVoice = null;
 
-    function saveCurriculum() {
-      localStorage.setItem('safari_curriculum_v7', JSON.stringify(appCurriculum));
+    function saveData() {
+      localStorage.setItem('safari_curriculum_v7', JSON.stringify(appData));
+    }
+
+    function getActiveLesson() {
+      const cat = appData[currentCatIndex];
+      if (!cat.lessons || cat.lessons.length === 0) {
+        cat.lessons = [{ id: 'default_l1', title: 'Bài 1: Cơ bản', words: [] }];
+      }
+      if (currentLessonIndex >= cat.lessons.length) {
+        currentLessonIndex = 0;
+      }
+      return cat.lessons[currentLessonIndex];
     }
   </script>
-
   <script>
+    // WEB AUDIO API - TẠO ÂM THANH XUẤT (OUTPUT ONLY) KHÔNG KHÓA MICRO
     function initAudioContext() {
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -599,7 +607,7 @@
         const gain = ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-        gain.gain.setValueAtTime(0.28, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.25, now + idx * 0.08);
         gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.32);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -616,7 +624,7 @@
       osc.type = 'sine';
       osc.frequency.setValueAtTime(280, now);
       osc.frequency.exponentialRampToValueAtTime(200, now + 0.22);
-      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.setValueAtTime(0.18, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.connect(gain);
       gain.connect(ctx.destination);
@@ -642,15 +650,15 @@
     function speakTargetWord(customWord = null, onEndCallback = null) {
       initAudioContext();
       if (!('speechSynthesis' in window)) return;
-      const curLesson = getCurrentLesson();
-      const word = customWord || curLesson?.words[currentWordIndex]?.word;
+      const lesson = getActiveLesson();
+      const word = customWord || lesson.words[currentWordIndex]?.word;
       if (!word) return;
 
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(word.toLowerCase());
       utterance.lang = 'en-US';
       utterance.rate = 0.8;
-      utterance.pitch = 1.18;
+      utterance.pitch = 1.2;
       if (preferredFemaleVoice) utterance.voice = preferredFemaleVoice;
 
       if (onEndCallback) {
@@ -658,277 +666,127 @@
       }
       window.speechSynthesis.speak(utterance);
     }
-  </script>
 
-  <script>
-    function getCurrentTopic() {
-      if (!appCurriculum[currentTopicIndex]) currentTopicIndex = 0;
-      return appCurriculum[currentTopicIndex];
+    // XỬ LÝ LỖI MICRO & THU ÂM (BULLETPROOF SPEECH RECOGNITION)
+    const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    function resetMicUI() {
+      isListening = false;
+      const btn = document.getElementById('recordBtn');
+      btn.classList.remove('mic-active-glow', 'from-red-600', 'to-rose-600');
+      btn.classList.add('from-rose-500', 'to-pink-500');
+      document.getElementById('micIcon').innerText = '🎙️';
+      document.getElementById('micStatusText').innerText = 'Sẵn sàng';
+      document.getElementById('subHint').innerText = 'Chạm Micro và đọc to tiếng Anh nha!';
     }
 
-    function getCurrentLesson() {
-      const topic = getCurrentTopic();
-      if (!topic.lessons || topic.lessons.length === 0) {
-        topic.lessons = [{ id: 'l_default', title: 'Bài 1: Cơ bản', words: [] }];
-      }
-      if (!topic.lessons[currentLessonIndex]) currentLessonIndex = 0;
-      return topic.lessons[currentLessonIndex];
+    function setMicActiveUI() {
+      isListening = true;
+      const btn = document.getElementById('recordBtn');
+      btn.classList.add('mic-active-glow', 'from-red-600', 'to-rose-600');
+      btn.classList.remove('from-rose-500', 'to-pink-500');
+      document.getElementById('micIcon').innerText = '🛑';
+      document.getElementById('micStatusText').innerText = 'Đang nghe bé nói...';
+      document.getElementById('subHint').innerText = 'Pip đang nghe nè, bé đọc to lên nhé!';
+      setMascot('Pip đang lắng nghe nè, đọc to rõ lên nha bé ơi! 👂', '👂');
     }
 
-    function getVisualHTML(wordObj, extraClasses = '') {
-      if (!wordObj) return '<span class="text-7xl">🌟</span>';
-      const cleanWord = wordObj.word.toUpperCase();
-      const dictMatch = HIGH_RES_VECTORS[cleanWord];
+    function toggleVoiceInput() {
+      initAudioContext();
 
-      if (wordObj.img && wordObj.img.trim() !== '') {
-        return `<img src="${wordObj.img}" alt="${wordObj.word}" class="w-full h-full object-contain drop-shadow-md rounded-2xl ${extraClasses}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-7xl\\'>${dictMatch?.emoji || '🌟'}</span>'" />`;
-      }
-      if (dictMatch && dictMatch.svg) {
-        return `<div class="w-full h-full flex items-center justify-center p-1 ${extraClasses}">${dictMatch.svg}</div>`;
-      }
-      return `<span class="text-7xl sm:text-8xl animate-bounce">${dictMatch?.emoji || '🌟'}</span>`;
-    }
-
-    function renderTopicTabs() {
-      const container = document.getElementById('categoryTabs');
-      container.innerHTML = appCurriculum.map((cat, idx) => `
-        <button onclick="selectTopic(${idx})" class="px-2.5 py-1 rounded-xl text-xs font-black whitespace-nowrap transition-all ${idx === currentTopicIndex ? 'bg-amber-400 text-amber-950 shadow-sm' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
-          ${cat.icon} ${cat.name}
-        </button>
-      `).join('');
-    }
-
-    function renderLessonDropdown() {
-      const topic = getCurrentTopic();
-      const select = document.getElementById('lessonSelect');
-      select.innerHTML = topic.lessons.map((les, idx) => `
-        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>
-          ${les.title}
-        </option>
-      `).join('');
-    }
-
-    function selectTopic(idx) {
-      currentTopicIndex = idx;
-      currentLessonIndex = 0;
-      currentWordIndex = 0;
-      attemptsCount = 0;
-      renderTopicTabs();
-      renderLessonDropdown();
-      if (currentMode === 'practice') {
-        renderCurrentCard();
-      } else {
-        startQuizForCurrentLesson();
-      }
-    }
-
-    function onSelectLesson(idxStr) {
-      currentLessonIndex = parseInt(idxStr);
-      currentWordIndex = 0;
-      attemptsCount = 0;
-      if (currentMode === 'practice') {
-        renderCurrentCard();
-      } else {
-        startQuizForCurrentLesson();
-      }
-    }
-
-    function renderCurrentCard() {
-      const lesson = getCurrentLesson();
-      const words = lesson.words || [];
-
-      if (words.length === 0) {
-        document.getElementById('cardIndexBadge').innerText = '0 / 0';
-        document.getElementById('targetWord').innerText = 'CHƯA CÓ TỪ';
-        document.getElementById('targetIpa').innerText = '--';
-        document.getElementById('visualHolder').innerHTML = `
-          <div class="text-center p-4">
-            <span class="text-5xl">📝</span>
-            <p class="text-xs font-bold text-slate-500 mt-2">Bài này chưa có từ vựng.<br>Ba mẹ hãy bấm ⚙️ để thêm từ vào nhé!</p>
-          </div>
-        `;
+      if (!SpeechClass) {
+        setMascot('Trình duyệt chưa hỗ trợ Micro. Ba mẹ cho bé mở trên Chrome nhé!', '⚠️');
+        alert('Trình duyệt của bạn chưa hỗ trợ nhận diện giọng nói Web Speech. Hãy mở trên ứng dụng Google Chrome!');
         return;
       }
 
-      if (currentWordIndex >= words.length) currentWordIndex = 0;
-      const wordObj = words[currentWordIndex];
-
-      document.getElementById('cardIndexBadge').innerText = `TỪ ${currentWordIndex + 1} / ${words.length}`;
-      document.getElementById('targetWord').innerText = wordObj.word;
-      document.getElementById('targetIpa').innerText = wordObj.ipa || (HIGH_RES_VECTORS[wordObj.word.toUpperCase()]?.ipa || `/${wordObj.word.toLowerCase()}/`);
-      document.getElementById('liveHeardTranscript').innerText = '"..."';
-
-      document.getElementById('visualHolder').innerHTML = getVisualHTML(wordObj);
-      renderAttemptDots();
-      setMascot('Bé hãy bấm nút Micro và đọc to từ vựng nhé!', '🐲');
-    }
-
-    function renderAttemptDots() {
-      const container = document.getElementById('attemptDots');
-      container.innerHTML = [0, 1, 2].map(i => `
-        <span class="w-2.5 h-2.5 rounded-full border border-amber-400 ${i < attemptsCount ? 'bg-amber-400' : 'bg-transparent'}"></span>
-      `).join('');
-    }
-
-    function navigateWord(direction) {
-      const lesson = getCurrentLesson();
-      if (!lesson.words || lesson.words.length === 0) return;
-      currentWordIndex = (currentWordIndex + direction + lesson.words.length) % lesson.words.length;
-      attemptsCount = 0;
-      renderCurrentCard();
-    }
-
-    function setMascot(text, avatar = '🐲') {
-      document.getElementById('mascotText').innerText = text;
-      document.getElementById('mascotAvatar').innerText = avatar;
-    }
-  </script>
-
-  <script>
-    function switchAppMode(mode) {
-      currentMode = mode;
-      const practiceView = document.getElementById('practiceView');
-      const quizView = document.getElementById('quizView');
-      const practiceBtn = document.getElementById('modePracticeBtn');
-      const quizBtn = document.getElementById('modeQuizBtn');
-
-      if (mode === 'practice') {
-        practiceView.classList.remove('hidden');
-        quizView.classList.add('hidden');
-        practiceBtn.className = 'px-2 py-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm';
-        quizBtn.className = 'px-2 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900';
-        renderCurrentCard();
-      } else {
-        practiceView.classList.add('hidden');
-        quizView.classList.remove('hidden');
-        quizBtn.className = 'px-2 py-1 rounded-xl text-xs font-black transition-all bg-sky-400 text-sky-950 shadow-sm';
-        practiceBtn.className = 'px-2 py-1 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-slate-900';
-        startQuizForCurrentLesson();
-      }
-    }
-
-    function startQuizForCurrentLesson() {
-      const lesson = getCurrentLesson();
-      document.getElementById('quizLessonBadge').innerText = lesson.title;
-
-      if (!lesson.words || lesson.words.length === 0) {
-        document.getElementById('quizOptionsGrid').innerHTML = `
-          <div class="col-span-full text-center py-8">
-            <span class="text-4xl">⚠️</span>
-            <p class="text-xs font-bold text-slate-500 mt-2">Bài học này chưa có từ vựng để kiểm tra.</p>
-          </div>
-        `;
+      // Nếu đang nghe thì dừng lại
+      if (isListening) {
+        if (recognition) {
+          try { recognition.stop(); } catch (e) {}
+        }
+        resetMicUI();
         return;
       }
 
-      quizQuestions = [...lesson.words].sort(() => 0.5 - Math.random());
-      currentQuizIndex = 0;
-      renderQuizQuestion();
-    }
-
-    function renderQuizQuestion() {
-      if (currentQuizIndex >= quizQuestions.length) {
-        renderQuizCompletionScreen();
-        return;
+      // Luôn dọn dẹp và tạo mới phiên nhận diện để tránh lỗi InvalidStateError
+      if (recognition) {
+        try {
+          recognition.abort();
+        } catch (e) {}
       }
 
-      const target = quizQuestions[currentQuizIndex];
-      const lesson = getCurrentLesson();
-      document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
-      document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
+      try {
+        recognition = new SpeechClass();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 10;
 
-      // Distractors inside current lesson or other lessons
-      const otherWordsInLesson = lesson.words.filter(w => w.word !== target.word);
-      let distractors = otherWordsInLesson.sort(() => 0.5 - Math.random()).slice(0, 2);
+        recognition.onstart = () => {
+          setMicActiveUI();
+        };
 
-      if (distractors.length < 1) {
-        const globalPool = appCurriculum.flatMap(t => t.lessons.flatMap(l => l.words)).filter(w => w.word !== target.word);
-        distractors = globalPool.sort(() => 0.5 - Math.random()).slice(0, 2);
-      }
+        recognition.onresult = (event) => {
+          const hypotheses = [];
+          let interimText = '';
 
-      const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
-      const grid = document.getElementById('quizOptionsGrid');
-      grid.innerHTML = '';
+          for (let i = 0; i < event.results.length; ++i) {
+            const res = event.results[i];
+            for (let j = 0; j < res.length; ++j) {
+              const t = res[j].transcript;
+              if (t && !hypotheses.includes(t)) hypotheses.push(t);
+            }
+            if (!res.isFinal) {
+              interimText = res[0].transcript;
+            }
+          }
 
-      choices.forEach(item => {
-        const choiceBtn = document.createElement('button');
-        choiceBtn.className = 'w-full h-full max-h-[220px] rounded-3xl border-4 border-slate-200 hover:border-sky-400 bg-slate-50/80 p-2 flex flex-col items-center justify-center transition-all active:scale-95 shadow-md relative overflow-hidden group';
-        choiceBtn.innerHTML = `
-          <div class="w-full h-full flex items-center justify-center overflow-hidden pointer-events-none">
-            ${getVisualHTML(item, 'max-h-[160px]')}
-          </div>
-        `;
-        choiceBtn.onclick = () => handleQuizAnswer(item, target, choiceBtn);
-        grid.appendChild(choiceBtn);
-      });
+          const preview = interimText || hypotheses[0] || '...';
+          document.getElementById('liveHeardTranscript').innerText = `"${preview.trim()}"`;
 
-      setTimeout(() => {
-        speakTargetWord(target.word);
-      }, 350);
-    }
+          if (event.results[0].isFinal) {
+            resetMicUI();
+            const lesson = getActiveLesson();
+            const targetObj = lesson.words[currentWordIndex];
+            const evaluation = evaluateChildSpeech(hypotheses, targetObj);
 
-    function playQuizPromptAudio() {
-      const target = quizQuestions[currentQuizIndex];
-      if (target) {
-        speakTargetWord(target.word);
-      }
-    }
+            if (evaluation.isMatch) {
+              celebrateSuccess(evaluation.heardText);
+            } else {
+              handleSpeechRetry(evaluation.heardText);
+            }
+          }
+        };
 
-    function handleQuizAnswer(selectedItem, targetItem, btnElem) {
-      if (selectedItem.word === targetItem.word) {
-        btnElem.classList.remove('border-slate-200');
-        btnElem.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-300');
-        playCelebrationFanfare();
+        recognition.onerror = (e) => {
+          resetMicUI();
+          if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+            setMascot('Ba mẹ vui lòng bấm "Cho phép" để ứng dụng dùng Micro nhé!', '⚠️');
+            alert('Trang web chưa được cấp quyền dùng Micro. Ba mẹ bấm vào biểu tượng ổ khóa bên cạnh link web để Cho phép Micro nhé!');
+          } else if (e.error === 'no-speech') {
+            handleSpeechRetry('...');
+          } else {
+            document.getElementById('micStatusText').innerText = 'Sẵn sàng';
+          }
+        };
 
-        totalStars += 1;
-        localStorage.setItem('safari_stars_v7', totalStars);
-        document.getElementById('starCounter').innerText = totalStars;
+        recognition.onend = () => {
+          resetMicUI();
+        };
 
-        document.getElementById('quizFeedbackText').innerHTML = `🎉 <b class="text-emerald-600">CHÍNH XÁC!</b> Đó là "${targetItem.word}"!`;
+        recognition.start();
 
-        confetti({
-          particleCount: 40,
-          spread: 50,
-          origin: { y: 0.6 }
-        });
-
+      } catch (err) {
+        console.warn('Lỗi khởi động micro:', err);
+        resetMicUI();
+        // Fallback tự động bảo vệ
         setTimeout(() => {
-          currentQuizIndex++;
-          renderQuizQuestion();
-        }, 1200);
-      } else {
-        btnElem.classList.add('wobble', 'border-rose-300');
-        playGentleErrorSound();
-        document.getElementById('quizFeedbackText').innerHTML = `💡 Chưa đúng rồi, bé bấm nghe lại và thử lại bức ảnh khác nhé!`;
-        setTimeout(() => {
-          btnElem.classList.remove('wobble', 'border-rose-300');
-        }, 500);
+          try { recognition.start(); } catch(e) {}
+        }, 200);
       }
     }
 
-    function renderQuizCompletionScreen() {
-      const grid = document.getElementById('quizOptionsGrid');
-      grid.innerHTML = `
-        <div class="col-span-full flex flex-col items-center justify-center p-4 text-center">
-          <span class="text-6xl animate-bounce mb-2">🏆</span>
-          <h3 class="text-xl font-black text-amber-600 mb-1">HOÀN THÀNH BÀI HỌC!</h3>
-          <p class="text-xs font-bold text-slate-600 mb-4">Bé đã trả lời rất giỏi và nhận được thêm nhiều ngôi sao!</p>
-          <div class="flex gap-3">
-            <button onclick="startQuizForCurrentLesson()" class="bg-amber-400 hover:bg-amber-500 active:scale-95 text-amber-950 font-black px-4 py-2 rounded-2xl text-xs shadow-md">
-              🔄 Làm lại bài này
-            </button>
-            <button onclick="switchAppMode('practice')" class="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white font-black px-4 py-2 rounded-2xl text-xs shadow-md">
-              🎙️ Tiếp tục luyện nói
-            </button>
-          </div>
-        </div>
-      `;
-      playCelebrationFanfare();
-      confetti({ particleCount: 80, spread: 80 });
-    }
-  </script>
-
-  <script>
     function calculateLevenshtein(a, b) {
       const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
       for (let i = 0; i <= a.length; i++) dp[i][0] = i;
@@ -945,7 +803,7 @@
       const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
       const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
       
-      const dictObj = HIGH_RES_VECTORS[targetWordObj.word];
+      const dictObj = HIGH_RES_VECTORS[targetWordObj.word.toUpperCase()];
       if (dictObj && dictObj.alts) {
         childAlts.push(...dictObj.alts);
       }
@@ -981,6 +839,7 @@
             bestTranscript = w;
           }
 
+          // Ngưỡng bao dung đặc biệt cho bé 6 tuổi (>= 0.40 là chấp nhận)
           if (similarity >= 0.40) {
             return { isMatch: true, heardText: w, confidence: similarity };
           }
@@ -990,114 +849,24 @@
       return { isMatch: false, heardText: bestTranscript, confidence: bestConfidence };
     }
 
-    function initSpeechRecognition() {
-      const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechClass) {
-        setMascot('Trình duyệt chưa hỗ trợ Micro. Bé hãy mở bằng Google Chrome nhé!', '⚠️');
-        return;
-      }
-
-      recognition = new SpeechClass();
-      recognition.lang = 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = true; 
-      recognition.maxAlternatives = 10; 
-
-      recognition.onstart = () => {
-        isListening = true;
-        document.getElementById('micPulseRing').classList.remove('hidden');
-        document.getElementById('micStatusText').innerText = 'Đang nghe bé nói...';
-        setMascot('Pip đang lắng nghe nè, bé đọc to lên nhé! 👂', '👂');
-      };
-
-      recognition.onresult = (event) => {
-        const hypotheses = [];
-        let interimText = '';
-
-        for (let i = 0; i < event.results.length; ++i) {
-          const res = event.results[i];
-          for (let j = 0; j < res.length; ++j) {
-            const t = res[j].transcript;
-            if (t && !hypotheses.includes(t)) hypotheses.push(t);
-          }
-          if (!res.isFinal) {
-            interimText = res[0].transcript;
-          }
-        }
-
-        const previewWord = interimText || hypotheses[0] || '...';
-        document.getElementById('liveHeardTranscript').innerText = `"${previewWord.trim()}"`;
-
-        if (event.results[0].isFinal) {
-          isListening = false;
-          document.getElementById('micPulseRing').classList.add('hidden');
-          const curLesson = getCurrentLesson();
-          const targetObj = curLesson.words[currentWordIndex];
-          if (!targetObj) return;
-
-          const evaluation = evaluateChildSpeech(hypotheses, targetObj);
-          if (evaluation.isMatch) {
-            celebrateSuccess(evaluation.heardText);
-          } else {
-            handleSpeechRetry(evaluation.heardText);
-          }
-        }
-      };
-
-      recognition.onerror = () => {
-        isListening = false;
-        document.getElementById('micPulseRing').classList.add('hidden');
-        document.getElementById('micStatusText').innerText = 'Sẵn sàng';
-        handleSpeechRetry('...');
-      };
-
-      recognition.onend = () => {
-        isListening = false;
-        document.getElementById('micPulseRing').classList.add('hidden');
-      };
-    }
-
-    async function toggleVoiceInput() {
-      initAudioContext();
-      await initPersistentMic();
-      if (!recognition) return;
-
-      try {
-        if (isListening) {
-          recognition.stop();
-        } else {
-          recognition.start();
-        }
-      } catch (err) {
-        try {
-          recognition.stop();
-          setTimeout(() => recognition.start(), 150);
-        } catch(e) {}
-      }
-    }
-
     function celebrateSuccess(spokenWord) {
       playCelebrationFanfare();
       totalStars += 1;
-      localStorage.setItem('safari_stars_v7', totalStars);
+      localStorage.setItem('safari_stars', totalStars);
       document.getElementById('starCounter').innerText = totalStars;
       
-      const curLesson = getCurrentLesson();
-      const targetWord = curLesson.words[currentWordIndex]?.word || '';
+      const lesson = getActiveLesson();
+      const targetWord = lesson.words[currentWordIndex].word;
       setMascot(`XUẤT SẮC! Bé đọc từ "${targetWord}" chuẩn lắm! 🎉`, '🥳');
       
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
 
       attemptsCount = 0;
       renderAttemptDots();
 
       setTimeout(() => {
         navigateWord(1);
-      }, 1600);
+      }, 1500);
     }
 
     function handleSpeechRetry(heardWord) {
@@ -1116,272 +885,286 @@
       setTimeout(() => speakTargetWord(), 900);
     }
   </script>
-
   <script>
-    // 1. JSON FILE BACKUP & RESTORE
-    function exportCurriculumJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appCurriculum, null, 2));
+    function getVisualHTML(wordObj, extraClasses = '') {
+      if (!wordObj) return '<span class="text-7xl">🌟</span>';
+      const cleanWord = wordObj.word.toUpperCase();
+      const dictMatch = HIGH_RES_VECTORS[cleanWord];
+
+      if (wordObj.img && wordObj.img.trim() !== '') {
+        return `<img src="${wordObj.img}" alt="${wordObj.word}" class="w-full h-full object-contain drop-shadow-md rounded-2xl ${extraClasses}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-7xl\\'>${dictMatch?.emoji || '🌟'}</span>'" />`;
+      }
+      if (dictMatch && dictMatch.svg) {
+        return `<div class="w-full h-full flex items-center justify-center p-1 ${extraClasses}">${dictMatch.svg}</div>`;
+      }
+      return `<span class="text-7xl sm:text-8xl animate-bounce">${dictMatch?.emoji || '🌟'}</span>`;
+    }
+
+    function renderCurrentCard() {
+      const lesson = getActiveLesson();
+      if (!lesson.words || lesson.words.length === 0) {
+        document.getElementById('cardIndexBadge').innerText = `TỪ 0 / 0`;
+        document.getElementById('targetWord').innerText = 'CHƯA CÓ TỪ';
+        document.getElementById('targetIpa').innerText = '';
+        document.getElementById('visualHolder').innerHTML = '<div class="text-center p-4"><p class="text-sm font-bold text-slate-500">Bài học này chưa có từ vựng. Ba mẹ hãy vào Góc Phụ Huynh ⚙️ để thêm từ nhé!</p></div>';
+        return;
+      }
+
+      if (currentWordIndex >= lesson.words.length) currentWordIndex = 0;
+      const wordObj = lesson.words[currentWordIndex];
+
+      document.getElementById('cardIndexBadge').innerText = `TỪ ${currentWordIndex + 1} / ${lesson.words.length}`;
+      document.getElementById('targetWord').innerText = wordObj.word;
+      document.getElementById('targetIpa').innerText = wordObj.ipa || (HIGH_RES_VECTORS[wordObj.word.toUpperCase()]?.ipa || `/${wordObj.word.toLowerCase()}/`);
+      document.getElementById('liveHeardTranscript').innerText = '"..."';
+
+      document.getElementById('visualHolder').innerHTML = getVisualHTML(wordObj);
+      renderAttemptDots();
+      setMascot('Bé hãy bấm nút Micro màu đỏ và đọc to từ vựng nhé!', '🐲');
+    }
+
+    function renderAttemptDots() {
+      const container = document.getElementById('attemptDots');
+      container.innerHTML = [0, 1, 2].map(i => `
+        <span class="w-2.5 h-2.5 rounded-full border border-amber-400 ${i < attemptsCount ? 'bg-amber-400' : 'bg-transparent'}"></span>
+      `).join('');
+    }
+
+    function navigateWord(direction) {
+      const lesson = getActiveLesson();
+      if (!lesson.words || lesson.words.length === 0) return;
+      currentWordIndex = (currentWordIndex + direction + lesson.words.length) % lesson.words.length;
+      attemptsCount = 0;
+      renderCurrentCard();
+    }
+
+    function setMascot(text, avatar = '🐲') {
+      document.getElementById('mascotText').innerText = text;
+      document.getElementById('mascotAvatar').innerText = avatar;
+    }
+
+    function renderTabs() {
+      const container = document.getElementById('categoryTabs');
+      container.innerHTML = appData.map((cat, idx) => `
+        <button onclick="selectCategory(${idx})" class="px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${idx === currentCatIndex ? 'bg-amber-400 text-amber-950 shadow-sm' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
+          ${cat.icon} ${cat.name.split(' ')[0]}
+        </button>
+      `).join('');
+      renderLessonSelectOptions();
+    }
+
+    function renderLessonSelectOptions() {
+      const cat = appData[currentCatIndex];
+      const select = document.getElementById('lessonSelect');
+      select.innerHTML = (cat.lessons || []).map((l, idx) => `
+        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>${l.title}</option>
+      `).join('');
+    }
+
+    function selectCategory(idx) {
+      currentCatIndex = idx;
+      currentLessonIndex = 0;
+      currentWordIndex = 0;
+      attemptsCount = 0;
+      renderTabs();
+      if (currentMode === 'practice') {
+        renderCurrentCard();
+      } else {
+        startQuizForCurrentLesson();
+      }
+    }
+
+    function handleSelectLesson(idxStr) {
+      currentLessonIndex = parseInt(idxStr) || 0;
+      currentWordIndex = 0;
+      attemptsCount = 0;
+      if (currentMode === 'practice') {
+        renderCurrentCard();
+      } else {
+        startQuizForCurrentLesson();
+      }
+    }
+
+    // QUIZ / ĐỐ VUI THEO BÀI HỌC
+    function switchAppMode(mode) {
+      currentMode = mode;
+      const practiceView = document.getElementById('practiceView');
+      const quizView = document.getElementById('quizView');
+      const practiceBtn = document.getElementById('modePracticeBtn');
+      const quizBtn = document.getElementById('modeQuizBtn');
+
+      if (mode === 'practice') {
+        practiceView.classList.remove('hidden');
+        quizView.classList.add('hidden');
+        practiceBtn.className = 'px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm';
+        quizBtn.className = 'px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all text-slate-600 hover:text-slate-900';
+        renderCurrentCard();
+      } else {
+        practiceView.classList.add('hidden');
+        quizView.classList.remove('hidden');
+        quizBtn.className = 'px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-sky-400 text-sky-950 shadow-sm';
+        practiceBtn.className = 'px-2 sm:px-2.5 py-1 rounded-lg text-xs font-black transition-all text-slate-600 hover:text-slate-900';
+        startQuizForCurrentLesson();
+      }
+    }
+
+    function startQuizForCurrentLesson() {
+      const lesson = getActiveLesson();
+      document.getElementById('quizLessonBadge').innerText = `Bài: ${lesson.title}`;
+
+      if (!lesson.words || lesson.words.length === 0) {
+        document.getElementById('quizOptionsGrid').innerHTML = '<div class="col-span-full py-8 text-center text-xs font-bold text-slate-400">Bài học này chưa có từ vựng để làm bài kiểm tra!</div>';
+        return;
+      }
+
+      quizQuestions = [...lesson.words].sort(() => 0.5 - Math.random());
+      currentQuizIndex = 0;
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (currentQuizIndex >= quizQuestions.length) {
+        renderQuizCompletionScreen();
+        return;
+      }
+
+      const target = quizQuestions[currentQuizIndex];
+      const lesson = getActiveLesson();
+      document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+      document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
+
+      const otherWords = lesson.words.filter(w => w.word !== target.word);
+      let distractors = otherWords.sort(() => 0.5 - Math.random()).slice(0, 1);
+      
+      // Bổ sung từ chủ đề khác nếu bài học ít từ
+      if (distractors.length < 1) {
+        const pool = appData.flatMap(c => (c.lessons || []).flatMap(l => l.words)).filter(w => w.word !== target.word);
+        distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 1);
+      }
+
+      const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
+      const grid = document.getElementById('quizOptionsGrid');
+      grid.innerHTML = '';
+
+      choices.forEach(item => {
+        const choiceBtn = document.createElement('button');
+        choiceBtn.className = 'w-full h-full max-h-[220px] rounded-3xl border-4 border-slate-200 hover:border-sky-400 bg-slate-50/80 p-2 flex flex-col items-center justify-center transition-all active:scale-95 shadow-md relative overflow-hidden group';
+        
+        choiceBtn.innerHTML = `
+          <div class="w-full h-full flex items-center justify-center overflow-hidden pointer-events-none">
+            ${getVisualHTML(item, 'max-h-[160px]')}
+          </div>
+        `;
+
+        choiceBtn.onclick = () => handleQuizAnswer(item, target, choiceBtn);
+        grid.appendChild(choiceBtn);
+      });
+
+      // Tự động phát âm câu hỏi bằng giọng cô giáo
+      setTimeout(() => {
+        speakTargetWord(target.word);
+      }, 350);
+    }
+
+    function playQuizPromptAudio() {
+      const target = quizQuestions[currentQuizIndex];
+      if (target) {
+        speakTargetWord(target.word);
+      }
+    }
+
+    function handleQuizAnswer(selectedItem, targetItem, btnElem) {
+      if (selectedItem.word === targetItem.word) {
+        btnElem.classList.remove('border-slate-200');
+        btnElem.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-300');
+        playCelebrationFanfare();
+
+        totalStars += 1;
+        localStorage.setItem('safari_stars', totalStars);
+        document.getElementById('starCounter').innerText = totalStars;
+
+        document.getElementById('quizFeedbackText').innerHTML = `🎉 <b class="text-emerald-600">CHÍNH XÁC!</b> Đó là "${targetItem.word}"!`;
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
+
+        setTimeout(() => {
+          currentQuizIndex++;
+          renderQuizQuestion();
+        }, 1200);
+
+      } else {
+        btnElem.classList.add('wobble', 'border-rose-300');
+        playGentleErrorSound();
+        document.getElementById('quizFeedbackText').innerHTML = `💡 Chưa đúng rồi, bé bấm nghe lại và thử lại bức ảnh khác nhé!`;
+        setTimeout(() => {
+          btnElem.classList.remove('wobble', 'border-rose-300');
+        }, 500);
+      }
+    }
+
+    function renderQuizCompletionScreen() {
+      const grid = document.getElementById('quizOptionsGrid');
+      grid.innerHTML = `
+        <div class="col-span-full flex flex-col items-center justify-center p-4 text-center">
+          <span class="text-5xl animate-bounce mb-2">🏆</span>
+          <h3 class="text-lg font-black text-amber-600 mb-1">HOÀN THÀNH BÀI KIỂM TRA!</h3>
+          <p class="text-xs font-bold text-slate-600 mb-3">Bé đã trả lời rất giỏi và nhận được thêm sao!</p>
+          <div class="flex gap-2">
+            <button onclick="startQuizForCurrentLesson()" class="bg-amber-400 hover:bg-amber-500 active:scale-95 text-amber-950 font-black px-3 py-1.5 rounded-xl text-xs shadow">
+              🔄 Làm lại
+            </button>
+            <button onclick="switchAppMode('practice')" class="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white font-black px-3 py-1.5 rounded-xl text-xs shadow">
+              🎙️ Luyện nói tiếp
+            </button>
+          </div>
+        </div>
+      `;
+      playCelebrationFanfare();
+      confetti({ particleCount: 70, spread: 70 });
+    }
+  </script>
+  <script>
+    // XUẤT VÀ NHẬP FILE .JSON (BACKUP & RESTORE HOÀN HẢO CHO DI ĐỘNG)
+    function exportDataToJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "Kidspeak_Curriculum.json");
+      downloadAnchor.setAttribute("download", "KidSpeak_Curriculum.json");
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
+      alert('Đã tải file "KidSpeak_Curriculum.json" về máy thành công! Ba mẹ hãy gửi file này qua Zalo sang điện thoại để mở nhé!');
     }
 
-    function importCurriculumJSON(event) {
+    function importDataFromJSON(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(e) {
         try {
-          const parsed = JSON.parse(e.target.result);
-          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].lessons) {
-            appCurriculum = parsed;
-            saveCurriculum();
-            currentTopicIndex = 0;
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            appData = imported;
+            saveData();
+            currentCatIndex = 0;
             currentLessonIndex = 0;
             currentWordIndex = 0;
-            renderTopicTabs();
-            renderLessonDropdown();
+            renderTabs();
+            renderStudioLessonOptions();
+            renderStudioWordList();
             renderCurrentCard();
-            syncStudioControls();
-            alert("🎉 Đã nhập toàn bộ giáo trình thành công từ file .json!");
+            alert('🎉 Chúc mừng! Đã mở và cập nhật toàn bộ giáo trình từ file .json thành công!');
           } else {
-            alert("⚠️ File .json không đúng định dạng giáo trình KidSpeak.");
+            alert('File .json không đúng định dạng giáo trình của KidSpeak!');
           }
         } catch (err) {
-          alert("⚠️ Lỗi đọc file .json: " + err.message);
+          alert('Không thể đọc file .json này. Vui lòng kiểm tra lại!');
         }
       };
       reader.readAsText(file);
-      event.target.value = '';
     }
 
-    // 2. PARENTAL GATE
-    function openParentGate() {
-      const a = Math.floor(Math.random() * 6) + 3;
-      const b = Math.floor(Math.random() * 5) + 2;
-      parentMathSecret = a + b;
-      document.getElementById('mathQuestion').innerText = `${a} + ${b} = ?`;
-      document.getElementById('mathAnswerInput').value = '';
-      document.getElementById('parentGateModal').classList.remove('hidden');
-    }
-
-    function closeParentGate() {
-      document.getElementById('parentGateModal').classList.add('hidden');
-    }
-
-    function verifyParentMath() {
-      const val = parseInt(document.getElementById('mathAnswerInput').value);
-      if (val === parentMathSecret) {
-        closeParentGate();
-        openParentStudio();
-      } else {
-        alert('Phép tính chưa đúng, mời ba mẹ thử lại!');
-        openParentGate();
-      }
-    }
-
-    function openParentStudio() {
-      syncStudioControls();
-      document.getElementById('parentStudioModal').classList.remove('hidden');
-    }
-
-    function closeParentStudio() {
-      document.getElementById('parentStudioModal').classList.add('hidden');
-      renderTopicTabs();
-      renderLessonDropdown();
-      renderCurrentCard();
-    }
-
-    // 3. STUDIO TOPIC & LESSON CONTROLS
-    function syncStudioControls() {
-      const topicSelect = document.getElementById('studioTopicSelect');
-      topicSelect.innerHTML = appCurriculum.map((t, idx) => `
-        <option value="${idx}" ${idx === currentTopicIndex ? 'selected' : ''}>
-          ${t.icon} ${t.name}
-        </option>
-      `).join('');
-
-      syncStudioLessonsDropdown();
-    }
-
-    function syncStudioLessonsDropdown() {
-      const topic = getCurrentTopic();
-      const lessonSelect = document.getElementById('studioLessonSelect');
-      lessonSelect.innerHTML = topic.lessons.map((l, idx) => `
-        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>
-          ${l.title}
-        </option>
-      `).join('');
-
-      const curLesson = getCurrentLesson();
-      document.getElementById('studioLessonTargetTag').innerText = curLesson.title;
-      renderStudioWordList();
-    }
-
-    function onStudioTopicChange(val) {
-      currentTopicIndex = parseInt(val);
-      currentLessonIndex = 0;
-      currentWordIndex = 0;
-      syncStudioLessonsDropdown();
-    }
-
-    function onStudioLessonChange(val) {
-      currentLessonIndex = parseInt(val);
-      currentWordIndex = 0;
-      const curLesson = getCurrentLesson();
-      document.getElementById('studioLessonTargetTag').innerText = curLesson.title;
-      renderStudioWordList();
-    }
-
-    function promptCreateTopic() {
-      const name = prompt("Nhập tên chủ đề mới (ví dụ: Toys, Colors, Space...):");
-      if (!name || !name.trim()) return;
-      const icon = prompt("Nhập biểu tượng Emoji cho chủ đề (ví dụ: 🧸, 🎨, 🚀):", "⭐") || "⭐";
-
-      const newId = 'topic_' + Date.now();
-      appCurriculum.push({
-        id: newId,
-        name: name.trim(),
-        icon: icon.trim(),
-        lessons: [
-          { id: newId + '_l1', title: 'Bài 1: Khám phá', words: [] }
-        ]
-      });
-
-      saveCurriculum();
-      currentTopicIndex = appCurriculum.length - 1;
-      currentLessonIndex = 0;
-      syncStudioControls();
-      renderTopicTabs();
-    }
-
-    function promptCreateLesson() {
-      const topic = getCurrentTopic();
-      const defaultTitle = `Bài ${topic.lessons.length + 1}: Mới`;
-      const title = prompt(`Nhập tên bài học mới cho chủ đề "${topic.name}":`, defaultTitle);
-      if (!title || !title.trim()) return;
-
-      const newLessonId = 'les_' + Date.now();
-      topic.lessons.push({
-        id: newLessonId,
-        title: title.trim(),
-        words: []
-      });
-
-      saveCurriculum();
-      currentLessonIndex = topic.lessons.length - 1;
-      syncStudioLessonsDropdown();
-      renderLessonDropdown();
-    }
-
-    function deleteCurrentLesson() {
-      const topic = getCurrentTopic();
-      if (topic.lessons.length <= 1) {
-        return alert('Mỗi chủ đề cần giữ lại ít nhất 1 bài học!');
-      }
-
-      const curLesson = getCurrentLesson();
-      if (confirm(`Bạn có chắc muốn xóa bài học "${curLesson.title}" và toàn bộ từ trong bài này?`)) {
-        topic.lessons.splice(currentLessonIndex, 1);
-        currentLessonIndex = 0;
-        currentWordIndex = 0;
-        saveCurriculum();
-        syncStudioLessonsDropdown();
-        renderLessonDropdown();
-        renderCurrentCard();
-      }
-    }
-
-    // 4. STUDIO WORD MANAGEMENT
-    function renderStudioWordList() {
-      const curLesson = getCurrentLesson();
-      const listContainer = document.getElementById('studioWordList');
-      const words = curLesson.words || [];
-      document.getElementById('studioWordsCountBadge').innerText = `${words.length} từ`;
-
-      if (words.length === 0) {
-        listContainer.innerHTML = '<p class="text-xs text-slate-400 italic py-2 text-center">Bài này chưa có từ vựng nào.</p>';
-        return;
-      }
-
-      listContainer.innerHTML = words.map((w, idx) => `
-        <div class="flex items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl">
-          <div class="flex items-center gap-2">
-            <span class="font-black text-slate-800 text-xs">${w.word}</span>
-            <span class="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-bold">${w.ipa}</span>
-          </div>
-          <button onclick="deleteWordInLesson(${idx})" class="text-rose-600 hover:text-rose-800 font-black text-xs px-2 py-0.5 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition active:scale-95">
-            🗑️ Xóa
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function handleAddCustomWord() {
-      const word = document.getElementById('newWordInput').value.trim().toUpperCase();
-      const ipa = document.getElementById('newIpaInput').value.trim() || `/${word.toLowerCase()}/`;
-      const altsRaw = document.getElementById('newAltsInput').value.trim();
-      let imgUrl = document.getElementById('newImgUrlInput').value.trim() || selectedImageCandidate;
-
-      if (!word) return alert('Vui lòng nhập từ tiếng Anh!');
-
-      const alts = altsRaw ? altsRaw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean) : [word.toLowerCase()];
-      const curLesson = getCurrentLesson();
-
-      curLesson.words.push({
-        word: word,
-        ipa: ipa,
-        img: imgUrl,
-        alts: alts
-      });
-
-      saveCurriculum();
-      renderStudioWordList();
-      renderCurrentCard();
-
-      document.getElementById('newWordInput').value = '';
-      document.getElementById('newIpaInput').value = '';
-      document.getElementById('newAltsInput').value = '';
-      document.getElementById('newImgUrlInput').value = '';
-      selectedImageCandidate = '';
-      document.getElementById('imageCandidateGrid').innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400 italic">Đã thêm từ thành công! Gõ từ tiếp theo để tìm ảnh.</div>';
-
-      alert(`Đã thêm từ "${word}" vào bài học "${curLesson.title}"!`);
-    }
-
-    function deleteWordInLesson(idx) {
-      const curLesson = getCurrentLesson();
-      const wName = curLesson.words[idx]?.word;
-      if (confirm(`Xóa từ "${wName}" khỏi bài học?`)) {
-        curLesson.words.splice(idx, 1);
-        if (currentWordIndex >= curLesson.words.length) {
-          currentWordIndex = 0;
-        }
-        saveCurriculum();
-        renderStudioWordList();
-        renderCurrentCard();
-      }
-    }
-
-    function resetDefaults() {
-      if (confirm('Khôi phục lại toàn bộ giáo trình mẫu ban đầu?')) {
-        appCurriculum = JSON.parse(JSON.stringify(DEFAULT_CURRICULUM));
-        saveCurriculum();
-        currentTopicIndex = 0;
-        currentLessonIndex = 0;
-        currentWordIndex = 0;
-        syncStudioControls();
-        renderTopicTabs();
-        renderLessonDropdown();
-        renderCurrentCard();
-      }
-    }
-
-    // 5. WIKIMEDIA SEARCH
+    // TÌM ẢNH TRÊN WIKIMEDIA CHO TỪ MỚI
     async function searchWordImages(queryWord) {
       const cleanWord = queryWord.trim().toLowerCase();
       const grid = document.getElementById('imageCandidateGrid');
@@ -1393,11 +1176,7 @@
       const results = [];
       const upper = queryWord.toUpperCase();
       if (HIGH_RES_VECTORS[upper]) {
-        results.push({
-          type: 'dict',
-          label: 'Vector HD Chuẩn',
-          data: HIGH_RES_VECTORS[upper]
-        });
+        results.push({ type: 'dict', label: 'Vector HD Chuẩn', data: HIGH_RES_VECTORS[upper] });
       }
 
       try {
@@ -1408,11 +1187,7 @@
           if (json.query && json.query.pages) {
             Object.values(json.query.pages).forEach(p => {
               if (p.thumbnail && p.thumbnail.source) {
-                results.push({
-                  type: 'photo',
-                  label: p.title,
-                  url: p.thumbnail.source
-                });
+                results.push({ type: 'photo', label: p.title, url: p.thumbnail.source });
               }
             });
           }
@@ -1420,7 +1195,7 @@
       } catch (err) {}
 
       if (results.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400">Không tìm thấy ảnh trên mạng. Ứng dụng sẽ dùng Vector minh họa!</div>';
+        grid.innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400">Không tìm thấy ảnh trên mạng. Ứng dụng sẽ dùng Vector/Emoji đại diện!</div>';
         status.innerText = '0 ảnh';
         return;
       }
@@ -1441,6 +1216,7 @@
         }
 
         grid.appendChild(card);
+
         if (index === (results[0].type === 'photo' ? 0 : (results.length > 1 ? 1 : 0))) {
           if (item.type === 'photo') selectCandidateImage(item.url, card);
         }
@@ -1474,54 +1250,177 @@
       searchWordImages(word);
     }
 
-    // 6. MIC PERSISTENCE & VAD METER
-    async function initPersistentMic() {
-      if (micStream) return true;
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        micStream = stream;
-        const ctx = initAudioContext();
-        const source = ctx.createMediaStreamSource(stream);
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 256;
-        source.connect(analyser);
+    // PARENT GATE & STUDIO QUẢN LÝ
+    function openParentGate() {
+      const a = Math.floor(Math.random() * 6) + 3;
+      const b = Math.floor(Math.random() * 5) + 2;
+      parentMathSecret = a + b;
+      document.getElementById('mathQuestion').innerText = `${a} + ${b} = ?`;
+      document.getElementById('mathAnswerInput').value = '';
+      document.getElementById('parentGateModal').classList.remove('hidden');
+    }
 
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        const energyFill = document.getElementById('vadEnergyFill');
+    function closeParentGate() {
+      document.getElementById('parentGateModal').classList.add('hidden');
+    }
 
-        function updateVAD() {
-          if (!isListening) {
-            energyFill.style.width = '0%';
-            requestAnimationFrame(updateVAD);
-            return;
-          }
-          analyser.getByteFrequencyData(dataArray);
-          let sum = 0;
-          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-          let avg = sum / dataArray.length;
-          let pct = Math.min(100, Math.round((avg / 60) * 100));
-          energyFill.style.width = pct + '%';
+    function verifyParentMath() {
+      const val = parseInt(document.getElementById('mathAnswerInput').value);
+      if (val === parentMathSecret) {
+        closeParentGate();
+        openParentStudio();
+      } else {
+        alert('Phép tính chưa đúng, mời ba mẹ thử lại!');
+        openParentGate();
+      }
+    }
 
-          if (pct > 25) {
-            document.getElementById('mascotAvatar').style.transform = 'scale(1.25)';
-          } else {
-            document.getElementById('mascotAvatar').style.transform = 'scale(1)';
-          }
-          requestAnimationFrame(updateVAD);
+    function openParentStudio() {
+      renderStudioLessonOptions();
+      renderStudioWordList();
+      document.getElementById('parentStudioModal').classList.remove('hidden');
+    }
+
+    function closeParentStudio() {
+      document.getElementById('parentStudioModal').classList.add('hidden');
+      renderTabs();
+      renderCurrentCard();
+    }
+
+    function renderStudioLessonOptions() {
+      const cat = appData[currentCatIndex];
+      const select = document.getElementById('studioLessonSelect');
+      select.innerHTML = (cat.lessons || []).map((l, idx) => `
+        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>${l.title}</option>
+      `).join('');
+      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
+    }
+
+    function handleStudioChangeLesson(val) {
+      currentLessonIndex = parseInt(val) || 0;
+      currentWordIndex = 0;
+      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
+      renderStudioWordList();
+    }
+
+    function handleCreateNewLesson() {
+      const name = prompt('Nhập tên bài học mới (ví dụ: Bài 3: Động vật biển):');
+      if (!name || !name.trim()) return;
+      const cat = appData[currentCatIndex];
+      const newLesson = {
+        id: 'lesson_' + Date.now(),
+        title: name.trim(),
+        words: []
+      };
+      cat.lessons.push(newLesson);
+      currentLessonIndex = cat.lessons.length - 1;
+      saveData();
+      renderStudioLessonOptions();
+      renderStudioWordList();
+    }
+
+    function handleDeleteCurrentLesson() {
+      const cat = appData[currentCatIndex];
+      if (cat.lessons.length <= 1) {
+        return alert('Mỗi chủ đề cần giữ lại ít nhất 1 bài học!');
+      }
+      if (confirm(`Xóa "${cat.lessons[currentLessonIndex].title}" và toàn bộ từ trong bài này?`)) {
+        cat.lessons.splice(currentLessonIndex, 1);
+        currentLessonIndex = 0;
+        currentWordIndex = 0;
+        saveData();
+        renderStudioLessonOptions();
+        renderStudioWordList();
+      }
+    }
+
+    function renderStudioWordList() {
+      const lesson = getActiveLesson();
+      const listContainer = document.getElementById('studioWordList');
+      document.getElementById('studioWordsCountBadge').innerText = `${lesson.words.length} từ`;
+
+      if (lesson.words.length === 0) {
+        listContainer.innerHTML = '<p class="text-xs text-slate-400 italic p-2 text-center">Chưa có từ nào trong bài học này.</p>';
+        return;
+      }
+
+      listContainer.innerHTML = lesson.words.map((w, idx) => `
+        <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-center gap-2">
+            <span class="font-black text-slate-800 text-xs">${w.word}</span>
+            <span class="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-bold">${w.ipa}</span>
+          </div>
+          <button onclick="deleteWord(${idx})" class="text-rose-600 hover:text-rose-800 font-black text-xs px-2.5 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition active:scale-95">
+            🗑️ Xóa từ này
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function handleAddCustomWord() {
+      const word = document.getElementById('newWordInput').value.trim().toUpperCase();
+      const ipa = document.getElementById('newIpaInput').value.trim() || `/${word.toLowerCase()}/`;
+      const altsRaw = document.getElementById('newAltsInput').value.trim();
+      let imgUrl = document.getElementById('newImgUrlInput').value.trim() || selectedImageCandidate;
+
+      if (!word) return alert('Vui lòng nhập từ tiếng Anh!');
+
+      const alts = altsRaw ? altsRaw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean) : [word.toLowerCase()];
+
+      const lesson = getActiveLesson();
+      lesson.words.push({
+        word: word,
+        ipa: ipa,
+        img: imgUrl,
+        alts: alts
+      });
+
+      saveData();
+      renderStudioWordList();
+      renderCurrentCard();
+
+      document.getElementById('newWordInput').value = '';
+      document.getElementById('newIpaInput').value = '';
+      document.getElementById('newAltsInput').value = '';
+      document.getElementById('newImgUrlInput').value = '';
+      selectedImageCandidate = '';
+      document.getElementById('imageCandidateGrid').innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400 italic">Đã thêm từ thành công! Gõ từ tiếp theo để tìm ảnh.</div>';
+
+      alert(`Đã thêm từ "${word}" thành công vào "${lesson.title}" cho bé!`);
+    }
+
+    function deleteWord(idx) {
+      const lesson = getActiveLesson();
+      const wName = lesson.words[idx].word;
+      if (confirm(`Xóa từ "${wName}" khỏi bài học?`)) {
+        lesson.words.splice(idx, 1);
+        if (currentWordIndex >= lesson.words.length) {
+          currentWordIndex = 0;
         }
-        updateVAD();
-        return true;
-      } catch (err) {
-        return false;
+        saveData();
+        renderStudioWordList();
+        renderCurrentCard();
+      }
+    }
+
+    function resetDefaults() {
+      if (confirm('Khôi phục lại toàn bộ giáo trình và từ vựng chuẩn ban đầu?')) {
+        appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        currentCatIndex = 0;
+        currentLessonIndex = 0;
+        currentWordIndex = 0;
+        saveData();
+        renderStudioLessonOptions();
+        renderStudioWordList();
+        renderTabs();
+        renderCurrentCard();
       }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('starCounter').innerText = totalStars;
-      renderTopicTabs();
-      renderLessonDropdown();
+      renderTabs();
       renderCurrentCard();
-      initSpeechRecognition();
       loadFemaleTeacherVoice();
     });
   </script>
