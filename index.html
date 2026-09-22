@@ -217,8 +217,8 @@
         </button>
       </div>
 
-      <!-- Quiz Options Grid -->
-      <div id="quizOptionsGrid" class="flex-1 w-full grid grid-cols-2 gap-2.5 sm:gap-3 items-center justify-center p-1 min-h-0"></div>
+      <!-- Quiz Options Grid (2x2 Layout with 4 choices) -->
+      <div id="quizOptionsGrid" class="flex-1 w-full grid grid-cols-2 gap-2 sm:gap-2.5 items-center justify-center p-1 min-h-0"></div>
 
       <!-- Quiz Feedback Box -->
       <div id="quizFeedbackBox" class="w-full bg-sky-50 border border-sky-200 rounded-2xl p-1.5 text-center shrink-0 mt-1">
@@ -1144,25 +1144,32 @@
       document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
       document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
 
-      const otherWords = lesson.words.filter(w => w.word !== target.word);
-      let distractors = otherWords.sort(() => 0.5 - Math.random()).slice(0, 1);
-      
-      if (distractors.length < 1) {
-        const pool = appData.flatMap(c => (c.lessons || []).flatMap(l => l.words)).filter(w => w.word !== target.word);
-        distractors = pool.sort(() => 0.5 - Math.random()).slice(0, 1);
+      // Gather candidate distractors
+      const otherWordsInLesson = (lesson.words || []).filter(w => w.word !== target.word);
+      let distractors = [...otherWordsInLesson].sort(() => 0.5 - Math.random());
+
+      // If fewer than 3 distractors in current lesson, borrow words from other lessons or themes
+      if (distractors.length < 3) {
+        const pool = appData.flatMap(c => (c.lessons || []).flatMap(l => l.words))
+                            .filter(w => w.word !== target.word && !distractors.some(d => d.word === w.word));
+        const extraDistractors = pool.sort(() => 0.5 - Math.random()).slice(0, 3 - distractors.length);
+        distractors.push(...extraDistractors);
       }
 
-      const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
+      // Take up to 3 distractors so total choices = 4 (or less if entire dataset has fewer)
+      const selectedDistractors = distractors.slice(0, 3);
+      const choices = [target, ...selectedDistractors].sort(() => 0.5 - Math.random());
+
       const grid = document.getElementById('quizOptionsGrid');
       grid.innerHTML = '';
 
       choices.forEach(item => {
         const choiceBtn = document.createElement('button');
-        choiceBtn.className = 'w-full h-full max-h-[220px] rounded-3xl border-4 border-slate-200 hover:border-sky-400 bg-slate-50/80 p-2 flex flex-col items-center justify-center transition-all active:scale-95 shadow-md relative overflow-hidden group';
+        choiceBtn.className = 'w-full h-full max-h-[140px] sm:max-h-[160px] rounded-2xl border-4 border-slate-200 hover:border-sky-400 bg-slate-50/90 p-1.5 flex flex-col items-center justify-center transition-all active:scale-95 shadow-sm relative overflow-hidden group';
         
         choiceBtn.innerHTML = `
           <div class="w-full h-full flex items-center justify-center overflow-hidden pointer-events-none">
-            ${getVisualHTML(item, 'max-h-[160px]')}
+            ${getVisualHTML(item, 'max-h-[105px] sm:max-h-[125px]')}
           </div>
         `;
 
