@@ -83,27 +83,33 @@
       </div>
     </div>
 
-    <!-- Row 2: Prominent Category Scroll & Lesson Dropdown -->
+    <!-- Row 2: Category Scroll, Add Category Button & Lesson Dropdown -->
     <div class="w-full flex items-center gap-2">
-      <!-- Category Tabs (Horizontal Scrollable, Clear Font) -->
+      <!-- Category Tabs (Horizontal Scrollable) -->
       <div id="categoryTabs" class="flex-1 flex items-center gap-2 overflow-x-auto hide-scrollbar py-0.5">
         <!-- Injected dynamically by JS -->
       </div>
 
+      <!-- Add Category Quick Button -->
+      <button onclick="openParentGate('addCategory')" class="shrink-0 flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 active:scale-95 text-amber-950 font-black rounded-xl px-3 py-1.5 text-xs shadow-sm border border-amber-300 transition" title="Tạo thêm chủ đề mới">
+        <span class="text-sm">➕</span> <span>Thêm chủ đề</span>
+      </button>
+
       <!-- Lesson Dropdown Selector -->
       <div class="shrink-0 flex items-center gap-1 bg-amber-50 border-2 border-amber-300 rounded-xl px-2 py-1 shadow-sm">
         <span class="text-xs">📖</span>
-        <select id="lessonSelect" onchange="handleSelectLesson(this.value)" class="bg-transparent text-xs font-black text-amber-900 focus:outline-none cursor-pointer max-w-[130px] truncate">
+        <select id="lessonSelect" onchange="handleSelectLesson(this.value)" class="bg-transparent text-xs font-black text-amber-900 focus:outline-none cursor-pointer max-w-[120px] truncate">
           <!-- Injected via JS -->
         </select>
       </div>
     </div>
   </header>
 
+
   <!-- MAIN PRACTICE VIEW -->
   <main id="practiceView" class="flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     
-    <!-- Flashcard Box (Optimized vertical balance) -->
+    <!-- Flashcard Box -->
     <div class="w-full bg-white rounded-3xl border-4 border-amber-300 card-shadow p-2.5 sm:p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
       <!-- Card Nav Header -->
@@ -131,7 +137,7 @@
         </button>
       </div>
 
-      <!-- Mascot Guidance Speech Bubble -->
+      <!-- Mascot Speech Feedback -->
       <div class="w-full bg-amber-50 rounded-2xl p-1.5 border border-amber-200 flex items-center gap-2 mt-1 shrink-0">
         <div id="mascotAvatar" class="text-2xl transition-transform duration-200">🐲</div>
         <p id="mascotText" class="text-xs sm:text-sm font-bold text-amber-900 leading-snug flex-1">
@@ -139,7 +145,7 @@
         </p>
       </div>
 
-      <!-- GIANT PICTURE AREA (~70% of available card height for optimal recognition) -->
+      <!-- GIANT PICTURE AREA -->
       <div class="flex-1 w-full flex items-center justify-center my-1 min-h-0 relative overflow-hidden">
         <div id="imageDisplayWrapper" class="w-full h-full rounded-2xl border-4 border-amber-300/80 p-1 bg-gradient-to-b from-amber-50/50 via-sky-50/20 to-white flex items-center justify-center shadow-inner overflow-hidden">
           <div id="visualHolder" class="w-full h-full flex items-center justify-center"></div>
@@ -179,7 +185,7 @@
       
     </div>
 
-    <!-- Micro Action Button (Bouncy, High Hit Target) -->
+    <!-- Micro Action Button -->
     <div class="w-full py-1.5 flex flex-col items-center justify-center shrink-0">
       <div class="relative flex items-center justify-center">
         <button id="recordBtn" onclick="toggleVoiceInput()" class="relative z-10 w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 border-4 border-white shadow-xl flex items-center justify-center text-3xl text-white transition-all active:scale-90 bounce-pulse">
@@ -191,7 +197,8 @@
 
   </main>
 
-  <!-- QUIZ VIEW (ĐỐ VUI) -->
+
+  <!-- QUIZ VIEW (ĐỐ VUI 4 HÌNH 2x2) -->
   <main id="quizView" class="hidden flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
@@ -209,7 +216,7 @@
       </div>
 
       <!-- Quiz Sound Prompt -->
-      <div class="w-full flex flex-col items-center justify-center my-2 shrink-0">
+      <div class="w-full flex flex-col items-center justify-center my-1.5 shrink-0">
         <p class="text-xs font-bold text-slate-500 mb-1">Bé hãy bấm nghe cô đọc rồi chọn hình đúng nhé:</p>
         <button onclick="playQuizPromptAudio()" class="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-black px-4 py-2 rounded-2xl shadow-md transition-transform">
           <span class="text-2xl animate-pulse">🔊</span>
@@ -236,6 +243,7 @@
     </div>
   </main>
 
+
   <!-- PARENT GATE MODAL -->
   <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
@@ -253,16 +261,62 @@
     </div>
   </div>
 
-  <!-- PARENT STUDIO MODAL (CURRICULUM & JSON MANAGEMENT) -->
+  <!-- DIRECT ADD TOPIC MODAL (QUICK POPUP) -->
+  <div id="quickTopicModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full border-4 border-emerald-400 shadow-2xl flex flex-col gap-3">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 class="text-base font-black text-emerald-900 flex items-center gap-2">
+          <span>➕</span> Thêm Chủ Đề Mới Cho Bé
+        </h3>
+        <button onclick="closeQuickTopicModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-xs flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- Emoji Presets -->
+      <div>
+        <label class="block text-xs font-black text-slate-700 mb-1.5">1. Chọn biểu tượng chủ đề:</label>
+        <div class="grid grid-cols-6 gap-1.5 mb-2">
+          <button type="button" onclick="selectTopicEmoji('🎨')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-emerald-400 bg-emerald-50 hover:scale-110 transition">🎨</button>
+          <button type="button" onclick="selectTopicEmoji('👨‍👩‍👧')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👨‍👩‍👧</button>
+          <button type="button" onclick="selectTopicEmoji('🎒')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🎒</button>
+          <button type="button" onclick="selectTopicEmoji('👗')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👗</button>
+          <button type="button" onclick="selectTopicEmoji('⚽')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">⚽</button>
+          <button type="button" onclick="selectTopicEmoji('🚀')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🚀</button>
+          <button type="button" onclick="selectTopicEmoji('🏠')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🏠</button>
+          <button type="button" onclick="selectTopicEmoji('🌿')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🌿</button>
+          <button type="button" onclick="selectTopicEmoji('🎸')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🎸</button>
+          <button type="button" onclick="selectTopicEmoji('🧸')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🧸</button>
+          <button type="button" onclick="selectTopicEmoji('🌈')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🌈</button>
+          <button type="button" onclick="selectTopicEmoji('👑')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👑</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-bold text-slate-500">Hoặc gõ icon tùy ý:</span>
+          <input id="quickTopicIconInput" type="text" value="🎨" maxlength="4" class="w-14 text-center text-lg border-2 border-slate-300 rounded-xl py-1 font-bold focus:outline-none focus:border-emerald-500" />
+        </div>
+      </div>
+
+      <!-- Topic Name -->
+      <div>
+        <label class="block text-xs font-black text-slate-700 mb-1">2. Tên chủ đề:</label>
+        <input id="quickTopicNameInput" type="text" placeholder="Ví dụ: Colors (Màu sắc), Family (Gia đình)..." class="w-full px-3 py-2 rounded-xl border-2 border-slate-300 text-sm font-bold focus:outline-none focus:border-emerald-500" />
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeQuickTopicModal()" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-600 text-xs">Hủy</button>
+        <button type="button" onclick="submitQuickTopic()" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 font-black text-white text-xs shadow active:scale-95 transition">Tạo ngay & Thêm từ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARENT STUDIO MODAL (CURRICULUM, THEME & JSON MANAGEMENT) -->
   <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
     <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div>
           <h2 class="text-base font-black text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span> Quản Lý Giáo Trình & Đồng Bộ
+            <span>⚙️</span> Quản Lý Giáo Trình & Chủ Đề
           </h2>
-          <p class="text-[11px] text-slate-500 font-semibold">Tạo nhiều bài học theo chủ đề và chia sẻ file .json</p>
+          <p class="text-[11px] text-slate-500 font-semibold">Tạo chủ đề, bài học tùy ý và đồng bộ file .json</p>
         </div>
         <button onclick="closeParentStudio()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black text-slate-500 flex items-center justify-center">✕</button>
       </div>
@@ -286,20 +340,60 @@
           </p>
         </div>
 
-        <!-- LESSON & THEME MANAGER -->
+        <!-- THEME / CATEGORY MANAGER (QUẢN LÝ TẤT CẢ CHỦ ĐỀ) -->
+        <div class="bg-emerald-50/90 p-3.5 rounded-2xl border-2 border-emerald-300 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-emerald-950 flex items-center gap-1.5">
+              <span class="text-base">🎨</span> <span>Quản Lý Chủ Đề (Thêm / Xóa theo ý muốn):</span>
+            </span>
+            <span id="topicCountBadge" class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-black">3 chủ đề</span>
+          </div>
+
+          <!-- Existing Categories List with direct Delete buttons -->
+          <div id="studioCategoriesList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+            <!-- Injected dynamically by JS -->
+          </div>
+
+          <!-- Add New Theme Form -->
+          <div class="pt-2.5 border-t border-emerald-200">
+            <p class="text-[11px] font-black text-emerald-900 mb-1.5">➕ Tạo thêm chủ đề mới của bạn:</p>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <div class="flex gap-2">
+                <input id="newThemeIconInput" type="text" placeholder="Icon" class="w-14 px-2 py-1.5 rounded-xl border border-emerald-300 text-center text-base font-bold bg-white" value="🌟" title="Chọn hoặc gõ Emoji cho chủ đề" />
+                <input id="newThemeNameInput" type="text" placeholder="Tên chủ đề (vd: Colors, Toys, School...)" class="flex-1 px-3 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold bg-white focus:outline-none focus:border-emerald-600" />
+              </div>
+              <button onclick="handleCreateNewCategory()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black px-4 py-2 rounded-xl text-xs shadow shrink-0 transition">
+                ➕ Thêm chủ đề này
+              </button>
+            </div>
+            <!-- Quick emoji suggestion pills -->
+            <div class="flex items-center gap-1.5 mt-2 flex-wrap text-xs">
+              <span class="text-[10px] font-bold text-emerald-800">Gợi ý icon:</span>
+              <button onclick="setThemeIcon('🎨')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🎨 Màu sắc</button>
+              <button onclick="setThemeIcon('🧸')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🧸 Đồ chơi</button>
+              <button onclick="setThemeIcon('🦕')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🦕 Khủng long</button>
+              <button onclick="setThemeIcon('👨‍👩‍👧')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">👨‍👩‍👧 Gia đình</button>
+              <button onclick="setThemeIcon('🏫')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🏫 Trường học</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LESSON MANAGER (QUẢN LÝ BÀI HỌC) -->
         <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-sky-900">Quản lý Bài học trong Chủ đề:</span>
-            <button onclick="handleCreateNewLesson()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-2 py-1 rounded-lg text-[11px] shadow">
-              ➕ Thêm bài học mới
+            <span class="text-xs font-black text-sky-900 flex items-center gap-1">
+              <span>📖</span> <span>Bài học trong chủ đề:</span>
+            </span>
+            <button onclick="handleCreateNewLesson()" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] shadow">
+              ➕ Thêm bài mới
             </button>
           </div>
           <div class="flex items-center gap-2">
             <select id="studioLessonSelect" onchange="handleStudioChangeLesson(this.value)" class="flex-1 bg-white border border-sky-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800">
               <!-- Injected dynamically -->
             </select>
-            <button onclick="handleDeleteCurrentLesson()" class="text-rose-600 hover:text-rose-800 bg-rose-50 border border-rose-200 px-2 py-1.5 rounded-xl text-xs font-bold">
-              🗑️ Xóa bài
+            <button onclick="handleDeleteCurrentLesson()" class="text-rose-600 hover:text-rose-800 bg-rose-50 border border-rose-200 px-2.5 py-1.5 rounded-xl text-xs font-bold">
+              🗑️ Xóa bài này
             </button>
           </div>
         </div>
@@ -312,7 +406,7 @@
           </p>
 
           <div class="flex gap-2">
-            <input id="newWordInput" type="text" placeholder="Gõ từ tiếng Anh (vd: ELEPHANT, TIGER...)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
+            <input id="newWordInput" type="text" placeholder="Gõ từ tiếng Anh (vd: ELEPHANT, RED...)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
             <button onclick="searchWordImagesTrigger()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
               <span>🔍</span> <span>Tìm ảnh</span>
             </button>
@@ -367,6 +461,7 @@
 
     </div>
   </div>
+
 
   <script>
     const HIGH_RES_VECTORS = {
@@ -562,46 +657,48 @@
       }
     ];
 
-    let appData = JSON.parse(localStorage.getItem('safari_curriculum_v8')) || DEFAULT_DATA;
+    let appData = JSON.parse(localStorage.getItem('safari_curriculum_v9')) || DEFAULT_DATA;
     let currentCatIndex = 0;
     let currentLessonIndex = 0;
     let currentWordIndex = 0;
     let totalStars = parseInt(localStorage.getItem('safari_stars') || '0');
     let attemptsCount = 0;
     let isListening = false;
-    let currentMode = 'practice'; // 'practice' | 'quiz'
+    let currentMode = 'practice';
 
     let quizQuestions = [];
     let currentQuizIndex = 0;
     let audioContext = null;
     let recognition = null;
     let parentMathSecret = 0;
+    let pendingAction = null;
     let selectedImageCandidate = '';
     let preferredFemaleVoice = null;
 
-    // Audio Analysis & VAD (Voice Activity Detection)
     let vadStream = null;
     let vadAnalyser = null;
     let vadDataArray = null;
-    let vadCheckTimer = null;
     let hasDetectedVocalEnergy = false;
     let vocalEnergyDurationMs = 0;
 
     function saveData() {
-      localStorage.setItem('safari_curriculum_v8', JSON.stringify(appData));
+      localStorage.setItem('safari_curriculum_v9', JSON.stringify(appData));
     }
 
     function getActiveLesson() {
+      if (!appData || appData.length === 0) {
+        appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      }
+      if (currentCatIndex >= appData.length) currentCatIndex = 0;
       const cat = appData[currentCatIndex];
       if (!cat.lessons || cat.lessons.length === 0) {
-        cat.lessons = [{ id: 'default_l1', title: 'Bài 1: Cơ bản', words: [] }];
+        cat.lessons = [{ id: 'lesson_' + Date.now(), title: 'Bài 1: Cơ bản', words: [] }];
       }
-      if (currentLessonIndex >= cat.lessons.length) {
-        currentLessonIndex = 0;
-      }
+      if (currentLessonIndex >= cat.lessons.length) currentLessonIndex = 0;
       return cat.lessons[currentLessonIndex];
     }
   </script>
+
 
   <script>
     function initAudioContext() {
@@ -681,7 +778,6 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // AUDIO LEVEL METER & ENERGY TRACKER
     async function startVADMonitoring() {
       hasDetectedVocalEnergy = false;
       vocalEnergyDurationMs = 0;
@@ -720,11 +816,10 @@
           requestAnimationFrame(loop);
         }
         requestAnimationFrame(loop);
-      } catch (e) {
-        // Fallback gracefully if getUserMedia is denied
-      }
+      } catch (e) {}
     }
   </script>
+
 
   <script>
     const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -806,7 +901,6 @@
           const displaySample = latestInterim || accumulatedHypotheses[0] || '...';
           document.getElementById('liveHeardTranscript').innerText = `"${displaySample.trim()}"`;
 
-          // If final result came through
           if (event.results[0].isFinal && !finalSpokenHandled) {
             finalSpokenHandled = true;
             processSpeechEvaluation(accumulatedHypotheses);
@@ -842,7 +936,6 @@
       }
     }
 
-    // Levenshtein metric helper
     function calculateLevenshtein(a, b) {
       const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
       for (let i = 0; i <= a.length; i++) dp[i][0] = i;
@@ -855,7 +948,6 @@
       return dp[a.length][b.length];
     }
 
-    // ULTRA-TOLERANT CHILD PHONETICS EVALUATION (Fixes Android Chrome high pitch / drop-offs)
     function evaluateChildSpeech(hypotheses, targetWordObj) {
       const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
       const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
@@ -868,7 +960,6 @@
       let bestTranscript = hypotheses[0] || '';
       let bestConfidence = 0;
 
-      // Phonetic normalizer for 6yo child speech
       const normalizePhonetics = (str) => {
         return str
           .replace(/[^a-z]/g, '')
@@ -888,7 +979,6 @@
           const w = rawWord.replace(/[^a-z]/g, '');
           if (!w) continue;
 
-          // Direct or synonym alternative match
           if (w === cleanTarget || childAlts.includes(w)) {
             return { isMatch: true, heardText: w, confidence: 1.0 };
           }
@@ -898,12 +988,10 @@
             return { isMatch: true, heardText: w, confidence: 0.95 };
           }
 
-          // Substring / syllable containment (e.g. "ele" or "fant" for "elephant")
           if (normW.length >= 3 && (normTarget.includes(normW) || normW.includes(normTarget))) {
             return { isMatch: true, heardText: w, confidence: 0.9 };
           }
 
-          // Syllable Levenshtein distance check with >= 0.35 relaxed threshold
           const dist = calculateLevenshtein(normW, normTarget);
           const maxLen = Math.max(normW.length, normTarget.length);
           const similarity = maxLen > 0 ? (1 - dist / maxLen) : 0;
@@ -929,7 +1017,6 @@
       if (evaluation.isMatch) {
         celebrateSuccess(evaluation.heardText);
       } else {
-        // Smart VAD Fallback: If Android Chrome didn't transcribe accurately but child spoke loudly (>0.8s)
         if (hasDetectedVocalEnergy && vocalEnergyDurationMs > 750 && attemptsCount >= 1) {
           document.getElementById('liveHeardTranscript').innerText = `"${targetObj.word.toLowerCase()}" (Ghi nhận giọng bé)`;
           celebrateSuccess(targetObj.word);
@@ -986,6 +1073,7 @@
       setTimeout(() => speakTargetWord(), 900);
     }
   </script>
+
 
   <script>
     function getVisualHTML(wordObj, extraClasses = '') {
@@ -1045,18 +1133,17 @@
       document.getElementById('mascotAvatar').innerText = avatar;
     }
 
-    // TWO-TIER ROW 2 TABS RENDERER (Clean, readable on mobile)
     function renderTabs() {
       const container = document.getElementById('categoryTabs');
       container.innerHTML = appData.map((cat, idx) => {
         const isSelected = idx === currentCatIndex;
         return `
-          <button onclick="selectCategory(${idx})" class="px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shadow-sm ${
+          <button onclick="selectCategory(${idx})" class="px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 shadow-sm shrink-0 ${
             isSelected 
               ? 'bg-amber-400 text-amber-950 ring-2 ring-amber-300 scale-100' 
               : 'bg-white text-slate-700 hover:bg-amber-50 border border-slate-200'
           }">
-            <span class="text-sm">${cat.icon}</span>
+            <span class="text-sm">${cat.icon || '📁'}</span>
             <span>${cat.name.split('(')[0].trim()}</span>
           </button>
         `;
@@ -1096,7 +1183,6 @@
       }
     }
 
-    // QUIZ / ĐỐ VUI THEO BÀI HỌC
     function switchAppMode(mode) {
       currentMode = mode;
       const practiceView = document.getElementById('practiceView');
@@ -1144,11 +1230,9 @@
       document.getElementById('quizProgressBadge').innerText = `Câu ${currentQuizIndex + 1} / ${quizQuestions.length}`;
       document.getElementById('quizFeedbackText').innerText = `Chạm vào bức ảnh đúng với từ cô vừa đọc nhé! 👆`;
 
-      // Gather candidate distractors
       const otherWordsInLesson = (lesson.words || []).filter(w => w.word !== target.word);
       let distractors = [...otherWordsInLesson].sort(() => 0.5 - Math.random());
 
-      // If fewer than 3 distractors in current lesson, borrow words from other lessons or themes
       if (distractors.length < 3) {
         const pool = appData.flatMap(c => (c.lessons || []).flatMap(l => l.words))
                             .filter(w => w.word !== target.word && !distractors.some(d => d.word === w.word));
@@ -1156,7 +1240,6 @@
         distractors.push(...extraDistractors);
       }
 
-      // Take up to 3 distractors so total choices = 4 (or less if entire dataset has fewer)
       const selectedDistractors = distractors.slice(0, 3);
       const choices = [target, ...selectedDistractors].sort(() => 0.5 - Math.random());
 
@@ -1239,6 +1322,7 @@
     }
   </script>
 
+
   <script>
     function exportDataToJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
@@ -1266,6 +1350,7 @@
             currentLessonIndex = 0;
             currentWordIndex = 0;
             renderTabs();
+            renderStudioCategoryOptions();
             renderStudioLessonOptions();
             renderStudioWordList();
             renderCurrentCard();
@@ -1280,6 +1365,163 @@
       reader.readAsText(file);
     }
 
+    // THEME / CATEGORY CRUD
+    function setThemeIcon(emoji) {
+      document.getElementById('newThemeIconInput').value = emoji;
+    }
+
+    function renderStudioCategoriesList() {
+      const container = document.getElementById('studioCategoriesList');
+      if (!container) return;
+      document.getElementById('topicCountBadge').innerText = `${appData.length} chủ đề`;
+
+      container.innerHTML = appData.map((cat, idx) => {
+        const isCurrent = idx === currentCatIndex;
+        const totalWords = (cat.lessons || []).reduce((sum, l) => sum + (l.words || []).length, 0);
+        return `
+          <div class="flex items-center justify-between p-2 rounded-xl border ${
+            isCurrent ? 'bg-emerald-100/80 border-emerald-400' : 'bg-white border-slate-200'
+          }">
+            <div class="flex items-center gap-2 cursor-pointer flex-1" onclick="handleStudioChangeCategory(${idx})">
+              <span class="text-lg">${cat.icon || '📁'}</span>
+              <div>
+                <span class="font-black text-xs text-slate-800 ${isCurrent ? 'text-emerald-950 font-black' : ''}">${cat.name}</span>
+                <span class="text-[10px] text-slate-500 block">(${cat.lessons.length} bài • ${totalWords} từ vựng)</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              ${isCurrent ? '<span class="text-[10px] font-black text-emerald-700 bg-emerald-200/60 px-2 py-0.5 rounded-md">Đang chọn</span>' : ''}
+              <button onclick="handleDeleteCategoryByIndex(${idx})" class="text-rose-600 hover:text-rose-800 font-bold text-xs px-2 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition active:scale-95" title="Xóa chủ đề này">
+                🗑️ Xóa
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleCreateNewCategory() {
+      const name = document.getElementById('newThemeNameInput').value.trim();
+      const icon = document.getElementById('newThemeIconInput').value.trim() || '🌟';
+      if (!name) return alert('Vui lòng nhập tên chủ đề mới (ví dụ: Colors (Màu sắc), Toys (Đồ chơi)...)!');
+
+      const newCat = {
+        id: 'cat_' + Date.now(),
+        name: name,
+        icon: icon,
+        lessons: [
+          {
+            id: 'lesson_' + Date.now(),
+            title: 'Bài 1: Cơ bản',
+            words: []
+          }
+        ]
+      };
+
+      appData.push(newCat);
+      currentCatIndex = appData.length - 1;
+      currentLessonIndex = 0;
+      currentWordIndex = 0;
+      saveData();
+
+      document.getElementById('newThemeNameInput').value = '';
+      document.getElementById('newThemeIconInput').value = '🌟';
+
+      renderTabs();
+      renderStudioCategoriesList();
+      renderStudioLessonOptions();
+      renderStudioWordList();
+      renderCurrentCard();
+
+      alert(`🎉 Đã tạo thành công chủ đề mới: "${name}"! Ba mẹ hãy chọn bài học và thêm từ vựng cho bé nhé.`);
+    }
+
+    function handleDeleteCategoryByIndex(idx) {
+      if (appData.length <= 1) {
+        return alert('Ứng dụng cần giữ lại ít nhất 1 chủ đề, không thể xóa hết!');
+      }
+      const cat = appData[idx];
+      if (confirm(`Bạn có chắc muốn xóa toàn bộ chủ đề "${cat.name}" cùng tất cả các bài học và từ vựng bên trong?`)) {
+        appData.splice(idx, 1);
+        if (currentCatIndex >= appData.length) {
+          currentCatIndex = appData.length - 1;
+        }
+        currentLessonIndex = 0;
+        currentWordIndex = 0;
+        saveData();
+        renderTabs();
+        renderStudioCategoriesList();
+        renderStudioLessonOptions();
+        renderStudioWordList();
+        renderCurrentCard();
+      }
+    }
+
+    function handleStudioChangeCategory(idx) {
+      currentCatIndex = idx;
+      currentLessonIndex = 0;
+      currentWordIndex = 0;
+      renderTabs();
+      renderStudioCategoriesList();
+      renderStudioLessonOptions();
+      renderStudioWordList();
+      renderCurrentCard();
+    }
+
+    // LESSON CRUD
+    function handleCreateNewLesson() {
+      const name = prompt('Nhập tên bài học mới (ví dụ: Bài 2: Rừng xanh, Bài 3: Nông trại):');
+      if (!name || !name.trim()) return;
+      const cat = appData[currentCatIndex];
+      const newLesson = {
+        id: 'lesson_' + Date.now(),
+        title: name.trim(),
+        words: []
+      };
+      cat.lessons.push(newLesson);
+      currentLessonIndex = cat.lessons.length - 1;
+      currentWordIndex = 0;
+      saveData();
+      renderTabs();
+      renderStudioLessonOptions();
+      renderStudioWordList();
+    }
+
+    function handleDeleteCurrentLesson() {
+      const cat = appData[currentCatIndex];
+      if (cat.lessons.length <= 1) {
+        return alert('Mỗi chủ đề cần giữ lại ít nhất 1 bài học!');
+      }
+      if (confirm(`Xóa bài "${cat.lessons[currentLessonIndex].title}" và toàn bộ từ trong bài này?`)) {
+        cat.lessons.splice(currentLessonIndex, 1);
+        currentLessonIndex = 0;
+        currentWordIndex = 0;
+        saveData();
+        renderTabs();
+        renderStudioLessonOptions();
+        renderStudioWordList();
+        renderCurrentCard();
+      }
+    }
+
+    function renderStudioLessonOptions() {
+      const cat = appData[currentCatIndex];
+      const select = document.getElementById('studioLessonSelect');
+      select.innerHTML = (cat.lessons || []).map((l, idx) => `
+        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>${l.title}</option>
+      `).join('');
+      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
+    }
+
+    function handleStudioChangeLesson(val) {
+      currentLessonIndex = parseInt(val) || 0;
+      currentWordIndex = 0;
+      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
+      renderStudioWordList();
+      renderCurrentCard();
+    }
+
+    // WORD CRUD & WIKIMEDIA SEARCH
     async function searchWordImages(queryWord) {
       const cleanWord = queryWord.trim().toLowerCase();
       const grid = document.getElementById('imageCandidateGrid');
@@ -1365,7 +1607,79 @@
       searchWordImages(word);
     }
 
-    function openParentGate() {
+    function promptCreateTopicDirect() {
+      openParentGate('quickTopic');
+    }
+
+    function selectTopicEmoji(emoji) {
+      document.getElementById('quickTopicIconInput').value = emoji;
+      document.querySelectorAll('.emoji-preset-btn').forEach(btn => {
+        if (btn.innerText.trim() === emoji) {
+          btn.classList.add('border-emerald-400', 'bg-emerald-50');
+          btn.classList.remove('border-slate-200');
+        } else {
+          btn.classList.remove('border-emerald-400', 'bg-emerald-50');
+          btn.classList.add('border-slate-200');
+        }
+      });
+    }
+
+    function openQuickTopicModal() {
+      document.getElementById('quickTopicNameInput').value = '';
+      selectTopicEmoji('🎨');
+      document.getElementById('quickTopicModal').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('quickTopicNameInput').focus();
+      }, 200);
+    }
+
+    function closeQuickTopicModal() {
+      document.getElementById('quickTopicModal').classList.add('hidden');
+    }
+
+    function submitQuickTopic() {
+      const name = document.getElementById('quickTopicNameInput').value.trim();
+      const icon = document.getElementById('quickTopicIconInput').value.trim() || '🌟';
+
+      if (!name) {
+        alert('Ba mẹ vui lòng nhập tên cho chủ đề mới nhé!');
+        return;
+      }
+
+      const newCat = {
+        id: 'cat_' + Date.now(),
+        name: name,
+        icon: icon,
+        lessons: [
+          {
+            id: 'lesson_' + Date.now(),
+            title: 'Bài 1: Cơ bản',
+            words: []
+          }
+        ]
+      };
+
+      appData.push(newCat);
+      currentCatIndex = appData.length - 1;
+      currentLessonIndex = 0;
+      currentWordIndex = 0;
+      saveData();
+
+      closeQuickTopicModal();
+      renderTabs();
+      renderCurrentCard();
+
+      // Open Parent Studio right to the word addition form for this new topic
+      openParentStudio();
+      document.getElementById('studioCategorySelect').value = currentCatIndex;
+      handleStudioChangeCategory(currentCatIndex);
+      setTimeout(() => {
+        document.getElementById('newWordInput')?.focus();
+      }, 300);
+    }
+
+    function openParentGate(action = null) {
+      pendingAction = action;
       const a = Math.floor(Math.random() * 6) + 3;
       const b = Math.floor(Math.random() * 5) + 2;
       parentMathSecret = a + b;
@@ -1376,20 +1690,32 @@
 
     function closeParentGate() {
       document.getElementById('parentGateModal').classList.add('hidden');
+      pendingAction = null;
     }
 
     function verifyParentMath() {
       const val = parseInt(document.getElementById('mathAnswerInput').value);
       if (val === parentMathSecret) {
+        const action = pendingAction;
         closeParentGate();
-        openParentStudio();
+        if (action === 'quickTopic') {
+          openQuickTopicModal();
+        } else if (action === 'addCategory') {
+          openParentStudio();
+          setTimeout(() => {
+            document.getElementById('newThemeNameInput')?.focus();
+          }, 300);
+        } else {
+          openParentStudio();
+        }
       } else {
         alert('Phép tính chưa đúng, mời ba mẹ thử lại!');
-        openParentGate();
+        openParentGate(pendingAction);
       }
     }
 
     function openParentStudio() {
+      renderStudioCategoriesList();
       renderStudioLessonOptions();
       renderStudioWordList();
       document.getElementById('parentStudioModal').classList.remove('hidden');
@@ -1399,53 +1725,6 @@
       document.getElementById('parentStudioModal').classList.add('hidden');
       renderTabs();
       renderCurrentCard();
-    }
-
-    function renderStudioLessonOptions() {
-      const cat = appData[currentCatIndex];
-      const select = document.getElementById('studioLessonSelect');
-      select.innerHTML = (cat.lessons || []).map((l, idx) => `
-        <option value="${idx}" ${idx === currentLessonIndex ? 'selected' : ''}>${l.title}</option>
-      `).join('');
-      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
-    }
-
-    function handleStudioChangeLesson(val) {
-      currentLessonIndex = parseInt(val) || 0;
-      currentWordIndex = 0;
-      document.getElementById('studioCurrentLessonName').innerText = getActiveLesson().title;
-      renderStudioWordList();
-    }
-
-    function handleCreateNewLesson() {
-      const name = prompt('Nhập tên bài học mới (ví dụ: Bài 3: Động vật biển):');
-      if (!name || !name.trim()) return;
-      const cat = appData[currentCatIndex];
-      const newLesson = {
-        id: 'lesson_' + Date.now(),
-        title: name.trim(),
-        words: []
-      };
-      cat.lessons.push(newLesson);
-      currentLessonIndex = cat.lessons.length - 1;
-      saveData();
-      renderStudioLessonOptions();
-      renderStudioWordList();
-    }
-
-    function handleDeleteCurrentLesson() {
-      const cat = appData[currentCatIndex];
-      if (cat.lessons.length <= 1) {
-        return alert('Mỗi chủ đề cần giữ lại ít nhất 1 bài học!');
-      }
-      if (confirm(`Xóa "${cat.lessons[currentLessonIndex].title}" và toàn bộ từ trong bài này?`)) {
-        cat.lessons.splice(currentLessonIndex, 1);
-        currentLessonIndex = 0;
-        currentWordIndex = 0;
-        saveData();
-        renderStudioLessonOptions();
-        renderStudioWordList();
-      }
     }
 
     function renderStudioWordList() {
@@ -1524,6 +1803,7 @@
         currentLessonIndex = 0;
         currentWordIndex = 0;
         saveData();
+        renderStudioCategoryOptions();
         renderStudioLessonOptions();
         renderStudioWordList();
         renderTabs();
