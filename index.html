@@ -76,7 +76,7 @@
           <span id="starCounter" class="font-black text-amber-900 text-xs">0</span>
         </div>
 
-        <!-- Parent Gate / Settings Button -->
+        <!-- Parent Settings Button -->
         <button onclick="openParentGate()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold p-1.5 rounded-xl text-xs shadow transition" title="Góc Phụ Huynh">
           ⚙️
         </button>
@@ -86,9 +86,7 @@
     <!-- Row 2: Category Scroll, Add Category Button & Lesson Dropdown -->
     <div class="w-full flex items-center gap-2">
       <!-- Category Tabs (Horizontal Scrollable) -->
-      <div id="categoryTabs" class="flex-1 flex items-center gap-2 overflow-x-auto hide-scrollbar py-0.5">
-        <!-- Injected dynamically by JS -->
-      </div>
+      <div id="categoryTabs" class="flex-1 flex items-center gap-2 overflow-x-auto hide-scrollbar py-0.5"></div>
 
       <!-- Add Category Quick Button -->
       <button onclick="openParentGate('addCategory')" class="shrink-0 flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 active:scale-95 text-amber-950 font-black rounded-xl px-3 py-1.5 text-xs shadow-sm border border-amber-300 transition" title="Tạo thêm chủ đề mới">
@@ -99,7 +97,6 @@
       <div class="shrink-0 flex items-center gap-1 bg-amber-50 border-2 border-amber-300 rounded-xl px-2 py-1 shadow-sm">
         <span class="text-xs">📖</span>
         <select id="lessonSelect" onchange="handleSelectLesson(this.value)" class="bg-transparent text-xs font-black text-amber-900 focus:outline-none cursor-pointer max-w-[120px] truncate">
-          <!-- Injected via JS -->
         </select>
       </div>
     </div>
@@ -170,12 +167,12 @@
 
       <!-- Live Speech Recognition Feedback & Audio Activity Bar -->
       <div class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2.5 py-1 shrink-0 flex flex-col gap-0.5">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between text-[11px]">
           <div class="flex items-center gap-1 overflow-hidden flex-1 mr-2">
-            <span class="text-[10px] font-bold text-slate-400 shrink-0">Pip nghe được:</span>
-            <span id="liveHeardTranscript" class="text-xs font-black text-indigo-600 truncate italic">"..."</span>
+            <span class="text-[10px] font-bold text-slate-400 shrink-0">Pip nghe:</span>
+            <span id="liveHeardTranscript" class="font-black text-indigo-600 truncate italic">"..."</span>
           </div>
-          <span id="micStatusText" class="text-[10px] text-amber-600 font-bold shrink-0">Sẵn sàng</span>
+          <span id="micStatusText" class="text-amber-600 font-bold shrink-0">Sẵn sàng</span>
         </div>
         <!-- Voice Energy Indicator -->
         <div class="w-full h-1 bg-slate-200 rounded-full overflow-hidden">
@@ -261,68 +258,52 @@
     </div>
   </div>
 
-  <!-- DIRECT ADD TOPIC MODAL (QUICK POPUP) -->
-  <div id="quickTopicModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
-    <div class="bg-white rounded-3xl p-5 max-w-sm w-full border-4 border-emerald-400 shadow-2xl flex flex-col gap-3">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-        <h3 class="text-base font-black text-emerald-900 flex items-center gap-2">
-          <span>➕</span> Thêm Chủ Đề Mới Cho Bé
-        </h3>
-        <button onclick="closeQuickTopicModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-xs flex items-center justify-center">✕</button>
-      </div>
 
-      <!-- Emoji Presets -->
-      <div>
-        <label class="block text-xs font-black text-slate-700 mb-1.5">1. Chọn biểu tượng chủ đề:</label>
-        <div class="grid grid-cols-6 gap-1.5 mb-2">
-          <button type="button" onclick="selectTopicEmoji('🎨')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-emerald-400 bg-emerald-50 hover:scale-110 transition">🎨</button>
-          <button type="button" onclick="selectTopicEmoji('👨‍👩‍👧')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👨‍👩‍👧</button>
-          <button type="button" onclick="selectTopicEmoji('🎒')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🎒</button>
-          <button type="button" onclick="selectTopicEmoji('👗')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👗</button>
-          <button type="button" onclick="selectTopicEmoji('⚽')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">⚽</button>
-          <button type="button" onclick="selectTopicEmoji('🚀')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🚀</button>
-          <button type="button" onclick="selectTopicEmoji('🏠')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🏠</button>
-          <button type="button" onclick="selectTopicEmoji('🌿')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🌿</button>
-          <button type="button" onclick="selectTopicEmoji('🎸')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🎸</button>
-          <button type="button" onclick="selectTopicEmoji('🧸')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🧸</button>
-          <button type="button" onclick="selectTopicEmoji('🌈')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">🌈</button>
-          <button type="button" onclick="selectTopicEmoji('👑')" class="emoji-preset-btn text-xl p-1.5 rounded-xl border-2 border-slate-200 hover:border-emerald-400 hover:scale-110 transition">👑</button>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[11px] font-bold text-slate-500">Hoặc gõ icon tùy ý:</span>
-          <input id="quickTopicIconInput" type="text" value="🎨" maxlength="4" class="w-14 text-center text-lg border-2 border-slate-300 rounded-xl py-1 font-bold focus:outline-none focus:border-emerald-500" />
-        </div>
-      </div>
-
-      <!-- Topic Name -->
-      <div>
-        <label class="block text-xs font-black text-slate-700 mb-1">2. Tên chủ đề:</label>
-        <input id="quickTopicNameInput" type="text" placeholder="Ví dụ: Colors (Màu sắc), Family (Gia đình)..." class="w-full px-3 py-2 rounded-xl border-2 border-slate-300 text-sm font-bold focus:outline-none focus:border-emerald-500" />
-      </div>
-
-      <div class="flex gap-2 pt-2 border-t border-slate-100">
-        <button type="button" onclick="closeQuickTopicModal()" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-600 text-xs">Hủy</button>
-        <button type="button" onclick="submitQuickTopic()" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 font-black text-white text-xs shadow active:scale-95 transition">Tạo ngay & Thêm từ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PARENT STUDIO MODAL (CURRICULUM, THEME & JSON MANAGEMENT) -->
+  <!-- PARENT STUDIO MODAL (CURRICULUM, STRICTNESS & JSON MANAGEMENT) -->
   <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
     <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div>
           <h2 class="text-base font-black text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span> Quản Lý Giáo Trình & Chủ Đề
+            <span>⚙️</span> Quản Lý Giáo Trình & Độ Khó
           </h2>
-          <p class="text-[11px] text-slate-500 font-semibold">Tạo chủ đề, bài học tùy ý và đồng bộ file .json</p>
+          <p class="text-[11px] text-slate-500 font-semibold">Tùy chỉnh độ nghiêm ngặt khi chấm phát âm</p>
         </div>
         <button onclick="closeParentStudio()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-black text-slate-500 flex items-center justify-center">✕</button>
       </div>
 
       <div class="flex-1 overflow-y-auto pr-1 mt-3 space-y-3">
         
+        <!-- STRICTNESS / ACCURACY CONTROL -->
+        <div class="bg-rose-50/80 p-3 rounded-2xl border-2 border-rose-300 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-rose-950 flex items-center gap-1.5">
+              <span class="text-base">🎯</span> <span>Độ nghiêm ngặt khi chấm phát âm:</span>
+            </span>
+            <span id="strictnessBadge" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+              Tiêu chuẩn (75%)
+            </span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" onclick="setStrictness('easy')" id="btnStrictEasy" class="py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-white border-slate-200 text-slate-700 hover:border-emerald-400">
+              👶 Dễ / Mới tập
+              <span class="block text-[9px] font-normal text-slate-500">Khớp >= 60%</span>
+            </button>
+            <button type="button" onclick="setStrictness('medium')" id="btnStrictMed" class="py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-amber-400 border-amber-500 text-amber-950 shadow-sm">
+              👍 Tiêu chuẩn
+              <span class="block text-[9px] font-normal text-amber-900">Khớp >= 75%</span>
+            </button>
+            <button type="button" onclick="setStrictness('strict')" id="btnStrictHigh" class="py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-white border-slate-200 text-slate-700 hover:border-rose-400">
+              🔥 Nghiêm ngặt
+              <span class="block text-[9px] font-normal text-slate-500">Khớp >= 90%</span>
+            </button>
+          </div>
+          <p class="text-[10px] text-rose-800 font-semibold leading-relaxed">
+            * <b>Đã tắt chế độ tự động cho qua</b>. App sẽ so khớp từ ngữ thực tế bé nói với từ vựng tiếng Anh. Nếu bé cố tình đọc sai hoặc nói tiếng Việt, app sẽ nhẹ nhàng yêu cầu thử lại.
+          </p>
+        </div>
+
         <!-- JSON FILE BACKUP & IMPORT BOX -->
         <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
           <p class="text-xs font-black text-amber-900 mb-2">💾 Sao lưu & Đồng bộ sang Điện thoại:</p>
@@ -335,50 +316,32 @@
               <input type="file" id="jsonFileInput" accept=".json" onchange="importDataFromJSON(event)" class="hidden" />
             </label>
           </div>
-          <p class="text-[10px] text-amber-700 font-semibold mt-1.5">
-            * Ba mẹ lưu file .json trên máy tính, gửi qua Zalo sang điện thoại rồi bấm "Mở file .json" để nạp ngay!
-          </p>
         </div>
 
-        <!-- THEME / CATEGORY MANAGER (QUẢN LÝ TẤT CẢ CHỦ ĐỀ) -->
-        <div class="bg-emerald-50/90 p-3.5 rounded-2xl border-2 border-emerald-300 space-y-3">
+        <!-- THEME / CATEGORY MANAGER -->
+        <div class="bg-emerald-50/90 p-3 rounded-2xl border-2 border-emerald-300 space-y-2.5">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-emerald-950 flex items-center gap-1.5">
-              <span class="text-base">🎨</span> <span>Quản Lý Chủ Đề (Thêm / Xóa theo ý muốn):</span>
+              <span class="text-base">🎨</span> <span>Quản Lý Chủ Đề (Thêm / Xóa):</span>
             </span>
             <span id="topicCountBadge" class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-black">3 chủ đề</span>
           </div>
 
-          <!-- Existing Categories List with direct Delete buttons -->
-          <div id="studioCategoriesList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-            <!-- Injected dynamically by JS -->
-          </div>
+          <div id="studioCategoriesList" class="space-y-1.5 max-h-32 overflow-y-auto pr-1"></div>
 
           <!-- Add New Theme Form -->
-          <div class="pt-2.5 border-t border-emerald-200">
-            <p class="text-[11px] font-black text-emerald-900 mb-1.5">➕ Tạo thêm chủ đề mới của bạn:</p>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <div class="flex gap-2">
-                <input id="newThemeIconInput" type="text" placeholder="Icon" class="w-14 px-2 py-1.5 rounded-xl border border-emerald-300 text-center text-base font-bold bg-white" value="🌟" title="Chọn hoặc gõ Emoji cho chủ đề" />
-                <input id="newThemeNameInput" type="text" placeholder="Tên chủ đề (vd: Colors, Toys, School...)" class="flex-1 px-3 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold bg-white focus:outline-none focus:border-emerald-600" />
-              </div>
-              <button onclick="handleCreateNewCategory()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black px-4 py-2 rounded-xl text-xs shadow shrink-0 transition">
-                ➕ Thêm chủ đề này
+          <div class="pt-2 border-t border-emerald-200">
+            <div class="flex gap-2">
+              <input id="newThemeIconInput" type="text" class="w-12 px-1 py-1.5 rounded-xl border border-emerald-300 text-center text-base font-bold bg-white" value="🌟" />
+              <input id="newThemeNameInput" type="text" placeholder="Tên chủ đề mới (vd: Colors, Toys...)" class="flex-1 px-3 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold bg-white focus:outline-none focus:border-emerald-600" />
+              <button onclick="handleCreateNewCategory()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black px-3 py-1.5 rounded-xl text-xs shadow shrink-0">
+                ➕ Thêm
               </button>
-            </div>
-            <!-- Quick emoji suggestion pills -->
-            <div class="flex items-center gap-1.5 mt-2 flex-wrap text-xs">
-              <span class="text-[10px] font-bold text-emerald-800">Gợi ý icon:</span>
-              <button onclick="setThemeIcon('🎨')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🎨 Màu sắc</button>
-              <button onclick="setThemeIcon('🧸')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🧸 Đồ chơi</button>
-              <button onclick="setThemeIcon('🦕')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🦕 Khủng long</button>
-              <button onclick="setThemeIcon('👨‍👩‍👧')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">👨‍👩‍👧 Gia đình</button>
-              <button onclick="setThemeIcon('🏫')" class="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-xs hover:scale-110 transition">🏫 Trường học</button>
             </div>
           </div>
         </div>
 
-        <!-- LESSON MANAGER (QUẢN LÝ BÀI HỌC) -->
+        <!-- LESSON MANAGER -->
         <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-sky-900 flex items-center gap-1">
@@ -390,7 +353,6 @@
           </div>
           <div class="flex items-center gap-2">
             <select id="studioLessonSelect" onchange="handleStudioChangeLesson(this.value)" class="flex-1 bg-white border border-sky-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800">
-              <!-- Injected dynamically -->
             </select>
             <button onclick="handleDeleteCurrentLesson()" class="text-rose-600 hover:text-rose-800 bg-rose-50 border border-rose-200 px-2.5 py-1.5 rounded-xl text-xs font-bold">
               🗑️ Xóa bài này
@@ -398,7 +360,7 @@
           </div>
         </div>
 
-        <!-- ADD WORD TO CURRENT LESSON FORM -->
+        <!-- ADD WORD FORM -->
         <div class="bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 space-y-2.5">
           <p class="text-xs font-black text-indigo-900 flex items-center justify-between">
             <span>➕ Thêm từ mới vào bài đang chọn:</span>
@@ -406,32 +368,24 @@
           </p>
 
           <div class="flex gap-2">
-            <input id="newWordInput" type="text" placeholder="Gõ từ tiếng Anh (vd: ELEPHANT, RED...)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
+            <input id="newWordInput" type="text" placeholder="Từ tiếng Anh (vd: ELEPHANT)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
             <button onclick="searchWordImagesTrigger()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
               <span>🔍</span> <span>Tìm ảnh</span>
             </button>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <input id="newIpaInput" type="text" placeholder="Phiên âm (tự sinh vd: /ˈel.ə.fənt/)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
-            <input id="newAltsInput" type="text" placeholder="Âm ngọng của bé (vd: efan, pant)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newIpaInput" type="text" placeholder="Phiên âm (vd: /ˈel.ə.fənt/)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newAltsInput" type="text" placeholder="Âm ngọng chấp nhận (vd: efan, pant)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
           </div>
 
           <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-[11px] font-extrabold text-slate-600">Chọn 1 hình ảnh bé thích:</span>
-              <span id="imgSearchStatus" class="text-[10px] font-bold text-indigo-600"></span>
-            </div>
-            
-            <div id="imageCandidateGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-32 overflow-y-auto bg-white p-2 rounded-xl border border-indigo-200 min-h-[60px]">
+            <div id="imageCandidateGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-28 overflow-y-auto bg-white p-2 rounded-xl border border-indigo-200 min-h-[50px]">
               <div class="col-span-full py-2 text-center text-xs text-slate-400 italic">
-                Gõ từ tiếng Anh rồi bấm "Tìm ảnh" để chọn ảnh thật đẹp cho bé!
+                Gõ từ tiếng Anh rồi bấm "Tìm ảnh" để chọn ảnh cho bé!
               </div>
             </div>
-
-            <div class="mt-1.5">
-              <input id="newImgUrlInput" type="text" placeholder="Hoặc dán trực tiếp link ảnh online bất kỳ..." class="w-full px-2.5 py-1 rounded-lg border border-slate-200 text-[11px]" />
-            </div>
+            <input id="newImgUrlInput" type="text" placeholder="Hoặc dán trực tiếp link ảnh online..." class="w-full mt-1.5 px-2.5 py-1 rounded-lg border border-slate-200 text-[11px]" />
           </div>
 
           <button onclick="handleAddCustomWord()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2 rounded-xl text-xs shadow-md active:scale-95 transition">
@@ -442,7 +396,7 @@
         <!-- CURRENT LESSON WORD LIST -->
         <div class="bg-white p-3 rounded-2xl border border-slate-200">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-black text-slate-700">Danh sách từ trong bài học này:</span>
+            <span class="text-xs font-black text-slate-700">Danh sách từ trong bài học:</span>
             <span id="studioWordsCountBadge" class="text-[11px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">0 từ</span>
           </div>
           <div id="studioWordList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
@@ -468,7 +422,7 @@
       ELEPHANT: {
         ipa: '/ˈel.ə.fənt/',
         emoji: '🐘',
-        alts: ['elephant', 'elefant', 'elephunt', 'elepant', 'eliphan', 'aliphan', 'lephant', 'fan', 'pant', 'efan', 'alfa', 'olifan'],
+        alts: ['elephant', 'elefant', 'elephunt', 'elepant', 'eliphan', 'lephant'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="115" cy="115" rx="65" ry="52" fill="#94A3B8"/>
           <ellipse cx="70" cy="100" rx="42" ry="46" fill="#94A3B8"/>
@@ -484,7 +438,7 @@
       MONKEY: {
         ipa: '/ˈmʌŋ.ki/',
         emoji: '🐵',
-        alts: ['monk', 'maki', 'monki', 'manki', 'munky'],
+        alts: ['monkey', 'monki', 'manki', 'munky'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="105" r="56" fill="#8D4925"/>
           <circle cx="48" cy="95" r="22" fill="#8D4925"/>
@@ -502,7 +456,7 @@
       TIGER: {
         ipa: '/ˈtaɪ.ɡər/',
         emoji: '🐯',
-        alts: ['tige', 'taiga', 'tiga', 'tyge', 'ger', 'tiger'],
+        alts: ['tiger', 'tyger', 'tiga', 'taiga'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="105" r="68" fill="#FB923C"/>
           <polygon points="50,60 60,25 95,50" fill="#EA580C"/>
@@ -515,7 +469,7 @@
       LION: {
         ipa: '/ˈlaɪ.ən/',
         emoji: '🦁',
-        alts: ['wion', 'lyon', 'laion', 'line', 'lion'],
+        alts: ['lion', 'lyon', 'laion'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="100" r="78" fill="#EA580C"/>
           <circle cx="100" cy="100" r="56" fill="#FDE047"/>
@@ -526,7 +480,7 @@
       CAT: {
         ipa: '/kæt/',
         emoji: '🐱',
-        alts: ['kat', 'cap', 'cac', 'cut', 'ca', 'cat'],
+        alts: ['cat', 'kat', 'katt'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="110" r="65" fill="#FBBF24"/>
           <polygon points="50,70 60,25 98,60" fill="#F59E0B"/>
@@ -539,7 +493,7 @@
       DOG: {
         ipa: '/dɒɡ/',
         emoji: '🐶',
-        alts: ['dok', 'doc', 'dot', 'do', 'dog', 'dawg'],
+        alts: ['dog', 'dawg', 'dogg'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="100" cy="110" rx="70" ry="60" fill="#D97706"/>
           <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/>
@@ -551,7 +505,7 @@
       DUCK: {
         ipa: '/dʌk/',
         emoji: '🦆',
-        alts: ['dak', 'dac', 'dap', 'duh', 'duck'],
+        alts: ['duck', 'dak'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="90" r="56" fill="#FACC15"/>
           <circle cx="80" cy="80" r="8" fill="#1E293B"/>
@@ -561,7 +515,7 @@
       APPLE: {
         ipa: '/ˈæp.əl/',
         emoji: '🍎',
-        alts: ['apo', 'appo', 'aple', 'apple'],
+        alts: ['apple', 'aple', 'appl'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="84" cy="110" r="52" fill="#EF4444"/>
           <circle cx="116" cy="110" r="52" fill="#DC2626"/>
@@ -571,7 +525,7 @@
       BANANA: {
         ipa: '/bəˈnɑː.nə/',
         emoji: '🍌',
-        alts: ['nana', 'banana', 'banan'],
+        alts: ['banana', 'banan'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <path d="M 50 150 C 40 80 100 40 150 50 C 110 70 80 110 90 160 Z" fill="#FACC15" stroke="#EAB308" stroke-width="4"/>
         </svg>`
@@ -579,7 +533,7 @@
       CAR: {
         ipa: '/kɑːr/',
         emoji: '🚗',
-        alts: ['ca', 'ka', 'car'],
+        alts: ['car', 'carr', 'kaar'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="40" y="90" width="120" height="44" rx="12" fill="#3B82F6"/>
           <circle cx="70" cy="134" r="16" fill="#1E293B"/>
@@ -589,7 +543,7 @@
       BUS: {
         ipa: '/bʌs/',
         emoji: '🚌',
-        alts: ['bas', 'bah', 'bus'],
+        alts: ['bus', 'buss'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="30" y="60" width="140" height="75" rx="16" fill="#FBBF24"/>
           <circle cx="65" cy="135" r="16" fill="#1E293B"/>
@@ -608,19 +562,19 @@
             id: 'animals_l1',
             title: 'Bài 1: Thú nuôi',
             words: [
-              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['kat', 'cap', 'cac', 'cut', 'ca'] },
-              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dok', 'doc', 'do', 'dawg'] },
-              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['dak', 'dac', 'dap', 'duh'] }
+              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['cat', 'kat'] },
+              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dog', 'dawg'] },
+              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['duck', 'dak'] }
             ]
           },
           {
             id: 'animals_l2',
             title: 'Bài 2: Rừng xanh',
             words: [
-              { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['efan', 'elphan', 'pant', 'fan'] },
-              { word: 'MONKEY', ipa: '/ˈmʌŋ.ki/', img: '', alts: ['monk', 'maki', 'monki', 'manki'] },
-              { word: 'TIGER', ipa: '/ˈtaɪ.ɡər/', img: '', alts: ['tige', 'taiga', 'tiga'] },
-              { word: 'LION', ipa: '/ˈlaɪ.ən/', img: '', alts: ['wion', 'lyon', 'laion'] }
+              { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['elephant', 'elefant'] },
+              { word: 'MONKEY', ipa: '/ˈmʌŋ.ki/', img: '', alts: ['monkey', 'monki'] },
+              { word: 'TIGER', ipa: '/ˈtaɪ.ɡər/', img: '', alts: ['tiger', 'tiga'] },
+              { word: 'LION', ipa: '/ˈlaɪ.ən/', img: '', alts: ['lion', 'lyon'] }
             ]
           }
         ]
@@ -634,8 +588,8 @@
             id: 'foods_l1',
             title: 'Bài 1: Trái cây',
             words: [
-              { word: 'APPLE', ipa: '/ˈæp.əl/', img: '', alts: ['apo', 'appo', 'aple'] },
-              { word: 'BANANA', ipa: '/bəˈnɑː.nə/', img: '', alts: ['nana', 'banana', 'banan'] }
+              { word: 'APPLE', ipa: '/ˈæp.əl/', img: '', alts: ['apple', 'aple'] },
+              { word: 'BANANA', ipa: '/bəˈnɑː.nə/', img: '', alts: ['banana'] }
             ]
           }
         ]
@@ -647,10 +601,10 @@
         lessons: [
           {
             id: 'vehicles_l1',
-            title: 'Bài 1: Xe đường phố',
+            title: 'Bài 1: Xe cộ',
             words: [
-              { word: 'CAR', ipa: '/kɑːr/', img: '', alts: ['ca', 'ka', 'car'] },
-              { word: 'BUS', ipa: '/bʌs/', img: '', alts: ['bas', 'bah'] }
+              { word: 'CAR', ipa: '/kɑːr/', img: '', alts: ['car'] },
+              { word: 'BUS', ipa: '/bʌs/', img: '', alts: ['bus'] }
             ]
           }
         ]
@@ -665,6 +619,9 @@
     let attemptsCount = 0;
     let isListening = false;
     let currentMode = 'practice';
+    
+    // Strictness Level: 'easy' (0.60), 'medium' (0.75), 'strict' (0.90)
+    let strictnessLevel = localStorage.getItem('safari_strictness') || 'medium';
 
     let quizQuestions = [];
     let currentQuizIndex = 0;
@@ -678,11 +635,42 @@
     let vadStream = null;
     let vadAnalyser = null;
     let vadDataArray = null;
-    let hasDetectedVocalEnergy = false;
-    let vocalEnergyDurationMs = 0;
 
     function saveData() {
       localStorage.setItem('safari_curriculum_v9', JSON.stringify(appData));
+    }
+
+    function setStrictness(level) {
+      strictnessLevel = level;
+      localStorage.setItem('safari_strictness', level);
+      updateStrictnessUI();
+    }
+
+    function updateStrictnessUI() {
+      const bEasy = document.getElementById('btnStrictEasy');
+      const bMed = document.getElementById('btnStrictMed');
+      const bHigh = document.getElementById('btnStrictHigh');
+      const badge = document.getElementById('strictnessBadge');
+
+      if (!bEasy || !bMed || !bHigh || !badge) return;
+
+      [bEasy, bMed, bHigh].forEach(b => {
+        b.className = 'py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-white border-slate-200 text-slate-700';
+      });
+
+      if (strictnessLevel === 'easy') {
+        bEasy.className = 'py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-emerald-400 border-emerald-500 text-emerald-950 shadow-sm';
+        badge.innerText = 'Dễ (60%)';
+        badge.className = 'text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900';
+      } else if (strictnessLevel === 'strict') {
+        bHigh.className = 'py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-rose-400 border-rose-500 text-rose-950 shadow-sm';
+        badge.innerText = 'Nghiêm ngặt (90%)';
+        badge.className = 'text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-200 text-rose-900';
+      } else {
+        bMed.className = 'py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-amber-400 border-amber-500 text-amber-950 shadow-sm';
+        badge.innerText = 'Tiêu chuẩn (75%)';
+        badge.className = 'text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-200 text-amber-900';
+      }
     }
 
     function getActiveLesson() {
@@ -779,8 +767,6 @@
     }
 
     async function startVADMonitoring() {
-      hasDetectedVocalEnergy = false;
-      vocalEnergyDurationMs = 0;
       try {
         if (!vadStream) {
           vadStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -807,8 +793,6 @@
           energyBar.style.width = pct + '%';
 
           if (pct > 20) {
-            hasDetectedVocalEnergy = true;
-            vocalEnergyDurationMs += 40;
             document.getElementById('mascotAvatar').style.transform = 'scale(1.25)';
           } else {
             document.getElementById('mascotAvatar').style.transform = 'scale(1)';
@@ -911,11 +895,9 @@
           resetMicUI();
           if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
             setMascot('Ba mẹ vui lòng bấm "Cho phép" để ứng dụng dùng Micro nhé!', '⚠️');
-            alert('Trang web chưa được cấp quyền dùng Micro. Ba mẹ bấm vào biểu tượng ổ khóa bên cạnh link web trên thanh địa chỉ để Bật Micro nhé!');
-          } else if (e.error === 'no-speech') {
-            checkVADFallbackOrRetry();
+            alert('Trang web chưa được cấp quyền dùng Micro. Ba mẹ bấm vào biểu tượng cài đặt bên cạnh link web để Bật Micro nhé!');
           } else {
-            document.getElementById('micStatusText').innerText = 'Sẵn sàng';
+            handleSpeechRetry('Chưa nghe rõ');
           }
         };
 
@@ -925,7 +907,7 @@
             finalSpokenHandled = true;
             processSpeechEvaluation(accumulatedHypotheses);
           } else if (!finalSpokenHandled) {
-            checkVADFallbackOrRetry();
+            handleSpeechRetry('Chưa nghe thấy');
           }
         };
 
@@ -948,6 +930,7 @@
       return dp[a.length][b.length];
     }
 
+    // STRICT ACCURACY SPEECH EVALUATION
     function evaluateChildSpeech(hypotheses, targetWordObj) {
       const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
       const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
@@ -957,8 +940,14 @@
         childAlts.push(...dictObj.alts);
       }
 
-      let bestTranscript = hypotheses[0] || '';
-      let bestConfidence = 0;
+      // Thresholds based on Strictness Setting
+      // 'easy' = 0.60 | 'medium' = 0.75 | 'strict' = 0.90
+      let requiredThreshold = 0.75;
+      if (strictnessLevel === 'easy') requiredThreshold = 0.60;
+      if (strictnessLevel === 'strict') requiredThreshold = 0.90;
+
+      let bestTranscript = hypotheses[0] || '...';
+      let bestSimilarity = 0;
 
       const normalizePhonetics = (str) => {
         return str
@@ -979,34 +968,35 @@
           const w = rawWord.replace(/[^a-z]/g, '');
           if (!w) continue;
 
+          // 1. Direct exact match with target or valid alternatives
           if (w === cleanTarget || childAlts.includes(w)) {
-            return { isMatch: true, heardText: w, confidence: 1.0 };
+            return { isMatch: true, heardText: w, similarity: 1.0 };
           }
 
+          // 2. Exact match after phonetic normalization
           const normW = normalizePhonetics(w);
           if (normW === normTarget) {
-            return { isMatch: true, heardText: w, confidence: 0.95 };
+            return { isMatch: true, heardText: w, similarity: 0.95 };
           }
 
-          if (normW.length >= 3 && (normTarget.includes(normW) || normW.includes(normTarget))) {
-            return { isMatch: true, heardText: w, confidence: 0.9 };
-          }
-
+          // 3. Normalized Levenshtein distance check
           const dist = calculateLevenshtein(normW, normTarget);
           const maxLen = Math.max(normW.length, normTarget.length);
-          const similarity = maxLen > 0 ? (1 - dist / maxLen) : 0;
-          if (similarity > bestConfidence) {
-            bestConfidence = similarity;
+          const sim = maxLen > 0 ? (1 - dist / maxLen) : 0;
+
+          if (sim > bestSimilarity) {
+            bestSimilarity = sim;
             bestTranscript = w;
           }
 
-          if (similarity >= 0.35) {
-            return { isMatch: true, heardText: w, confidence: similarity };
+          // Must satisfy the chosen strictness threshold
+          if (sim >= requiredThreshold) {
+            return { isMatch: true, heardText: w, similarity: sim };
           }
         }
       }
 
-      return { isMatch: false, heardText: bestTranscript, confidence: bestConfidence };
+      return { isMatch: false, heardText: bestTranscript, similarity: bestSimilarity };
     }
 
     function processSpeechEvaluation(hypotheses) {
@@ -1014,26 +1004,14 @@
       const targetObj = lesson.words[currentWordIndex];
       const evaluation = evaluateChildSpeech(hypotheses, targetObj);
 
+      const simPct = Math.round(evaluation.similarity * 100);
+      document.getElementById('liveHeardTranscript').innerText = `"${evaluation.heardText}" (Khớp ${simPct}%)`;
+
       if (evaluation.isMatch) {
         celebrateSuccess(evaluation.heardText);
       } else {
-        if (hasDetectedVocalEnergy && vocalEnergyDurationMs > 750 && attemptsCount >= 1) {
-          document.getElementById('liveHeardTranscript').innerText = `"${targetObj.word.toLowerCase()}" (Ghi nhận giọng bé)`;
-          celebrateSuccess(targetObj.word);
-        } else {
-          handleSpeechRetry(evaluation.heardText);
-        }
-      }
-    }
-
-    function checkVADFallbackOrRetry() {
-      const lesson = getActiveLesson();
-      const targetObj = lesson.words[currentWordIndex];
-      if (hasDetectedVocalEnergy && vocalEnergyDurationMs > 800) {
-        document.getElementById('liveHeardTranscript').innerText = `"${targetObj.word.toLowerCase()}" (Ghi nhận âm thanh)`;
-        celebrateSuccess(targetObj.word);
-      } else {
-        handleSpeechRetry('...');
+        // No auto-pass via audio energy anymore! Real pronunciation check only.
+        handleSpeechRetry(evaluation.heardText);
       }
     }
 
@@ -1045,7 +1023,7 @@
       
       const lesson = getActiveLesson();
       const targetWord = lesson.words[currentWordIndex].word;
-      setMascot(`XUẤT SẮC! Bé đọc từ "${targetWord}" chuẩn lắm! 🎉`, '🥳');
+      setMascot(`XUẤT SẮC! Bé đọc từ "${targetWord}" rất chuẩn! 🎉`, '🥳');
       
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
 
@@ -1069,7 +1047,9 @@
       }
 
       playGentleErrorSound();
-      setMascot(`Gần đúng rồi! Bé bấm "Nghe cô đọc" rồi nói lại to hơn nha! 💖`, '🥰');
+      const lesson = getActiveLesson();
+      const targetWord = lesson.words[currentWordIndex].word;
+      setMascot(`Chưa chính xác! Pip nghe là "${heardWord}". Bé bấm "Nghe cô đọc" từ "${targetWord}" rồi đọc lại nha!`, '🥰');
       setTimeout(() => speakTargetWord(), 900);
     }
   </script>
@@ -1350,7 +1330,7 @@
             currentLessonIndex = 0;
             currentWordIndex = 0;
             renderTabs();
-            renderStudioCategoryOptions();
+            renderStudioCategoriesList();
             renderStudioLessonOptions();
             renderStudioWordList();
             renderCurrentCard();
@@ -1366,10 +1346,6 @@
     }
 
     // THEME / CATEGORY CRUD
-    function setThemeIcon(emoji) {
-      document.getElementById('newThemeIconInput').value = emoji;
-    }
-
     function renderStudioCategoriesList() {
       const container = document.getElementById('studioCategoriesList');
       if (!container) return;
@@ -1403,7 +1379,7 @@
     function handleCreateNewCategory() {
       const name = document.getElementById('newThemeNameInput').value.trim();
       const icon = document.getElementById('newThemeIconInput').value.trim() || '🌟';
-      if (!name) return alert('Vui lòng nhập tên chủ đề mới (ví dụ: Colors (Màu sắc), Toys (Đồ chơi)...)!');
+      if (!name) return alert('Vui lòng nhập tên chủ đề mới!');
 
       const newCat = {
         id: 'cat_' + Date.now(),
@@ -1425,15 +1401,13 @@
       saveData();
 
       document.getElementById('newThemeNameInput').value = '';
-      document.getElementById('newThemeIconInput').value = '🌟';
-
       renderTabs();
       renderStudioCategoriesList();
       renderStudioLessonOptions();
       renderStudioWordList();
       renderCurrentCard();
 
-      alert(`🎉 Đã tạo thành công chủ đề mới: "${name}"! Ba mẹ hãy chọn bài học và thêm từ vựng cho bé nhé.`);
+      alert(`🎉 Đã tạo thành công chủ đề: "${name}"!`);
     }
 
     function handleDeleteCategoryByIndex(idx) {
@@ -1441,7 +1415,7 @@
         return alert('Ứng dụng cần giữ lại ít nhất 1 chủ đề, không thể xóa hết!');
       }
       const cat = appData[idx];
-      if (confirm(`Bạn có chắc muốn xóa toàn bộ chủ đề "${cat.name}" cùng tất cả các bài học và từ vựng bên trong?`)) {
+      if (confirm(`Bạn có chắc muốn xóa chủ đề "${cat.name}" cùng tất cả bài học bên trong?`)) {
         appData.splice(idx, 1);
         if (currentCatIndex >= appData.length) {
           currentCatIndex = appData.length - 1;
@@ -1470,7 +1444,7 @@
 
     // LESSON CRUD
     function handleCreateNewLesson() {
-      const name = prompt('Nhập tên bài học mới (ví dụ: Bài 2: Rừng xanh, Bài 3: Nông trại):');
+      const name = prompt('Nhập tên bài học mới (ví dụ: Bài 2: Rừng nhiệt đới):');
       if (!name || !name.trim()) return;
       const cat = appData[currentCatIndex];
       const newLesson = {
@@ -1492,7 +1466,7 @@
       if (cat.lessons.length <= 1) {
         return alert('Mỗi chủ đề cần giữ lại ít nhất 1 bài học!');
       }
-      if (confirm(`Xóa bài "${cat.lessons[currentLessonIndex].title}" và toàn bộ từ trong bài này?`)) {
+      if (confirm(`Xóa bài "${cat.lessons[currentLessonIndex].title}"?`)) {
         cat.lessons.splice(currentLessonIndex, 1);
         currentLessonIndex = 0;
         currentWordIndex = 0;
@@ -1521,19 +1495,16 @@
       renderCurrentCard();
     }
 
-    // WORD CRUD & WIKIMEDIA SEARCH
+    // WORD CRUD & SEARCH
     async function searchWordImages(queryWord) {
       const cleanWord = queryWord.trim().toLowerCase();
       const grid = document.getElementById('imageCandidateGrid');
-      const status = document.getElementById('imgSearchStatus');
-      
-      grid.innerHTML = '<div class="col-span-full py-3 text-center text-xs text-indigo-600 font-bold animate-pulse">Đang tìm ảnh cho bé...</div>';
-      status.innerText = 'Đang tìm...';
+      grid.innerHTML = '<div class="col-span-full py-2 text-center text-xs text-indigo-600 font-bold animate-pulse">Đang tìm ảnh cho bé...</div>';
 
       const results = [];
       const upper = queryWord.toUpperCase();
       if (HIGH_RES_VECTORS[upper]) {
-        results.push({ type: 'dict', label: 'Vector HD Chuẩn', data: HIGH_RES_VECTORS[upper] });
+        results.push({ type: 'dict', label: 'Vector Chuẩn', data: HIGH_RES_VECTORS[upper] });
       }
 
       try {
@@ -1552,20 +1523,17 @@
       } catch (err) {}
 
       if (results.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400">Không tìm thấy ảnh trên mạng. Ứng dụng sẽ dùng Vector/Emoji đại diện!</div>';
-        status.innerText = '0 ảnh';
+        grid.innerHTML = '<div class="col-span-full py-2 text-center text-xs text-slate-400">Không tìm thấy ảnh trên mạng. App sẽ dùng Vector/Emoji đại diện!</div>';
         return;
       }
 
-      status.innerText = `Tìm thấy ${results.length} ảnh`;
       grid.innerHTML = '';
-
       results.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'relative aspect-square rounded-xl border-2 border-slate-200 cursor-pointer overflow-hidden p-1 flex items-center justify-center hover:border-indigo-500 bg-slate-50 transition shadow-sm';
         
         if (item.type === 'dict') {
-          card.innerHTML = `<div class="w-full h-full p-1">${item.data.svg}</div><span class="absolute bottom-0.5 text-[8px] bg-indigo-600 text-white px-1 rounded font-bold">Vector HD</span>`;
+          card.innerHTML = `<div class="w-full h-full p-1">${item.data.svg}</div><span class="absolute bottom-0.5 text-[8px] bg-indigo-600 text-white px-1 rounded font-bold">Vector</span>`;
           card.onclick = () => selectCandidateImage('', card);
         } else {
           card.innerHTML = `<img src="${item.url}" alt="${item.label}" class="w-full h-full object-cover rounded-lg" onerror="this.parentElement.remove()" />`;
@@ -1573,7 +1541,6 @@
         }
 
         grid.appendChild(card);
-
         if (index === (results[0].type === 'photo' ? 0 : (results.length > 1 ? 1 : 0))) {
           if (item.type === 'photo') selectCandidateImage(item.url, card);
         }
@@ -1607,77 +1574,6 @@
       searchWordImages(word);
     }
 
-    function promptCreateTopicDirect() {
-      openParentGate('quickTopic');
-    }
-
-    function selectTopicEmoji(emoji) {
-      document.getElementById('quickTopicIconInput').value = emoji;
-      document.querySelectorAll('.emoji-preset-btn').forEach(btn => {
-        if (btn.innerText.trim() === emoji) {
-          btn.classList.add('border-emerald-400', 'bg-emerald-50');
-          btn.classList.remove('border-slate-200');
-        } else {
-          btn.classList.remove('border-emerald-400', 'bg-emerald-50');
-          btn.classList.add('border-slate-200');
-        }
-      });
-    }
-
-    function openQuickTopicModal() {
-      document.getElementById('quickTopicNameInput').value = '';
-      selectTopicEmoji('🎨');
-      document.getElementById('quickTopicModal').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('quickTopicNameInput').focus();
-      }, 200);
-    }
-
-    function closeQuickTopicModal() {
-      document.getElementById('quickTopicModal').classList.add('hidden');
-    }
-
-    function submitQuickTopic() {
-      const name = document.getElementById('quickTopicNameInput').value.trim();
-      const icon = document.getElementById('quickTopicIconInput').value.trim() || '🌟';
-
-      if (!name) {
-        alert('Ba mẹ vui lòng nhập tên cho chủ đề mới nhé!');
-        return;
-      }
-
-      const newCat = {
-        id: 'cat_' + Date.now(),
-        name: name,
-        icon: icon,
-        lessons: [
-          {
-            id: 'lesson_' + Date.now(),
-            title: 'Bài 1: Cơ bản',
-            words: []
-          }
-        ]
-      };
-
-      appData.push(newCat);
-      currentCatIndex = appData.length - 1;
-      currentLessonIndex = 0;
-      currentWordIndex = 0;
-      saveData();
-
-      closeQuickTopicModal();
-      renderTabs();
-      renderCurrentCard();
-
-      // Open Parent Studio right to the word addition form for this new topic
-      openParentStudio();
-      document.getElementById('studioCategorySelect').value = currentCatIndex;
-      handleStudioChangeCategory(currentCatIndex);
-      setTimeout(() => {
-        document.getElementById('newWordInput')?.focus();
-      }, 300);
-    }
-
     function openParentGate(action = null) {
       pendingAction = action;
       const a = Math.floor(Math.random() * 6) + 3;
@@ -1698,15 +1594,11 @@
       if (val === parentMathSecret) {
         const action = pendingAction;
         closeParentGate();
-        if (action === 'quickTopic') {
-          openQuickTopicModal();
-        } else if (action === 'addCategory') {
-          openParentStudio();
+        openParentStudio();
+        if (action === 'addCategory') {
           setTimeout(() => {
             document.getElementById('newThemeNameInput')?.focus();
           }, 300);
-        } else {
-          openParentStudio();
         }
       } else {
         alert('Phép tính chưa đúng, mời ba mẹ thử lại!');
@@ -1715,6 +1607,7 @@
     }
 
     function openParentStudio() {
+      updateStrictnessUI();
       renderStudioCategoriesList();
       renderStudioLessonOptions();
       renderStudioWordList();
@@ -1803,7 +1696,7 @@
         currentLessonIndex = 0;
         currentWordIndex = 0;
         saveData();
-        renderStudioCategoryOptions();
+        renderStudioCategoriesList();
         renderStudioLessonOptions();
         renderStudioWordList();
         renderTabs();
@@ -1816,6 +1709,7 @@
       renderTabs();
       renderCurrentCard();
       loadFemaleTeacherVoice();
+      updateStrictnessUI();
     });
   </script>
 </body>
