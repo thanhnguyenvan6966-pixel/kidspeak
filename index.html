@@ -50,6 +50,7 @@
 </head>
 <body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800 select-none">
 
+  <!-- TWO-TIER RESPONSIVE HEADER -->
   <header class="w-full px-3 py-1.5 flex flex-col gap-1.5 border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-20 shadow-sm">
     <!-- Row 1: Brand, 3-Level Quick Switcher, Mode, Stars, Settings -->
     <div class="w-full flex items-center justify-between gap-1">
@@ -116,6 +117,7 @@
     </div>
   </header>
 
+  <!-- PRACTICE VIEW -->
   <main id="practiceView" class="flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     
     <!-- Flashcard Box -->
@@ -209,6 +211,7 @@
 
   </main>
 
+  <!-- QUIZ VIEW (4-CHOICE 2x2 GRID) -->
   <main id="quizView" class="hidden flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
@@ -253,6 +256,7 @@
     </div>
   </main>
 
+  <!-- PARENTAL MATH GATE MODAL -->
   <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
       <div class="text-3xl mb-1">🔐</div>
@@ -269,6 +273,7 @@
     </div>
   </div>
 
+  <!-- PARENT STUDIO MODAL -->
   <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
     <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
@@ -422,6 +427,7 @@
     </div>
   </div>
 
+  <!-- SCRIPT DEFINITIONS -->
   <script>
     const HIGH_RES_VECTORS = {
       BUFFALO: {
@@ -655,6 +661,7 @@
     let pendingAction = null;
     let selectedImageCandidate = '';
     let preferredFemaleVoice = null;
+    let ttsDebounceTimer = null;
 
     function saveData() {
       localStorage.setItem('safari_curriculum_v10', JSON.stringify(appData));
@@ -733,6 +740,7 @@
     }
   </script>
 
+  <!-- AUDIO ENGINE & MICROSOFT EDGE + CHROME TTS RESILIENCE -->
   <script>
     function initAudioContext() {
       try {
@@ -788,17 +796,40 @@
       } catch (err) {}
     }
 
+    // Voice loader that prioritizes Microsoft Edge Natural Voices alongside Apple & Chrome
     function loadFemaleTeacherVoice() {
       if (!('speechSynthesis' in window)) return;
       try {
         const voices = window.speechSynthesis.getVoices();
         if (!voices || voices.length === 0) return;
-        preferredFemaleVoice = voices.find(v => 
-          (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
-          (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || 
-           v.name.includes('Zira') || v.name.includes('Google US English') || v.name.includes('Karen') || v.name.includes('Siri'))
-        ) || voices.find(v => v.lang.startsWith('en'));
-      } catch (err) {}
+
+        // 1. Edge Natural Voices (High-Fidelity)
+        let found = voices.find(v => (v.lang.includes('en-US') || v.lang.includes('en_US')) && 
+          (v.name.includes('Aria') || v.name.includes('Jenny') || v.name.includes('Natural')));
+        
+        // 2. Microsoft Windows Zira / Edge standard
+        if (!found) {
+          found = voices.find(v => (v.lang.includes('en-US') || v.lang.includes('en_US')) && v.name.includes('Zira'));
+        }
+
+        // 3. Apple & Chrome Female Voices
+        if (!found) {
+          found = voices.find(v => 
+            (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
+            (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || 
+             v.name.includes('Google US English') || v.name.includes('Karen') || v.name.includes('Siri'))
+          );
+        }
+
+        // 4. Any English Voice fallback
+        if (!found) {
+          found = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+        }
+
+        preferredFemaleVoice = found || voices[0];
+      } catch (err) {
+        console.warn('Voice loading error:', err);
+      }
     }
 
     if ('speechSynthesis' in window) {
@@ -806,6 +837,7 @@
       loadFemaleTeacherVoice();
     }
 
+    // Edge & Chrome compatible Speech Synthesis with cancel debounce
     function speakTargetWord(customWord = null) {
       initAudioContext();
 
@@ -814,39 +846,66 @@
         return;
       }
 
+      if (ttsDebounceTimer) {
+        clearTimeout(ttsDebounceTimer);
+      }
+
       try {
         window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
+      } catch (e) {}
 
-        const lesson = getActiveLesson();
-        const word = customWord || (lesson.words[currentWordIndex]?.word) || 'Cat';
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.8;
-        utterance.pitch = 1.15;
+      // Critical Edge fix: Debounce 45ms after cancel() to prevent Microsoft Edge internal audio pipeline freeze
+      ttsDebounceTimer = setTimeout(() => {
+        try {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
 
-        loadFemaleTeacherVoice();
-        if (preferredFemaleVoice) {
-          utterance.voice = preferredFemaleVoice;
+          const lesson = getActiveLesson();
+          const word = customWord || (lesson.words[currentWordIndex]?.word) || 'Cat';
+          const utterance = new SpeechSynthesisUtterance(word);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.85;
+          utterance.pitch = 1.1;
+
+          loadFemaleTeacherVoice();
+          if (preferredFemaleVoice) {
+            utterance.voice = preferredFemaleVoice;
+          }
+
+          // Edge & Chrome Keep-Alive resume heartbeat
+          const resumeInterval = setInterval(() => {
+            if (!window.speechSynthesis.speaking) {
+              clearInterval(resumeInterval);
+            } else {
+              window.speechSynthesis.resume();
+            }
+          }, 250);
+
+          utterance.onend = () => clearInterval(resumeInterval);
+          utterance.onerror = (e) => {
+            clearInterval(resumeInterval);
+            console.warn('SpeechSynthesis error on Edge/Chrome:', e);
+            playCelebrationFanfare();
+          };
+
+          window.speechSynthesis.speak(utterance);
+        } catch (err) {
+          console.error('Error speaking word:', err);
         }
-
-        utterance.onerror = (e) => {
-          console.warn('SpeechSynthesis error, fallback to audio cue:', e);
-          playCelebrationFanfare();
-        };
-
-        window.speechSynthesis.speak(utterance);
-      } catch (err) {
-        console.error('Error speaking word:', err);
-      }
+      }, 45);
     }
   </script>
 
+  <!-- SPEECH RECOGNITION (CHROME, EDGE & SAFARI UNIFIED COMPATIBILITY) -->
   <script>
-    const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    // Universal Speech Recognition cross-browser binding (Chrome, Edge msSpeech, Safari)
+    const SpeechClass = window.SpeechRecognition || 
+                        window.webkitSpeechRecognition || 
+                        window.msSpeechRecognition;
 
     function containsVietnameseChars(str) {
-      const vnPattern = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+      const vnPattern = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóọỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
       return vnPattern.test(str);
     }
 
@@ -898,8 +957,8 @@
       initAudioContext();
 
       if (!SpeechClass) {
-        setMascot('Trình duyệt chưa hỗ trợ Web Speech. Bé hãy mở bằng Google Chrome nhé!', '⚠️');
-        alert('Trình duyệt chưa hỗ trợ nhận diện giọng nói Web Speech. Hãy mở trang web bằng ứng dụng Google Chrome!');
+        setMascot('Trình duyệt chưa hỗ trợ Web Speech. Bé hãy mở bằng Google Chrome hoặc Microsoft Edge phiên bản mới nhé!', '⚠️');
+        alert('Trình duyệt của bạn chưa hỗ trợ nhận dạng giọng nói Web Speech. Hãy mở trang web bằng Google Chrome hoặc Microsoft Edge bản mới!');
         return;
       }
 
@@ -914,7 +973,7 @@
       if (isStartingRecognition) return;
       isStartingRecognition = true;
 
-      // Immediately activate UI glow so the child knows the mic is triggered
+      // Visual feedback happens instantly
       setMicActiveUI();
 
       if (recognition) {
@@ -933,7 +992,8 @@
         recognition.lang = 'en-US';
         recognition.continuous = false;
         recognition.interimResults = true;
-        recognition.maxAlternatives = 10;
+        // Edge compatibility fix: maxAlternatives = 5 avoids parameter rejects in Microsoft Edge
+        recognition.maxAlternatives = 5;
 
         let accumulatedHypotheses = [];
         let finalSpokenHandled = false;
@@ -971,9 +1031,13 @@
         recognition.onerror = (e) => {
           isStartingRecognition = false;
           resetMicUI();
+          console.warn('SpeechRecognition error:', e.error);
+
           if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-            setMascot('Ba mẹ vui lòng bấm "Cho phép" để ứng dụng dùng Micro nhé!', '⚠️');
-            alert('Trang web chưa được cấp quyền Micro. Ba mẹ hãy bấm vào biểu tượng cài đặt trên thanh địa chỉ để Bật Micro nhé!');
+            setMascot('Trình duyệt chưa được cấp quyền Micro! Ba mẹ hãy kiểm tra cài đặt nhé!', '⚠️');
+            alert('Quyền Micro bị chặn trên trình duyệt này!\n\nCách xử lý trên Microsoft Edge / Chrome:\n1. Bấm vào biểu tượng Ổ khóa 🔒 (hoặc Cài đặt) ở đầu thanh địa chỉ.\n2. Chọn Quyền Micro (Microphone) -> Chuyển thành "Cho phép" (Allow).\n3. Tải lại trang (F5) để sử dụng bình thường!');
+          } else if (e.error === 'network') {
+            setMascot('Lỗi kết nối giọng nói! Vui lòng kiểm tra kết nối mạng Internet nhé.', '⚠️');
           } else {
             handleSpeechRetry('Chưa nghe rõ', 0);
           }
@@ -993,7 +1057,7 @@
         recognition.start();
 
       } catch (err) {
-        console.error('Recognition start exception:', err);
+        console.error('Edge/Chrome Recognition initiation error:', err);
         resetMicUI();
       }
     }
@@ -1150,6 +1214,7 @@
     }
   </script>
 
+  <!-- CARD RENDERING & QUIZ CONTROLLER -->
   <script>
     function getVisualHTML(wordObj, extraClasses = '') {
       if (!wordObj) return '<span class="text-7xl">🌟</span>';
@@ -1399,6 +1464,7 @@
     }
   </script>
 
+  <!-- PARENT STUDIO, TOPIC & DATA MANAGEMENT -->
   <script>
     function exportDataToJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
