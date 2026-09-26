@@ -775,58 +775,39 @@
     }
 
     function playGentleErrorSound() {
-      const ctx = initAudioContext();
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(280, now);
-      osc.frequency.exponentialRampToValueAtTime(180, now + 0.25);
-      gain.gain.setValueAtTime(0.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.26);
-    }
-
-    function loadFemaleTeacherVoice() {
-      if (!('speechSynthesis' in window)) return;
-      const voices = window.speechSynthesis.getVoices();
-      preferredFemaleVoice = voices.find(v => 
-        (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
-        (v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Zira') || 
-         v.name.includes('Google US English') || v.name.includes('Karen') || v.name.includes('Female'))
-      ) || voices.find(v => v.lang.startsWith('en'));
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = loadFemaleTeacherVoice;
-      loadFemaleTeacherVoice();
-    }
-
-    function speakTargetWord(customWord = null, onEndCallback = null) {
-      initAudioContext();
-      if (!('speechSynthesis' in window)) return;
-      const lesson = getActiveLesson();
-      const word = customWord || lesson.words[currentWordIndex]?.word;
-      if (!word) return;
-
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(word.toLowerCase());
-      utterance.lang = 'en-US';
-      utterance.rate = 0.8;
-      utterance.pitch = 1.2;
-      if (preferredFemaleVoice) utterance.voice = preferredFemaleVoice;
-
-      if (onEndCallback) utterance.onend = onEndCallback;
-      window.speechSynthesis.speak(utterance);
-    }
-  </script>
-
-  <!-- RIGOROUS SPEECH RECOGNITION & ACCURACY MATCHING -->
+  <!-- STRICT SPEECH RECOGNITION & VIETNAMESE INTERCEPTOR -->
   <script>
     const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    // Detect Vietnamese tone marks and accents
+    function containsVietnameseChars(str) {
+      const vnPattern = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+      return vnPattern.test(str);
+    }
+
+    // Common Vietnamese translations and kid phrases for instant interception
+    const COMMON_VN_WORDS = [
+      'su tu', 'sư tử', 'con meo', 'con mèo', 'meo', 'mèo', 'con cho', 'con chó', 'cho', 'chó',
+      'con vit', 'con vịt', 'vit', 'vịt', 'con trau', 'con trâu', 'trau', 'trâu', 'con voi', 'con voi',
+      'voi', 'con khi', 'con khỉ', 'khi', 'khỉ', 'con ho', 'con hổ', 'ho', 'hổ', 'cop', 'cọp',
+      'qua tao', 'quả táo', 'trai tao', 'trái táo', 'tao', 'táo', 'qua chuoi', 'quả chuối', 'trai chuoi',
+      'chuoi', 'chuối', 'xe hoi', 'xe hơi', 'o to', 'ô tô', 'xe oto', 'xe buyt', 'xe buýt', 'xe bus',
+      'khung long', 'khủng long', 'mau sac', 'màu sắc', 'do choi', 'đồ chơi', 'con nai', 'con bo', 'bò'
+    ];
+
+    function isVietnameseSpoken(phrase) {
+      const lower = phrase.toLowerCase().trim();
+      if (containsVietnameseChars(lower)) return true;
+
+      // Check against unaccented Vietnamese keyword list
+      const cleanWords = lower.replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+      for (const w of cleanWords) {
+        if (['con', 'qua', 'trai', 'chuoi', 'trau', 'khi', 'cho', 'meo', 'vit', 'oto'].includes(w)) {
+          return true;
+        }
+      }
+      return COMMON_VN_WORDS.some(v => lower.includes(v));
+    }
 
     function resetMicUI() {
       isListening = false;
@@ -846,7 +827,7 @@
       document.getElementById('micIcon').innerText = '🛑';
       document.getElementById('micStatusText').innerText = 'Đang nghe bé nói...';
       document.getElementById('subHint').innerText = 'Pip đang nghe nè, đọc to lên nhé!';
-      setMascot('Pip đang lắng nghe nè, đọc to rõ lên nha bé ơi! 👂', '👂');
+      setMascot('Pip đang lắng nghe nè, đọc to rõ lên bằng tiếng Anh nha bé ơi! 👂', '👂');
     }
 
     function toggleVoiceInput() {
@@ -872,7 +853,7 @@
 
       try {
         recognition = new SpeechClass();
-        recognition.lang = 'en-US';
+        recognition.lang = 'en-US'; // Strict English engine
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.maxAlternatives = 10;
@@ -948,8 +929,20 @@
       return dp[a.length][b.length];
     }
 
-    // STRICT ACCURACY SPEECH EVALUATION
+    // STRICT ACCURACY SPEECH EVALUATION WITH VIETNAMESE INTERCEPTION
     function evaluateChildSpeech(hypotheses, targetWordObj) {
+      // 1. First intercept any Vietnamese words spoken by the child
+      for (const phrase of hypotheses) {
+        if (isVietnameseSpoken(phrase)) {
+          return {
+            isMatch: false,
+            isVietnamese: true,
+            heardText: phrase,
+            similarity: 0
+          };
+        }
+      }
+
       const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
       const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
       
@@ -986,19 +979,18 @@
           const w = rawWord.replace(/[^a-z]/g, '');
           if (!w) continue;
 
-          // 1. Direct exact match with target or valid alternatives
+          // Exact match with English target or known child alternatives
           if (w === cleanTarget || childAlts.includes(w)) {
-            return { isMatch: true, heardText: w, similarity: 1.0 };
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 1.0 };
           }
 
-          // 2. Exact match after phonetic normalization
+          // Phonetically normalized exact match
           const normW = normalizePhonetics(w);
           if (normW === normTarget) {
-            // Strict mode requires 90%, normalize gets 95%
-            return { isMatch: true, heardText: w, similarity: 0.95 };
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 0.95 };
           }
 
-          // 3. Normalized Levenshtein distance check
+          // Normalized Levenshtein distance check
           const dist = calculateLevenshtein(normW, normTarget);
           const maxLen = Math.max(normW.length, normTarget.length);
           const sim = maxLen > 0 ? (1 - dist / maxLen) : 0;
@@ -1008,14 +1000,13 @@
             bestTranscript = w;
           }
 
-          // Must strictly satisfy the chosen strictness threshold
           if (sim >= requiredThreshold) {
-            return { isMatch: true, heardText: w, similarity: sim };
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: sim };
           }
         }
       }
 
-      return { isMatch: false, heardText: bestTranscript, similarity: bestSimilarity };
+      return { isMatch: false, isVietnamese: false, heardText: bestTranscript, similarity: bestSimilarity };
     }
 
     function processSpeechEvaluation(hypotheses) {
@@ -1027,15 +1018,29 @@
       const matchBadge = document.getElementById('matchPercentBadge');
       
       document.getElementById('liveHeardTranscript').innerText = `"${evaluation.heardText}"`;
-      matchBadge.innerText = `Độ khớp: ${simPct}%`;
 
-      if (evaluation.isMatch) {
+      if (evaluation.isVietnamese) {
+        matchBadge.className = 'text-amber-600 font-bold';
+        matchBadge.innerText = 'Phát hiện Tiếng Việt (0%)';
+        handleVietnameseAlert(evaluation.heardText, targetObj.word);
+      } else if (evaluation.isMatch) {
         matchBadge.className = 'text-emerald-600 font-bold';
+        matchBadge.innerText = `Độ khớp: ${simPct}% (ĐÚNG)`;
         celebrateSuccess(evaluation.heardText, simPct);
       } else {
         matchBadge.className = 'text-rose-600 font-bold';
+        matchBadge.innerText = `Độ khớp: ${simPct}% (CHƯA ĐÚNG)`;
         handleSpeechRetry(evaluation.heardText, simPct);
       }
+    }
+
+    function handleVietnameseAlert(heardWord, targetWord) {
+      playGentleErrorSound();
+      attemptsCount++;
+      renderAttemptDots();
+
+      setMascot(`Bé ơi, đó là tiếng Việt ("${heardWord}") rồi! Bé hãy đọc bằng tiếng Anh: "${targetWord}" nhé! 🇬🇧`, '⚠️');
+      setTimeout(() => speakTargetWord(), 1200);
     }
 
     function celebrateSuccess(spokenWord, matchPct) {
@@ -1062,17 +1067,12 @@
       attemptsCount++;
       renderAttemptDots();
 
-      if (attemptsCount >= 3) {
-        setMascot('BÉ ĐÃ RẤT NỖ LỰC! Pip tặng bé 1 sao chăm chỉ nha! 🌟', '🎉');
-        playCelebrationFanfare();
-        setTimeout(() => celebrateSuccess(heardWord, matchPct), 900);
-        return;
-      }
-
       playGentleErrorSound();
       const lesson = getActiveLesson();
       const targetWord = lesson.words[currentWordIndex].word;
-      setMascot(`Chưa chính xác (Độ khớp: ${matchPct}%). Pip nghe là "${heardWord}". Bé bấm "Nghe cô đọc" từ "${targetWord}" rồi đọc lại nha!`, '🥰');
+
+      // STRICT PEDAGOGY: Never auto-pass on wrong answers! Keep guiding the child.
+      setMascot(`Chưa chính xác (Độ khớp: ${matchPct}%). Pip nghe là "${heardWord}". Bé nghe cô đọc từ "${targetWord}" rồi thử lại nhé!`, '🥰');
       setTimeout(() => speakTargetWord(), 1000);
     }
   </script>
