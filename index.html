@@ -31,7 +31,7 @@
     }
     @keyframes recordGlow {
       from { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.4), 0 0 0 14px rgba(239, 68, 68, 0.2); }
-      to { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0.6), 0 0 0 24px rgba(239, 68, 68, 0.15); }
+      to { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0.7), 0 0 0 24px rgba(239, 68, 68, 0.25); }
     }
     .card-shadow {
       box-shadow: 0 12px 24px -6px rgba(245, 158, 11, 0.22), 0 6px 10px -4px rgba(245, 158, 11, 0.12);
@@ -50,7 +50,6 @@
 </head>
 <body class="h-[100dvh] w-screen overflow-hidden flex flex-col text-slate-800 select-none">
 
-  <!-- TWO-TIER MOBILE RESPONSIVE HEADER -->
   <header class="w-full px-3 py-1.5 flex flex-col gap-1.5 border-b border-amber-200/80 bg-white/95 backdrop-blur-md shrink-0 z-20 shadow-sm">
     <!-- Row 1: Brand, 3-Level Quick Switcher, Mode, Stars, Settings -->
     <div class="w-full flex items-center justify-between gap-1">
@@ -117,7 +116,6 @@
     </div>
   </header>
 
-  <!-- MAIN PRACTICE VIEW -->
   <main id="practiceView" class="flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     
     <!-- Flashcard Box -->
@@ -133,7 +131,7 @@
           <span id="cardIndexBadge" class="text-[11px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
             TỪ 1 / 1
           </span>
-          <div class="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200" title="Bé nói 3 lần Pip sẽ tự động tặng sao cổ vũ!">
+          <div class="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200" title="Bé đọc đúng để nhận sao!">
             <span class="text-[10px] text-amber-800 font-bold">Lần nói:</span>
             <div id="attemptDots" class="flex gap-1">
               <span class="w-2.5 h-2.5 rounded-full border border-amber-400 bg-transparent"></span>
@@ -172,7 +170,7 @@
           <span id="targetIpa" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
             /kæt/
           </span>
-          <button onclick="speakTargetWord()" class="flex items-center gap-1 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow transition-all">
+          <button id="listenTeacherBtn" onclick="speakTargetWord()" class="flex items-center gap-1 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow transition-all">
             <span>👩‍🏫</span>
             <span>Nghe cô đọc</span>
           </button>
@@ -211,7 +209,6 @@
 
   </main>
 
-  <!-- QUIZ VIEW (ĐỐ VUI 4 HÌNH 2x2) -->
   <main id="quizView" class="hidden flex-1 w-full max-w-md mx-auto px-3 py-1.5 flex flex-col items-center justify-between min-h-0">
     <div class="w-full bg-white rounded-3xl border-4 border-sky-300 card-shadow p-3 flex flex-col items-center justify-between flex-1 min-h-0 relative">
       
@@ -256,7 +253,6 @@
     </div>
   </main>
 
-  <!-- PARENT GATE MODAL -->
   <div id="parentGateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 font-ui">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center border-4 border-amber-400 shadow-2xl">
       <div class="text-3xl mb-1">🔐</div>
@@ -273,7 +269,6 @@
     </div>
   </div>
 
-  <!-- PARENT STUDIO MODAL -->
   <div id="parentStudioModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 font-ui">
     <div class="bg-white rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92vh] flex flex-col border-4 border-indigo-300 shadow-2xl">
       
@@ -289,7 +284,7 @@
 
       <div class="flex-1 overflow-y-auto pr-1 mt-3 space-y-3">
         
-        <!-- STRICTNESS / ACCURACY CONTROL -->
+        <!-- Strictness Selector -->
         <div class="bg-rose-50/80 p-3 rounded-2xl border-2 border-rose-300 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-rose-950 flex items-center gap-1.5">
@@ -313,12 +308,9 @@
               <span class="block text-[9px] font-normal text-slate-500">Khớp >= 90%</span>
             </button>
           </div>
-          <p class="text-[10px] text-rose-800 font-semibold leading-relaxed">
-            * <b>Chấm điểm tuyệt đối bằng âm ngữ</b>. Nếu cố tình đọc sai (ví dụ từ BUFFALO mà đọc "banana", "cat" hay ê a), hệ thống sẽ từ chối ngay.
-          </p>
         </div>
 
-        <!-- JSON FILE BACKUP & IMPORT BOX -->
+        <!-- JSON File Backup & Import Box -->
         <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
           <p class="text-xs font-black text-amber-900 mb-2">💾 Sao lưu & Đồng bộ sang Điện thoại:</p>
           <div class="grid grid-cols-2 gap-2">
@@ -332,7 +324,7 @@
           </div>
         </div>
 
-        <!-- THEME / CATEGORY MANAGER -->
+        <!-- Theme / Category Manager -->
         <div class="bg-emerald-50/90 p-3 rounded-2xl border-2 border-emerald-300 space-y-2.5">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-emerald-950 flex items-center gap-1.5">
@@ -355,7 +347,7 @@
           </div>
         </div>
 
-        <!-- LESSON MANAGER -->
+        <!-- Lesson Manager -->
         <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-sky-900 flex items-center gap-1">
@@ -374,7 +366,7 @@
           </div>
         </div>
 
-        <!-- ADD WORD FORM -->
+        <!-- Add Word Form -->
         <div class="bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 space-y-2.5">
           <p class="text-xs font-black text-indigo-900 flex items-center justify-between">
             <span>➕ Thêm từ mới vào bài đang chọn:</span>
@@ -407,7 +399,7 @@
           </button>
         </div>
 
-        <!-- CURRENT LESSON WORD LIST -->
+        <!-- Current Lesson Word List -->
         <div class="bg-white p-3 rounded-2xl border border-slate-200">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-black text-slate-700">Danh sách từ trong bài học:</span>
@@ -430,7 +422,6 @@
     </div>
   </div>
 
-  <!-- EMBEDDED HIGH-RES ASSETS & DEFAULT CURRICULUM -->
   <script>
     const HIGH_RES_VECTORS = {
       BUFFALO: {
@@ -650,6 +641,7 @@
     let totalStars = parseInt(localStorage.getItem('safari_stars') || '0');
     let attemptsCount = 0;
     let isListening = false;
+    let isStartingRecognition = false;
     let currentMode = 'practice';
     
     // Strictness Level: 'easy' (0.60), 'medium' (0.75), 'strict' (0.90)
@@ -675,12 +667,10 @@
     }
 
     function updateStrictnessUI() {
-      // Header Buttons
       const topEasy = document.getElementById('topStrictEasy');
       const topMed = document.getElementById('topStrictMed');
       const topHigh = document.getElementById('topStrictHigh');
 
-      // Modal Buttons & Badges
       const modalEasy = document.getElementById('modalBtnStrictEasy');
       const modalMed = document.getElementById('modalBtnStrictMed');
       const modalHigh = document.getElementById('modalBtnStrictHigh');
@@ -716,7 +706,6 @@
           cardTag.className = 'text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300';
         }
       } else {
-        // Medium default
         if (topMed) topMed.className = 'px-2 py-0.5 rounded-lg text-[10px] sm:text-xs font-black transition-all bg-amber-400 text-amber-950 shadow-sm';
         if (modalMed) modalMed.className = 'py-2 px-1 rounded-xl border-2 text-center text-xs font-black transition-all bg-amber-400 border-amber-500 text-amber-950 shadow-sm';
         if (modalBadge) {
@@ -744,48 +733,123 @@
     }
   </script>
 
-  <!-- WEB AUDIO EFFECTS & FEMALE TTS -->
   <script>
     function initAudioContext() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+      } catch (e) {
+        console.warn('AudioContext init error:', e);
       }
       return audioContext;
     }
 
     function playCelebrationFanfare() {
       const ctx = initAudioContext();
-      const now = ctx.currentTime;
-      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-        gain.gain.setValueAtTime(0.25, now + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.32);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + idx * 0.08);
-        osc.stop(now + idx * 0.08 + 0.34);
-      });
+      if (!ctx) return;
+      try {
+        const now = ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.25, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.32);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.34);
+        });
+      } catch (err) {}
     }
 
     function playGentleErrorSound() {
-  <!-- STRICT SPEECH RECOGNITION & VIETNAMESE INTERCEPTOR -->
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      try {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.28);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      } catch (err) {}
+    }
+
+    function loadFemaleTeacherVoice() {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices || voices.length === 0) return;
+        preferredFemaleVoice = voices.find(v => 
+          (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
+          (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || 
+           v.name.includes('Zira') || v.name.includes('Google US English') || v.name.includes('Karen') || v.name.includes('Siri'))
+        ) || voices.find(v => v.lang.startsWith('en'));
+      } catch (err) {}
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadFemaleTeacherVoice;
+      loadFemaleTeacherVoice();
+    }
+
+    function speakTargetWord(customWord = null) {
+      initAudioContext();
+
+      if (!('speechSynthesis' in window)) {
+        playCelebrationFanfare();
+        return;
+      }
+
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+
+        const lesson = getActiveLesson();
+        const word = customWord || (lesson.words[currentWordIndex]?.word) || 'Cat';
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        utterance.pitch = 1.15;
+
+        loadFemaleTeacherVoice();
+        if (preferredFemaleVoice) {
+          utterance.voice = preferredFemaleVoice;
+        }
+
+        utterance.onerror = (e) => {
+          console.warn('SpeechSynthesis error, fallback to audio cue:', e);
+          playCelebrationFanfare();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.error('Error speaking word:', err);
+      }
+    }
+  </script>
+
   <script>
     const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    // Detect Vietnamese tone marks and accents
     function containsVietnameseChars(str) {
       const vnPattern = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
       return vnPattern.test(str);
     }
 
-    // Common Vietnamese translations and kid phrases for instant interception
     const COMMON_VN_WORDS = [
       'su tu', 'sư tử', 'con meo', 'con mèo', 'meo', 'mèo', 'con cho', 'con chó', 'cho', 'chó',
       'con vit', 'con vịt', 'vit', 'vịt', 'con trau', 'con trâu', 'trau', 'trâu', 'con voi', 'con voi',
@@ -799,7 +863,6 @@
       const lower = phrase.toLowerCase().trim();
       if (containsVietnameseChars(lower)) return true;
 
-      // Check against unaccented Vietnamese keyword list
       const cleanWords = lower.replace(/[^a-z0-9\s]/g, '').split(/\s+/);
       for (const w of cleanWords) {
         if (['con', 'qua', 'trai', 'chuoi', 'trau', 'khi', 'cho', 'meo', 'vit', 'oto'].includes(w)) {
@@ -811,6 +874,7 @@
 
     function resetMicUI() {
       isListening = false;
+      isStartingRecognition = false;
       const btn = document.getElementById('recordBtn');
       btn.classList.remove('mic-recording-pulse', 'from-red-600', 'to-rose-600');
       btn.classList.add('from-rose-500', 'to-pink-500');
@@ -834,8 +898,8 @@
       initAudioContext();
 
       if (!SpeechClass) {
-        setMascot('Trình duyệt chưa hỗ trợ Micro. Ba mẹ hãy mở trên Chrome nhé!', '⚠️');
-        alert('Trình duyệt của bạn chưa hỗ trợ nhận diện giọng nói Web Speech. Hãy mở bằng ứng dụng Google Chrome!');
+        setMascot('Trình duyệt chưa hỗ trợ Web Speech. Bé hãy mở bằng Google Chrome nhé!', '⚠️');
+        alert('Trình duyệt chưa hỗ trợ nhận diện giọng nói Web Speech. Hãy mở trang web bằng ứng dụng Google Chrome!');
         return;
       }
 
@@ -847,13 +911,26 @@
         return;
       }
 
+      if (isStartingRecognition) return;
+      isStartingRecognition = true;
+
+      // Immediately activate UI glow so the child knows the mic is triggered
+      setMicActiveUI();
+
       if (recognition) {
-        try { recognition.abort(); } catch (e) {}
+        try {
+          recognition.onstart = null;
+          recognition.onend = null;
+          recognition.onerror = null;
+          recognition.onresult = null;
+          recognition.abort();
+        } catch (e) {}
+        recognition = null;
       }
 
       try {
         recognition = new SpeechClass();
-        recognition.lang = 'en-US'; // Strict English engine
+        recognition.lang = 'en-US';
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.maxAlternatives = 10;
@@ -862,6 +939,7 @@
         let finalSpokenHandled = false;
 
         recognition.onstart = () => {
+          isStartingRecognition = false;
           setMicActiveUI();
         };
 
@@ -891,16 +969,18 @@
         };
 
         recognition.onerror = (e) => {
+          isStartingRecognition = false;
           resetMicUI();
           if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
             setMascot('Ba mẹ vui lòng bấm "Cho phép" để ứng dụng dùng Micro nhé!', '⚠️');
-            alert('Trang web chưa được cấp quyền dùng Micro. Ba mẹ bấm vào biểu tượng cài đặt bên cạnh link web để Bật Micro nhé!');
+            alert('Trang web chưa được cấp quyền Micro. Ba mẹ hãy bấm vào biểu tượng cài đặt trên thanh địa chỉ để Bật Micro nhé!');
           } else {
             handleSpeechRetry('Chưa nghe rõ', 0);
           }
         };
 
         recognition.onend = () => {
+          isStartingRecognition = false;
           resetMicUI();
           if (!finalSpokenHandled && accumulatedHypotheses.length > 0) {
             finalSpokenHandled = true;
@@ -913,6 +993,7 @@
         recognition.start();
 
       } catch (err) {
+        console.error('Recognition start exception:', err);
         resetMicUI();
       }
     }
@@ -929,9 +1010,7 @@
       return dp[a.length][b.length];
     }
 
-    // STRICT ACCURACY SPEECH EVALUATION WITH VIETNAMESE INTERCEPTION
     function evaluateChildSpeech(hypotheses, targetWordObj) {
-      // 1. First intercept any Vietnamese words spoken by the child
       for (const phrase of hypotheses) {
         if (isVietnameseSpoken(phrase)) {
           return {
@@ -951,8 +1030,6 @@
         childAlts.push(...dictObj.alts);
       }
 
-      // Thresholds based on Strictness Setting
-      // 'easy' = 0.60 | 'medium' = 0.75 | 'strict' = 0.90
       let requiredThreshold = 0.75;
       if (strictnessLevel === 'easy') requiredThreshold = 0.60;
       if (strictnessLevel === 'strict') requiredThreshold = 0.90;
@@ -979,18 +1056,15 @@
           const w = rawWord.replace(/[^a-z]/g, '');
           if (!w) continue;
 
-          // Exact match with English target or known child alternatives
           if (w === cleanTarget || childAlts.includes(w)) {
             return { isMatch: true, isVietnamese: false, heardText: w, similarity: 1.0 };
           }
 
-          // Phonetically normalized exact match
           const normW = normalizePhonetics(w);
           if (normW === normTarget) {
             return { isMatch: true, isVietnamese: false, heardText: w, similarity: 0.95 };
           }
 
-          // Normalized Levenshtein distance check
           const dist = calculateLevenshtein(normW, normTarget);
           const maxLen = Math.max(normW.length, normTarget.length);
           const sim = maxLen > 0 ? (1 - dist / maxLen) : 0;
@@ -1071,13 +1145,11 @@
       const lesson = getActiveLesson();
       const targetWord = lesson.words[currentWordIndex].word;
 
-      // STRICT PEDAGOGY: Never auto-pass on wrong answers! Keep guiding the child.
       setMascot(`Chưa chính xác (Độ khớp: ${matchPct}%). Pip nghe là "${heardWord}". Bé nghe cô đọc từ "${targetWord}" rồi thử lại nhé!`, '🥰');
       setTimeout(() => speakTargetWord(), 1000);
     }
   </script>
 
-  <!-- FLASHCARD RENDERING & TOPIC/LESSON CONTROLS -->
   <script>
     function getVisualHTML(wordObj, extraClasses = '') {
       if (!wordObj) return '<span class="text-7xl">🌟</span>';
@@ -1327,7 +1399,6 @@
     }
   </script>
 
-  <!-- JSON IMPORT/EXPORT & PARENT STUDIO LOGIC -->
   <script>
     function exportDataToJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
@@ -1370,7 +1441,6 @@
       reader.readAsText(file);
     }
 
-    // THEME / CATEGORY CRUD
     function renderStudioCategoriesList() {
       const container = document.getElementById('studioCategoriesList');
       if (!container) return;
@@ -1467,7 +1537,6 @@
       renderCurrentCard();
     }
 
-    // LESSON CRUD
     function handleCreateNewLesson() {
       const name = prompt('Nhập tên bài học mới (ví dụ: Bài 2: Rừng nhiệt đới):');
       if (!name || !name.trim()) return;
@@ -1520,7 +1589,6 @@
       renderCurrentCard();
     }
 
-    // WORD CRUD & SEARCH
     async function searchWordImages(queryWord) {
       const cleanWord = queryWord.trim().toLowerCase();
       const grid = document.getElementById('imageCandidateGrid');
