@@ -379,15 +379,15 @@
           </p>
 
           <div class="flex gap-2">
-            <input id="newWordInput" type="text" placeholder="Từ tiếng Anh (vd: BUFFALO)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
+            <input id="newWordInput" type="text" placeholder="Từ tiếng Anh (vd: FOX, BEAR)" class="flex-1 px-3 py-1.5 rounded-xl border-2 border-indigo-200 text-sm uppercase font-black focus:outline-none focus:border-indigo-500" />
             <button onclick="searchWordImagesTrigger()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow shrink-0 active:scale-95">
               <span>🔍</span> <span>Tìm ảnh</span>
             </button>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <input id="newIpaInput" type="text" placeholder="Phiên âm (vd: /ˈbʌf.ə.loʊ/)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
-            <input id="newAltsInput" type="text" placeholder="Âm ngọng chấp nhận (vd: bafeow, bafalo)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newIpaInput" type="text" placeholder="Phiên âm (vd: /fɑːks/)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
+            <input id="newAltsInput" type="text" placeholder="Âm ngọng chấp nhận (vd: focks, boks)" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-bold" />
           </div>
 
           <div>
@@ -430,10 +430,46 @@
   <!-- SCRIPT DEFINITIONS -->
   <script>
     const HIGH_RES_VECTORS = {
+      FOX: {
+        ipa: '/fɑːks/',
+        emoji: '🦊',
+        alts: ['fox', 'focks', 'focs', 'fux', 'foks', 'box', 'fax', 'folks', 'pocs', 'vox', 'fark', 'fog'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <polygon points="50,40 75,100 35,90" fill="#EA580C" />
+          <polygon points="150,40 125,100 165,90" fill="#EA580C" />
+          <polygon points="54,48 70,95 42,88" fill="#FEE2E2" />
+          <polygon points="146,48 130,95 158,88" fill="#FEE2E2" />
+          <ellipse cx="100" cy="115" rx="60" ry="50" fill="#F97316"/>
+          <path d="M 60 110 C 65 145 95 160 100 160 C 105 160 135 145 140 110 C 120 125 80 125 60 110 Z" fill="#FFF7ED"/>
+          <circle cx="75" cy="100" r="7" fill="#1E293B"/>
+          <circle cx="125" cy="100" r="7" fill="#1E293B"/>
+          <circle cx="77" cy="98" r="2.5" fill="#FFFFFF"/>
+          <circle cx="127" cy="98" r="2.5" fill="#FFFFFF"/>
+          <ellipse cx="100" cy="142" rx="9" ry="6" fill="#0F172A"/>
+        </svg>`
+      },
+      BEAR: {
+        ipa: '/ber/',
+        emoji: '🐻',
+        alts: ['bear', 'bare', 'bair', 'beer', 'ber', 'pair', 'fair', 'care', 'dare', 'tare', 'bay', 'bell', 'baer'],
+        svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
+          <circle cx="55" cy="65" r="24" fill="#78350F"/>
+          <circle cx="55" cy="65" r="14" fill="#B45309"/>
+          <circle cx="145" cy="65" r="24" fill="#78350F"/>
+          <circle cx="145" cy="65" r="14" fill="#B45309"/>
+          <circle cx="100" cy="115" r="64" fill="#78350F"/>
+          <ellipse cx="100" cy="132" rx="34" ry="24" fill="#FDE68A"/>
+          <circle cx="78" cy="105" r="7" fill="#1E293B"/>
+          <circle cx="122" cy="105" r="7" fill="#1E293B"/>
+          <circle cx="80" cy="103" r="2.5" fill="#FFFFFF"/>
+          <circle cx="124" cy="103" r="2.5" fill="#FFFFFF"/>
+          <ellipse cx="100" cy="126" rx="10" ry="7" fill="#1E293B"/>
+        </svg>`
+      },
       BUFFALO: {
         ipa: '/ˈbʌf.ə.loʊ/',
         emoji: '🐃',
-        alts: ['buffalo', 'buffalow', 'bufalo', 'bafalo', 'buffallo'],
+        alts: ['buffalo', 'buffalow', 'bufalo', 'bafalo', 'buffallo', 'baflow', 'buff'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <path d="M 40 70 C 20 40 60 20 80 50 C 70 70 50 70 40 70 Z" fill="#334155"/>
           <path d="M 160 70 C 180 40 140 20 120 50 C 130 70 150 70 160 70 Z" fill="#334155"/>
@@ -450,7 +486,7 @@
       ELEPHANT: {
         ipa: '/ˈel.ə.fənt/',
         emoji: '🐘',
-        alts: ['elephant', 'elefant', 'elephunt', 'elepant', 'eliphan', 'lephant'],
+        alts: ['elephant', 'elefant', 'elephunt', 'elepant', 'eliphan', 'lephant', 'efan', 'pant'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="115" cy="115" rx="65" ry="52" fill="#94A3B8"/>
           <ellipse cx="70" cy="100" rx="42" ry="46" fill="#94A3B8"/>
@@ -466,7 +502,7 @@
       MONKEY: {
         ipa: '/ˈmʌŋ.ki/',
         emoji: '🐵',
-        alts: ['monkey', 'monki', 'manki', 'munky'],
+        alts: ['monkey', 'monki', 'manki', 'munky', 'monk', 'maky'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="105" r="56" fill="#8D4925"/>
           <circle cx="48" cy="95" r="22" fill="#8D4925"/>
@@ -474,8 +510,6 @@
           <circle cx="152" cy="95" r="22" fill="#8D4925"/>
           <circle cx="152" cy="95" r="14" fill="#E0A96D"/>
           <ellipse cx="100" cy="118" rx="42" ry="32" fill="#E0A96D"/>
-          <ellipse cx="80" cy="95" rx="16" ry="18" fill="#E0A96D"/>
-          <ellipse cx="120" cy="95" rx="16" ry="18" fill="#E0A96D"/>
           <circle cx="82" cy="95" r="6" fill="#1E293B"/>
           <circle cx="118" cy="95" r="6" fill="#1E293B"/>
           <path d="M 88 128 Q 100 138 112 128" stroke="#8D4925" stroke-width="3" stroke-linecap="round" fill="none"/>
@@ -484,7 +518,7 @@
       TIGER: {
         ipa: '/ˈtaɪ.ɡər/',
         emoji: '🐯',
-        alts: ['tiger', 'tyger', 'tiga', 'taiga'],
+        alts: ['tiger', 'tyger', 'tiga', 'taiga', 'tigo'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="105" r="68" fill="#FB923C"/>
           <polygon points="50,60 60,25 95,50" fill="#EA580C"/>
@@ -497,7 +531,7 @@
       LION: {
         ipa: '/ˈlaɪ.ən/',
         emoji: '🦁',
-        alts: ['lion', 'lyon', 'laion'],
+        alts: ['lion', 'lyon', 'laion', 'line'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="100" r="78" fill="#EA580C"/>
           <circle cx="100" cy="100" r="56" fill="#FDE047"/>
@@ -508,7 +542,7 @@
       CAT: {
         ipa: '/kæt/',
         emoji: '🐱',
-        alts: ['cat', 'kat', 'katt'],
+        alts: ['cat', 'kat', 'katt', 'cap', 'cut', 'ket', 'gat'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="110" r="65" fill="#FBBF24"/>
           <polygon points="50,70 60,25 98,60" fill="#F59E0B"/>
@@ -521,7 +555,7 @@
       DOG: {
         ipa: '/dɒɡ/',
         emoji: '🐶',
-        alts: ['dog', 'dawg', 'dogg'],
+        alts: ['dog', 'dawg', 'dogg', 'dock', 'doc', 'dark', 'duck'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <ellipse cx="100" cy="110" rx="70" ry="60" fill="#D97706"/>
           <ellipse cx="45" cy="90" rx="18" ry="36" fill="#B45309"/>
@@ -533,7 +567,7 @@
       DUCK: {
         ipa: '/dʌk/',
         emoji: '🦆',
-        alts: ['duck', 'dak'],
+        alts: ['duck', 'dak', 'dock', 'dack', 'dog'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="100" cy="90" r="56" fill="#FACC15"/>
           <circle cx="80" cy="80" r="8" fill="#1E293B"/>
@@ -543,7 +577,7 @@
       APPLE: {
         ipa: '/ˈæp.əl/',
         emoji: '🍎',
-        alts: ['apple', 'aple', 'appl'],
+        alts: ['apple', 'aple', 'appl', 'apo'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <circle cx="84" cy="110" r="52" fill="#EF4444"/>
           <circle cx="116" cy="110" r="52" fill="#DC2626"/>
@@ -553,7 +587,7 @@
       BANANA: {
         ipa: '/bəˈnɑː.nə/',
         emoji: '🍌',
-        alts: ['banana', 'banan'],
+        alts: ['banana', 'banan', 'nana'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <path d="M 50 150 C 40 80 100 40 150 50 C 110 70 80 110 90 160 Z" fill="#FACC15" stroke="#EAB308" stroke-width="4"/>
         </svg>`
@@ -561,7 +595,7 @@
       CAR: {
         ipa: '/kɑːr/',
         emoji: '🚗',
-        alts: ['car', 'carr', 'kaar'],
+        alts: ['car', 'carr', 'kaar', 'cat', 'card', 'cal'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="40" y="90" width="120" height="44" rx="12" fill="#3B82F6"/>
           <circle cx="70" cy="134" r="16" fill="#1E293B"/>
@@ -571,7 +605,7 @@
       BUS: {
         ipa: '/bʌs/',
         emoji: '🚌',
-        alts: ['bus', 'buss'],
+        alts: ['bus', 'buss', 'bass', 'bath', 'buzz', 'bud'],
         svg: `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[300px] drop-shadow-md">
           <rect x="30" y="60" width="140" height="75" rx="16" fill="#FBBF24"/>
           <circle cx="65" cy="135" r="16" fill="#1E293B"/>
@@ -588,17 +622,19 @@
         lessons: [
           {
             id: 'animals_l1',
-            title: 'Bài 1: Thú nuôi',
+            title: 'Bài 1: Thú cưng',
             words: [
-              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['cat', 'kat'] },
-              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dog', 'dawg'] },
-              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['duck', 'dak'] }
+              { word: 'CAT', ipa: '/kæt/', img: '', alts: ['cat', 'kat', 'cap'] },
+              { word: 'DOG', ipa: '/dɒɡ/', img: '', alts: ['dog', 'dawg', 'dock'] },
+              { word: 'DUCK', ipa: '/dʌk/', img: '', alts: ['duck', 'dak', 'dock'] }
             ]
           },
           {
             id: 'animals_l2',
-            title: 'Bài 2: Rừng xanh',
+            title: 'Bài 2: Thú rừng',
             words: [
+              { word: 'FOX', ipa: '/fɑːks/', img: '', alts: ['fox', 'focks', 'focs', 'box', 'fax', 'folks', 'pocs', 'vox'] },
+              { word: 'BEAR', ipa: '/ber/', img: '', alts: ['bear', 'bare', 'bair', 'beer', 'ber', 'pair', 'fair', 'care', 'dare'] },
               { word: 'BUFFALO', ipa: '/ˈbʌf.ə.loʊ/', img: '', alts: ['buffalo', 'buffalow'] },
               { word: 'ELEPHANT', ipa: '/ˈel.ə.fənt/', img: '', alts: ['elephant', 'elefant'] },
               { word: 'MONKEY', ipa: '/ˈmʌŋ.ki/', img: '', alts: ['monkey', 'monki'] },
@@ -796,23 +832,19 @@
       } catch (err) {}
     }
 
-    // Voice loader that prioritizes Microsoft Edge Natural Voices alongside Apple & Chrome
     function loadFemaleTeacherVoice() {
       if (!('speechSynthesis' in window)) return;
       try {
         const voices = window.speechSynthesis.getVoices();
         if (!voices || voices.length === 0) return;
 
-        // 1. Edge Natural Voices (High-Fidelity)
         let found = voices.find(v => (v.lang.includes('en-US') || v.lang.includes('en_US')) && 
           (v.name.includes('Aria') || v.name.includes('Jenny') || v.name.includes('Natural')));
         
-        // 2. Microsoft Windows Zira / Edge standard
         if (!found) {
           found = voices.find(v => (v.lang.includes('en-US') || v.lang.includes('en_US')) && v.name.includes('Zira'));
         }
 
-        // 3. Apple & Chrome Female Voices
         if (!found) {
           found = voices.find(v => 
             (v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en-GB')) &&
@@ -821,7 +853,6 @@
           );
         }
 
-        // 4. Any English Voice fallback
         if (!found) {
           found = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
         }
@@ -837,7 +868,6 @@
       loadFemaleTeacherVoice();
     }
 
-    // Edge & Chrome compatible Speech Synthesis with cancel debounce
     function speakTargetWord(customWord = null) {
       initAudioContext();
 
@@ -854,7 +884,6 @@
         window.speechSynthesis.cancel();
       } catch (e) {}
 
-      // Critical Edge fix: Debounce 45ms after cancel() to prevent Microsoft Edge internal audio pipeline freeze
       ttsDebounceTimer = setTimeout(() => {
         try {
           if (window.speechSynthesis.paused) {
@@ -873,7 +902,6 @@
             utterance.voice = preferredFemaleVoice;
           }
 
-          // Edge & Chrome Keep-Alive resume heartbeat
           const resumeInterval = setInterval(() => {
             if (!window.speechSynthesis.speaking) {
               clearInterval(resumeInterval);
@@ -897,9 +925,9 @@
     }
   </script>
 
-  <!-- SPEECH RECOGNITION (CHROME, EDGE & SAFARI UNIFIED COMPATIBILITY) -->
+  <!-- PHONETIC METAPHONE ENGINE & ACOUSTIC HOMOPHONE MATRIX -->
   <script>
-    // Universal Speech Recognition cross-browser binding (Chrome, Edge msSpeech, Safari)
+    // Universal Speech Recognition cross-browser binding
     const SpeechClass = window.SpeechRecognition || 
                         window.webkitSpeechRecognition || 
                         window.msSpeechRecognition;
@@ -913,9 +941,9 @@
       'su tu', 'sư tử', 'con meo', 'con mèo', 'meo', 'mèo', 'con cho', 'con chó', 'cho', 'chó',
       'con vit', 'con vịt', 'vit', 'vịt', 'con trau', 'con trâu', 'trau', 'trâu', 'con voi', 'con voi',
       'voi', 'con khi', 'con khỉ', 'khi', 'khỉ', 'con ho', 'con hổ', 'ho', 'hổ', 'cop', 'cọp',
-      'qua tao', 'quả táo', 'trai tao', 'trái táo', 'tao', 'táo', 'qua chuoi', 'quả chuối', 'trai chuoi',
-      'chuoi', 'chuối', 'xe hoi', 'xe hơi', 'o to', 'ô tô', 'xe oto', 'xe buyt', 'xe buýt', 'xe bus',
-      'khung long', 'khủng long', 'mau sac', 'màu sắc', 'do choi', 'đồ chơi', 'con nai', 'con bo', 'bò'
+      'con cao', 'con cáo', 'cáo', 'con gau', 'con gấu', 'gấu', 'gau', 'qua tao', 'quả táo', 'trai tao',
+      'trái táo', 'tao', 'táo', 'qua chuoi', 'quả chuối', 'trai chuoi', 'chuoi', 'chuối', 'xe hoi',
+      'xe hơi', 'o to', 'ô tô', 'xe oto', 'xe buyt', 'xe buýt', 'xe bus', 'khung long', 'khủng long'
     ];
 
     function isVietnameseSpoken(phrase) {
@@ -924,11 +952,164 @@
 
       const cleanWords = lower.replace(/[^a-z0-9\s]/g, '').split(/\s+/);
       for (const w of cleanWords) {
-        if (['con', 'qua', 'trai', 'chuoi', 'trau', 'khi', 'cho', 'meo', 'vit', 'oto'].includes(w)) {
+        if (['con', 'qua', 'trai', 'chuoi', 'trau', 'khi', 'cho', 'meo', 'vit', 'oto', 'cao', 'gau'].includes(w)) {
           return true;
         }
       }
       return COMMON_VN_WORDS.some(v => lower.includes(v));
+    }
+
+    // Simplified Child Phonetic Encoder (Metaphone-inspired for kindergarten speech)
+    function encodeChildPhonetics(str) {
+      if (!str) return '';
+      let s = str.toLowerCase().replace(/[^a-z]/g, '');
+      if (!s) return '';
+
+      // Standardize initial dipthongs & common clusters
+      s = s.replace(/^kn/, 'n')
+           .replace(/^wr/, 'r')
+           .replace(/^wh/, 'w')
+           .replace(/^x/, 's');
+
+      // Vowel reduction: keep first vowel, simplify subsequent vowels
+      const firstChar = s[0];
+      let rest = s.slice(1);
+
+      rest = rest.replace(/[aeiouy]+/g, 'A');
+
+      // Consonant phonetic groupings
+      rest = rest.replace(/ph/g, 'F')
+                 .replace(/ck/g, 'K')
+                 .replace(/c(?=[eiy])/g, 'S')
+                 .replace(/c/g, 'K')
+                 .replace(/q/g, 'K')
+                 .replace(/x/g, 'KS')
+                 .replace(/dg/g, 'J')
+                 .replace(/tch/g, 'CH')
+                 .replace(/th/g, '0') // theta
+                 .replace(/sh/g, 'X')
+                 .replace(/ch/g, 'X')
+                 .replace(/v/g, 'F')
+                 .replace(/z/g, 'S')
+                 .replace(/d(?=[eiy])/g, 'J')
+                 .replace(/b/g, 'P')
+                 .replace(/d/g, 'T')
+                 .replace(/g/g, 'K');
+
+      // Deduplicate adjacent letters
+      let out = firstChar.toUpperCase() + rest;
+      let deduplicated = '';
+      for (let i = 0; i < out.length; i++) {
+        if (i === 0 || out[i] !== out[i - 1]) {
+          deduplicated += out[i];
+        }
+      }
+      return deduplicated;
+    }
+
+    // Comprehensive acoustic and homophone near-rhyme matrix for short monosyllabic words
+    const ACOUSTIC_HOMOPHONE_MAP = {
+      FOX: ['fox', 'focks', 'focs', 'fux', 'foks', 'box', 'fax', 'folks', 'pocs', 'vox', 'fark', 'fog', 'fuchs', 'fauxt', 'blocks', 'parks', 'pax'],
+      BEAR: ['bear', 'bare', 'bair', 'beer', 'ber', 'pair', 'fair', 'care', 'dare', 'tare', 'bay', 'bell', 'baer', 'their', 'there', 'where', 'pear', 'bayer'],
+      CAT: ['cat', 'kat', 'katt', 'cap', 'cut', 'ket', 'gat', 'hat', 'bat', 'cad', 'can', 'cater'],
+      DOG: ['dog', 'dawg', 'dogg', 'dock', 'doc', 'dark', 'duck', 'dot', 'dug', 'tag'],
+      DUCK: ['duck', 'dak', 'dock', 'dack', 'dog', 'dark', 'tuck', 'luck'],
+      CAR: ['car', 'carr', 'kaar', 'cat', 'card', 'cal', 'call', 'care'],
+      BUS: ['bus', 'buss', 'bass', 'bath', 'buzz', 'bud', 'box', 'boss'],
+      LION: ['lion', 'lyon', 'laion', 'line', 'liar', 'ryan'],
+      TIGER: ['tiger', 'tyger', 'tiga', 'taiga', 'tigo', 'taker'],
+      MONKEY: ['monkey', 'monki', 'manki', 'munky', 'monk', 'maky', 'money'],
+      BUFFALO: ['buffalo', 'buffalow', 'bufalo', 'bafalo', 'buffallo', 'baflow', 'buff', 'fellow'],
+      ELEPHANT: ['elephant', 'elefant', 'elephunt', 'elepant', 'eliphan', 'lephant', 'efan', 'pant', 'alpha'],
+      APPLE: ['apple', 'aple', 'appl', 'apo', 'able', 'upper'],
+      BANANA: ['banana', 'banan', 'nana', 'bonana']
+    };
+
+    function calculateLevenshtein(a, b) {
+      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function evaluateChildSpeech(hypotheses, targetWordObj) {
+      for (const phrase of hypotheses) {
+        if (isVietnameseSpoken(phrase)) {
+          return {
+            isMatch: false,
+            isVietnamese: true,
+            heardText: phrase,
+            similarity: 0
+          };
+        }
+      }
+
+      const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
+      const upperTarget = targetWordObj.word.toUpperCase();
+      
+      const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
+      if (HIGH_RES_VECTORS[upperTarget]?.alts) {
+        childAlts.push(...HIGH_RES_VECTORS[upperTarget].alts);
+      }
+      if (ACOUSTIC_HOMOPHONE_MAP[upperTarget]) {
+        childAlts.push(...ACOUSTIC_HOMOPHONE_MAP[upperTarget]);
+      }
+
+      let requiredThreshold = 0.75;
+      if (strictnessLevel === 'easy') requiredThreshold = 0.60;
+      if (strictnessLevel === 'strict') requiredThreshold = 0.90;
+
+      let bestTranscript = hypotheses[0] || '...';
+      let bestSimilarity = 0;
+
+      const targetPhonetic = encodeChildPhonetics(cleanTarget);
+
+      for (const phrase of hypotheses) {
+        const words = phrase.toLowerCase().trim().split(/\s+/);
+        for (const rawWord of words) {
+          const w = rawWord.replace(/[^a-z]/g, '');
+          if (!w) continue;
+
+          // 1. Direct or known homophone/mis-transcription match
+          if (w === cleanTarget || childAlts.includes(w)) {
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 1.0 };
+          }
+
+          // 2. Phonetic sound code match
+          const wPhonetic = encodeChildPhonetics(w);
+          if (wPhonetic === targetPhonetic) {
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 0.95 };
+          }
+
+          // 3. Phonetic distance
+          const phoneDist = calculateLevenshtein(wPhonetic, targetPhonetic);
+          const maxPhoneLen = Math.max(wPhonetic.length, targetPhonetic.length);
+          const phoneSim = maxPhoneLen > 0 ? (1 - phoneDist / maxPhoneLen) : 0;
+
+          // 4. Raw string distance
+          const rawDist = calculateLevenshtein(w, cleanTarget);
+          const maxRawLen = Math.max(w.length, cleanTarget.length);
+          const rawSim = maxRawLen > 0 ? (1 - rawDist / maxRawLen) : 0;
+
+          const compositeSim = Math.max(rawSim, phoneSim);
+
+          if (compositeSim > bestSimilarity) {
+            bestSimilarity = compositeSim;
+            bestTranscript = w;
+          }
+
+          if (compositeSim >= requiredThreshold) {
+            return { isMatch: true, isVietnamese: false, heardText: w, similarity: compositeSim };
+          }
+        }
+      }
+
+      return { isMatch: false, isVietnamese: false, heardText: bestTranscript, similarity: bestSimilarity };
     }
 
     function resetMicUI() {
@@ -973,7 +1154,6 @@
       if (isStartingRecognition) return;
       isStartingRecognition = true;
 
-      // Visual feedback happens instantly
       setMicActiveUI();
 
       if (recognition) {
@@ -992,7 +1172,6 @@
         recognition.lang = 'en-US';
         recognition.continuous = false;
         recognition.interimResults = true;
-        // Edge compatibility fix: maxAlternatives = 5 avoids parameter rejects in Microsoft Edge
         recognition.maxAlternatives = 5;
 
         let accumulatedHypotheses = [];
@@ -1035,7 +1214,7 @@
 
           if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
             setMascot('Trình duyệt chưa được cấp quyền Micro! Ba mẹ hãy kiểm tra cài đặt nhé!', '⚠️');
-            alert('Quyền Micro bị chặn trên trình duyệt này!\n\nCách xử lý trên Microsoft Edge / Chrome:\n1. Bấm vào biểu tượng Ổ khóa 🔒 (hoặc Cài đặt) ở đầu thanh địa chỉ.\n2. Chọn Quyền Micro (Microphone) -> Chuyển thành "Cho phép" (Allow).\n3. Tải lại trang (F5) để sử dụng bình thường!');
+            alert('Quyền Micro bị chặn trên trình duyệt này!\n\nCách xử lý trên Microsoft Edge / Chrome:\n1. Bấm vào biểu tượng Ổ khóa 🔒 ở đầu thanh địa chỉ.\n2. Chọn Quyền Micro (Microphone) -> Chuyển thành "Cho phép" (Allow).\n3. Tải lại trang (F5) để sử dụng bình thường!');
           } else if (e.error === 'network') {
             setMascot('Lỗi kết nối giọng nói! Vui lòng kiểm tra kết nối mạng Internet nhé.', '⚠️');
           } else {
@@ -1057,94 +1236,9 @@
         recognition.start();
 
       } catch (err) {
-        console.error('Edge/Chrome Recognition initiation error:', err);
+        console.error('Recognition initiation error:', err);
         resetMicUI();
       }
-    }
-
-    function calculateLevenshtein(a, b) {
-      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
-      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-      for (let i = 1; i <= a.length; i++) {
-        for (let j = 1; j <= b.length; j++) {
-          dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
-        }
-      }
-      return dp[a.length][b.length];
-    }
-
-    function evaluateChildSpeech(hypotheses, targetWordObj) {
-      for (const phrase of hypotheses) {
-        if (isVietnameseSpoken(phrase)) {
-          return {
-            isMatch: false,
-            isVietnamese: true,
-            heardText: phrase,
-            similarity: 0
-          };
-        }
-      }
-
-      const cleanTarget = targetWordObj.word.toLowerCase().replace(/[^a-z]/g, '');
-      const childAlts = (targetWordObj.alts || []).map(a => a.toLowerCase().trim());
-      
-      const dictObj = HIGH_RES_VECTORS[targetWordObj.word.toUpperCase()];
-      if (dictObj && dictObj.alts) {
-        childAlts.push(...dictObj.alts);
-      }
-
-      let requiredThreshold = 0.75;
-      if (strictnessLevel === 'easy') requiredThreshold = 0.60;
-      if (strictnessLevel === 'strict') requiredThreshold = 0.90;
-
-      let bestTranscript = hypotheses[0] || '...';
-      let bestSimilarity = 0;
-
-      const normalizePhonetics = (str) => {
-        return str
-          .replace(/[^a-z]/g, '')
-          .replace(/ph/g, 'f')
-          .replace(/r/g, 'w')
-          .replace(/th/g, 'f')
-          .replace(/sh/g, 's')
-          .replace(/ch/g, 't')
-          .replace(/l/g, 'w');
-      };
-
-      const normTarget = normalizePhonetics(cleanTarget);
-
-      for (const phrase of hypotheses) {
-        const words = phrase.toLowerCase().trim().split(/\s+/);
-        for (const rawWord of words) {
-          const w = rawWord.replace(/[^a-z]/g, '');
-          if (!w) continue;
-
-          if (w === cleanTarget || childAlts.includes(w)) {
-            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 1.0 };
-          }
-
-          const normW = normalizePhonetics(w);
-          if (normW === normTarget) {
-            return { isMatch: true, isVietnamese: false, heardText: w, similarity: 0.95 };
-          }
-
-          const dist = calculateLevenshtein(normW, normTarget);
-          const maxLen = Math.max(normW.length, normTarget.length);
-          const sim = maxLen > 0 ? (1 - dist / maxLen) : 0;
-
-          if (sim > bestSimilarity) {
-            bestSimilarity = sim;
-            bestTranscript = w;
-          }
-
-          if (sim >= requiredThreshold) {
-            return { isMatch: true, isVietnamese: false, heardText: w, similarity: sim };
-          }
-        }
-      }
-
-      return { isMatch: false, isVietnamese: false, heardText: bestTranscript, similarity: bestSimilarity };
     }
 
     function processSpeechEvaluation(hypotheses) {
